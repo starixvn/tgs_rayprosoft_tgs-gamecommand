@@ -31,6 +31,30 @@ internal partial class GameCommandClient
     }
 
     public async ValueTask<GameInfo?> GameGetAsync(
+        Guid gameProviderId,
+        string gameExternalId,
+        CancellationToken cancellationToken = default)
+    {
+        var response = await _httpClient
+            .GetAsync(
+                requestUri: $"/game/{gameProviderId}/{gameExternalId}",
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        _ = response.EnsureSuccessStatusCode();
+
+        return response.StatusCode == HttpStatusCode.NoContent
+            ? null
+            : JsonSerializer.Deserialize<GameInfo>(
+                json: await response
+                    .Content
+                    .ReadAsStringAsync(
+                        cancellationToken: cancellationToken)
+                    .ConfigureAwait(false),
+                options: _SerializerOptions);
+    }
+
+    public async ValueTask<GameInfo?> GameGetAsync(
         string gameProviderCode,
         string gameExternalId,
         CancellationToken cancellationToken = default)

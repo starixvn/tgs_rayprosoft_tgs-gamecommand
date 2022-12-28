@@ -36,37 +36,12 @@ internal class GameExternalGetService : IGetService<GameExternalQuery, GameInfo?
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        if (!gameId.HasValue)
-        {
-            return null;
-        }
-
-        var model = await _gameRepository
-            .GetAsync(
-                id: gameId.Value,
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-
-        return model is null
+        return !gameId.HasValue
             ? null
-            : new GameInfo(
-                GameId: model.GameId,
-                GameCode: model.GameCode,
-                GameProviderId: model.GameProviderId,
-                GameProviderCode: model.GameProviderCode,
-                GameExternalId: model.GameExternalId,
-                Type: model.Type,
-                PlatformType: model.PlatformType,
-                Name: model.Name,
-                SubGame: model.SubGame,
-                AvailableToBrand: model.AvailableToBrand,
-                HasTurnoverOnTieBet: model.HasTurnoverOnTieBet,
-                Html5: model.Html5,
-                Description: model.Description,
-                EndpointPath: model.EndpointPath,
-                RuleUrl: model.RuleUrl,
-                AvailableCurrencies: model.AvailableCurrencies,
-                Localization: model.Localization,
-                SubGameProviderCode: model.SubGameProviderCode);
+            : await _gameRepository
+          .GetAsync(
+              id: gameId.Value,
+              cancellationToken: cancellationToken)
+          .ConfigureAwait(false);
     }
 }

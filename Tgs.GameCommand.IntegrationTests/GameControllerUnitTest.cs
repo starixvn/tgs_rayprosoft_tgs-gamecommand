@@ -81,7 +81,7 @@ public partial class GameCommandUnitTest
                     GameId: gameId,
                     GameCode: gameExternalId,
                     GameProviderId: gameProviderId,
-                    GameProviderCode: "KY",
+                    GameProviderCode: gameProviderCode,
                     GameExternalId: gameExternalId,
                     Type: GameType.CardGame,
                     PlatformType: GamePlatformType.DesktopAndMobile,
@@ -105,6 +105,52 @@ public partial class GameCommandUnitTest
         var sut = new GameCommandClient(httpClient);
 
         var actual = await sut.GameGetAsync(gameProviderCode, gameExternalId).ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+    }
+
+    [TestMethod]
+    public async Task Game_Get_GameProviderId_ExternalGameId()
+    {
+        var gameId = 1;
+        var gameExternalId = "test";
+        var gameProviderId = Guid.NewGuid();
+        var gameProviderCode = "KY";
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeService = Substitute.For<IGetService<GameGameProviderIdExternalQuery, GameInfo?>>();
+
+            _ = fakeService.GetAsync(
+                query: new GameGameProviderIdExternalQuery(gameProviderId, gameExternalId),
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns(ValueTask.FromResult<GameInfo?>(new GameInfo(
+                    GameId: gameId,
+                    GameCode: gameExternalId,
+                    GameProviderId: gameProviderId,
+                    GameProviderCode: gameProviderCode,
+                    GameExternalId: gameExternalId,
+                    Type: GameType.CardGame,
+                    PlatformType: GamePlatformType.DesktopAndMobile,
+                    Name: "Baccarat",
+                    SubGame: true,
+                    AvailableToBrand: false,
+                    HasTurnoverOnTieBet: false,
+                    Html5: true,
+                    Description: "Baccarat",
+                    EndpointPath: string.Empty,
+                    RuleUrl: string.Empty,
+                    AvailableCurrencies: null,
+                    Localization: string.Empty,
+                    SubGameProviderCode: "KY")));
+
+            _ = services.AddSingleton(fakeService);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut.GameGetAsync(gameProviderId, gameExternalId).ConfigureAwait(false);
 
         Assert.IsNotNull(actual);
     }

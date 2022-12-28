@@ -27,6 +27,15 @@ public class GameController : ControllerBase
             query: new GameExternalQuery(gameProviderCode, gameExternalId),
             cancellationToken: HttpContext.RequestAborted);
 
+    [HttpGet("{gameProviderid:guid}/{gameExternalId}", Name = "Game_GameProviderId_ExternalGameId_Get")]
+    public ValueTask<GameInfo?> GetAsync(
+        [FromServices] IGetService<GameGameProviderIdExternalQuery, GameInfo?> service,
+        Guid gameProviderid,
+        string gameExternalId)
+        => service.GetAsync(
+           query: new GameGameProviderIdExternalQuery(gameProviderid, gameExternalId),
+           cancellationToken: HttpContext.RequestAborted);
+
     [HttpGet("{id}/status", Name = "Game_GetStatus")]
     public ValueTask<GameStatus> GetStatusAsync(
         [FromServices] IGameRepository repository,
