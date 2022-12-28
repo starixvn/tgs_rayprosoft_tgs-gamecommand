@@ -17,6 +17,9 @@ internal class BrandCacheRepository : IBrandRepository
         _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
     }
 
+    public IAsyncEnumerable<string> GetBrandCodesAsync(CancellationToken cancellationToken = default)
+        => _repository.GetBrandCodesAsync(cancellationToken);
+
     public async ValueTask<Guid?> GetBrandIdAsync(
         string brandCode,
         CancellationToken cancellationToken = default)

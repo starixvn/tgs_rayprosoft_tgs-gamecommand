@@ -4,8 +4,11 @@ namespace Tgs.GameCommand.Core;
 
 public interface IBrandRepository
 {
+    IAsyncEnumerable<string> GetBrandCodesAsync(
+        CancellationToken cancellationToken = default);
+
     ValueTask<Guid?> GetBrandIdAsync(
-        string brandCode,
+            string brandCode,
         CancellationToken cancellationToken = default);
 
     ValueTask<string?> GetCurrencyAsync(

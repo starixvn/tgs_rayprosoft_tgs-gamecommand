@@ -14,6 +14,13 @@ internal class BrandRepository : IBrandRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
+    public IAsyncEnumerable<string> GetBrandCodesAsync(
+        CancellationToken cancellationToken = default)
+        => _context.Brands
+        .AsQueryable()
+        .Select(x => x.Code)
+        .AsAsyncEnumerable();
+
     public async ValueTask<Guid?> GetBrandIdAsync(
         string brandCode,
         CancellationToken cancellationToken = default)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ExpectedObjects;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,67 @@ namespace Tgs.GameCommandRepositories.UnitTest;
 [TestClass]
 public class BrandRepositoryUnitTest
 {
+    [TestMethod]
+    public async Task Get_BrandCodes()
+    {
+        var options = new DbContextOptionsBuilder<TgsContext>()
+            .UseInMemoryDatabase(databaseName: "dbo")
+            .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+            .Options;
+        var context = new TgsContext(options);
+        _ = context.Database.EnsureDeleted();
+
+        var fakeRepository = new BrandRepository(context);
+        var brandCode = "GPI";
+        var brand = new Brand()
+        {
+            Id = Guid.NewGuid(),
+            Status = 0,
+            Description = null,
+            OperationalEmail = null,
+            TimeZoneId = null,
+            LicenseeId = Guid.NewGuid(),
+            ClientId = Guid.NewGuid().ToString("N"),
+            SecretKey = Guid.NewGuid().ToString("N"),
+            ApiKey = Guid.NewGuid().ToString("N"),
+            SettlementIntervalType = 1,
+            PreviousSettlementFrom = DateTime.UtcNow,
+            PreviousSettlementTo = DateTime.UtcNow,
+            CurrentSettlementFrom = DateTime.UtcNow,
+            CurrentSettlementTo = DateTime.UtcNow,
+            NextSettlementFrom = DateTime.UtcNow,
+            NextSettlementTo = DateTime.UtcNow,
+            AutoSentPlayerBonus = false,
+            AutoSentAgentBonus = false,
+            Code = brandCode,
+            Name = brandCode,
+            CreatedOn = DateTime.UtcNow,
+            UpdatedOn = DateTime.UtcNow,
+            CreatedByUsername = string.Empty,
+            UpdatedByUsername = string.Empty,
+            SettlementDay = null,
+            LogoInfo = null,
+            EnableSms = false,
+            SmsVendorCode = null,
+            SmsVendorSettings = null,
+            PlatformCharge = 0,
+            CheckDividendActiveCount = false,
+            EnableSmsRegisterFlow = false,
+            AgentDividendType = 0,
+            EnableAgentSms = false
+        };
+
+        await context.Brands.AddRangeAsync(brand).ConfigureAwait(false);
+        _ = await context.SaveChangesAsync().ConfigureAwait(false);
+
+        var actual = await fakeRepository
+            .GetBrandCodesAsync()
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(brandCode, actual.First());
+    }
+
     [TestMethod]
     public async Task Get_BrandId_Already_Exists()
     {

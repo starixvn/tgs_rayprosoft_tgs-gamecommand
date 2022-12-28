@@ -126,4 +126,6 @@ app.MapMetrics();
 
 app.MapProfileViewer();
 
+_ = app.UseGameCommandRegister();
+
 app.Run();
