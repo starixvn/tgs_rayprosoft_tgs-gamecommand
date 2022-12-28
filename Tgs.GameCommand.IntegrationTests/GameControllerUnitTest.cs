@@ -1,0 +1,236 @@
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
+using Tgs.GameCommand.Client;
+using Tgs.GameCommand.Common;
+using Tgs.GameCommand.Core;
+using Tgs.GameCommand.Core.ApplicationServices;
+using Tgs.ServiceUtility;
+
+namespace Tgs.GameCommand.IntegrationTests;
+
+public partial class GameCommandUnitTest
+{
+    [TestMethod]
+    public async Task Game_Get()
+    {
+        var gameId = 1;
+        var gameExternalId = "test";
+        var gameProviderId = Guid.NewGuid();
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeRepository = Substitute.For<IGameRepository>();
+
+            _ = fakeRepository.GetAsync(
+                id: gameId,
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns(ValueTask.FromResult<GameInfo?>(new GameInfo(
+                    GameId: gameId,
+                    GameCode: gameExternalId,
+                    GameProviderId: gameProviderId,
+                    GameProviderCode: "KY",
+                    GameExternalId: gameExternalId,
+                    Type: GameType.CardGame,
+                    PlatformType: GamePlatformType.DesktopAndMobile,
+                    Name: "Baccarat",
+                    SubGame: true,
+                    AvailableToBrand: false,
+                    HasTurnoverOnTieBet: false,
+                    Html5: true,
+                    Description: "Baccarat",
+                    EndpointPath: string.Empty,
+                    RuleUrl: string.Empty,
+                    AvailableCurrencies: null,
+                    Localization: string.Empty,
+                    SubGameProviderCode: "KY")));
+
+            _ = services.AddSingleton(fakeRepository);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut.GameGetAsync(gameId).ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(gameProviderId, actual.GameProviderId);
+        Assert.AreEqual(gameId, actual.GameId);
+        Assert.AreEqual(gameExternalId, actual.GameExternalId);
+    }
+
+    [TestMethod]
+    public async Task Game_Get_GameProviderCode_ExternalGameId()
+    {
+        var gameId = 1;
+        var gameExternalId = "test";
+        var gameProviderId = Guid.NewGuid();
+        var gameProviderCode = "KY";
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeService = Substitute.For<IGetService<GameExternalQuery, GameInfo?>>();
+
+            _ = fakeService.GetAsync(
+                query: new GameExternalQuery(gameProviderCode, gameExternalId),
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns(ValueTask.FromResult<GameInfo?>(new GameInfo(
+                    GameId: gameId,
+                    GameCode: gameExternalId,
+                    GameProviderId: gameProviderId,
+                    GameProviderCode: "KY",
+                    GameExternalId: gameExternalId,
+                    Type: GameType.CardGame,
+                    PlatformType: GamePlatformType.DesktopAndMobile,
+                    Name: "Baccarat",
+                    SubGame: true,
+                    AvailableToBrand: false,
+                    HasTurnoverOnTieBet: false,
+                    Html5: true,
+                    Description: "Baccarat",
+                    EndpointPath: string.Empty,
+                    RuleUrl: string.Empty,
+                    AvailableCurrencies: null,
+                    Localization: string.Empty,
+                    SubGameProviderCode: "KY")));
+
+            _ = services.AddSingleton(fakeService);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut.GameGetAsync(gameProviderCode, gameExternalId).ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+    }
+
+    [TestMethod]
+    public async Task Game_Get_Status()
+    {
+        var gameId = 1;
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeRepository = Substitute.For<IGameRepository>();
+
+            _ = fakeRepository.GetStatusAsync(
+                id: gameId,
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns(GameStatus.Active);
+
+            _ = services.AddSingleton(fakeRepository);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut.GameGetStatusAsync(gameId).ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(GameStatus.Active, actual);
+    }
+
+    [TestMethod]
+    public async Task Game_Query_GameProviderCode()
+    {
+        var gameProviderCode = "KY";
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeService = Substitute.For<IQueryService<GameByGameProviderCodeQuery, GameInfo>>();
+
+            _ = fakeService.QueryAsync(
+                query: new GameByGameProviderCodeQuery(gameProviderCode),
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns((new GameInfo[] {
+                new GameInfo(
+                    GameId: 1,
+                    GameCode: "baccarat",
+                    GameProviderId: Guid.NewGuid(),
+                    GameProviderCode: "KY",
+                    GameExternalId:  "baccarat",
+                    Type: GameType.CardGame,
+                    PlatformType: GamePlatformType.DesktopAndMobile,
+                    Name: "Baccarat",
+                    SubGame: true,
+                    AvailableToBrand: false,
+                    HasTurnoverOnTieBet: false,
+                    Html5: true,
+                    Description: "Baccarat",
+                    EndpointPath: string.Empty,
+                    RuleUrl: string.Empty,
+                    AvailableCurrencies: null,
+                    Localization: string.Empty,
+                    SubGameProviderCode: "KY")  }).ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakeService);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .GameQueryAsync(gameProviderCode)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.IsTrue(actual.Any());
+    }
+
+    [TestMethod]
+    public async Task Game_Query_GameProviderCode_GameType()
+    {
+        var gameProviderCode = "KY";
+        var gameType = GameType.CardGame;
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeService = Substitute.For<IQueryService<GameByGameTypeQuery, GameInfo>>();
+
+            _ = fakeService.QueryAsync(
+                new GameByGameTypeQuery(gameProviderCode, gameType),
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns((new GameInfo[] {
+                new GameInfo(
+                    GameId: 1,
+                    GameCode: "baccarat",
+                    GameProviderId: Guid.NewGuid(),
+                    GameProviderCode: "KY",
+                    GameExternalId:  "baccarat",
+                    Type: GameType.CardGame,
+                    PlatformType: GamePlatformType.DesktopAndMobile,
+                    Name: "Baccarat",
+                    SubGame: true,
+                    AvailableToBrand: false,
+                    HasTurnoverOnTieBet: false,
+                    Html5: true,
+                    Description: "Baccarat",
+                    EndpointPath: string.Empty,
+                    RuleUrl: string.Empty,
+                    AvailableCurrencies: null,
+                    Localization: string.Empty,
+                    SubGameProviderCode: "KY")  }).ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakeService);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .GameQueryAsync(
+                gameProviderCode,
+                GameType.CardGame)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.IsTrue(actual.Any());
+    }
+}

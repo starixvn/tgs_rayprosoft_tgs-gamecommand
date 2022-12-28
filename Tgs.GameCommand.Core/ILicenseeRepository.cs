@@ -1,0 +1,8 @@
+﻿using Tgs.GameCommand.Common;
+
+namespace Tgs.GameCommand.Core;
+
+public interface ILicenseeRepository
+{
+    ValueTask<LicenseeStatus> GetStatusAsync(Guid licenseeId);
+}
