@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: configmap-{{ include "game-gameprovider-queryserver.name" . }}
+  name: configmap-{{ include "game-gamecommand.name" . }}
   namespace: {{ .Values.namespace }}
 data:
   appsettings.json: |
