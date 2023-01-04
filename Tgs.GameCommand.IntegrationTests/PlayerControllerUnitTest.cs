@@ -7,8 +7,6 @@ using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
 using Tgs.GameCommand.Core;
-using Tgs.GameCommand.Core.ApplicationServices;
-using Tgs.ServiceUtility;
 
 namespace Tgs.GameCommand.IntegrationTests;
 
@@ -27,14 +25,13 @@ public partial class GameCommandUnitTest
 
         await using var web = CreateTestSettingSite(services =>
         {
-            var fakeService = Substitute.For<IGetService<PlayerQuery, PlayerInfo?>>();
+            var fakePlayerRepository = Substitute.For<IPlayerRepository>();
 
-            var query = new PlayerQuery(playerCode);
-            _ = fakeService
+            _ = fakePlayerRepository
             .GetAsync(
-            query: query,
+                playerCode: Arg.Is(playerCode),
                 cancellationToken: Arg.Any<CancellationToken>())
-                .Returns(ValueTask.FromResult<PlayerInfo?>(
+            .Returns(ValueTask.FromResult<PlayerInfo?>(
                 new PlayerInfo(
                      resellerId,
                      resellerCode,
@@ -47,7 +44,7 @@ public partial class GameCommandUnitTest
                      Guid.NewGuid(),
                      "CNY")));
 
-            _ = services.AddSingleton(fakeService);
+            _ = services.AddSingleton(fakePlayerRepository);
         });
 
         var httpClient = web.CreateClient();

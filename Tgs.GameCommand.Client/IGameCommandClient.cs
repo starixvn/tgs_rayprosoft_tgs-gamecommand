@@ -55,6 +55,11 @@ public interface IGameCommandClient
        string gameExternalId,
        CancellationToken cancellationToken = default);
 
+    ValueTask<int?> GameGetIdAsync(
+       Guid gameProviderId,
+       string gameExternalId,
+       CancellationToken cancellationToken = default);
+
     ValueTask<GameStatus?> GameGetStatusAsync(
        int gameid,
        CancellationToken cancellationToken = default);

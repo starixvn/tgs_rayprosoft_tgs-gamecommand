@@ -10,9 +10,7 @@ using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
 using Tgs.GameCommand.Core;
-using Tgs.GameCommand.Core.ApplicationServices;
 using Tgs.GameCommand.Core.Models;
-using Tgs.ServiceUtility;
 
 namespace Tgs.GameCommand.IntegrationTests;
 
@@ -27,32 +25,29 @@ public partial class GameCommandUnitTest
 
         var expected = new GameProviderInfo(
             GameProviderId: gameProviderId,
-            Description: string.Empty,
+            GameProviderCode: gameProviderCode,
+            UniqueId: 1,
+            Name: gameProviderCode,
+            TransferWallet: true,
             AutoCloseRound: false,
             SupportTestPlayer: false,
             AllowKickPlayer: true,
             PlaceBetTimeout: 0,
             SettleBetTimeout: 0,
-            UniqueId: 1,
-            TransferWallet: true,
-            GameProviderCode: gameProviderCode,
-            Name: gameProviderCode,
+            Description: string.Empty,
             Localization: null);
 
         await using var web = CreateTestSettingSite(services =>
         {
-            var fakeService = Substitute.For<IGetService<GameProviderQuery, GameProviderInfo?>>();
+            var fakeGameProviderRepository = Substitute.For<IGameProviderRepository>();
 
-            var query = new GameProviderQuery(
-                Id: gameProviderId);
-
-            _ = fakeService
+            _ = fakeGameProviderRepository
                 .GetAsync(
-                    query,
-                    Arg.Any<CancellationToken>())
+                    id: Arg.Is(gameProviderId),
+                    cancellationToken: Arg.Any<CancellationToken>())
                 .Returns(ValueTask.FromResult<GameProviderInfo?>(expected));
 
-            _ = services.AddSingleton(fakeService);
+            _ = services.AddSingleton(fakeGameProviderRepository);
         });
 
         var httpClient = web.CreateClient();

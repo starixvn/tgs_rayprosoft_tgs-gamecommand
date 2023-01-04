@@ -24,7 +24,7 @@ internal class BrandCacheRepository : IBrandRepository
         string brandCode,
         CancellationToken cancellationToken = default)
     {
-        var key = string.Format("query:brand:get:brand:id:{0}", brandCode);
+        var key = string.Format("gamecommand:brand:get:brand:id:{0}", brandCode);
         if (!_memoryCache.TryGetValue(key, out Guid? brandId))
         {
             brandId = await _repository
@@ -34,9 +34,10 @@ internal class BrandCacheRepository : IBrandRepository
                         .ConfigureAwait(false);
             if (brandId.HasValue)
             {
-                _ = _memoryCache.Set(
-                    key: key,
-                    value: brandId);
+                return _memoryCache
+                    .Set(
+                        key: key,
+                        value: brandId);
             }
         }
         return brandId;

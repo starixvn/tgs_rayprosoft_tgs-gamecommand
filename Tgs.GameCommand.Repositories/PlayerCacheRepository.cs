@@ -22,7 +22,7 @@ internal class PlayerCacheRepository : IPlayerRepository
         string playerCode,
         CancellationToken cancellationToken = default)
     {
-        var key = string.Format("\"game:command:player:get:{0}", playerCode);
+        var key = string.Format("gamecommand:player:get:{0}", playerCode);
         if (!_memoryCache.TryGetValue(key, out PlayerInfo? playerInfo))
         {
             playerInfo = await _repository

@@ -20,18 +20,17 @@ internal class GameProviderRepository : IGameProviderRepository
         .Where(x => x.Id == id)
         .Select(x => new GameProviderInfo(
             x.Id,
-            x.Description,
+            x.Code,
+            x.UniqueId,
+            x.Name,
+            x.TransferWallet,
             x.AutoCloseRound,
             x.SupportTestPlayer,
             x.AllowKickPlayer,
             x.PlaceBetTimeout,
             x.SettleBetTimeout,
-            x.UniqueId,
-            x.TransferWallet,
-            x.Code,
-            x.Name,
-            x.Localization
-            ))
+            x.Description,
+            x.Localization))
         .ToAsyncEnumerable()
         .FirstOrDefaultAsync(cancellationToken);
 

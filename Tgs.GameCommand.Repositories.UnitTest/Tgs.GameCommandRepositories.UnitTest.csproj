@@ -18,11 +18,20 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NSubstitute" Version="4.4.0" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Tgs.GameCommand.Repositories\Tgs.GameCommand.Repositories.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\00.Git\tgs-gamecommand\Tgs.GameCommand.Repositories.UnitTest\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\00.Git\tgs-gamecommand\Tgs.GameCommand.Repositories.UnitTest\.editorconfig" />
   </ItemGroup>
 
 </Project>

@@ -22,7 +22,7 @@ internal class GameCacheRepository : IGameRepository
         int id,
         CancellationToken cancellationToken = default)
     {
-        var key = string.Format("game:command:game:get:{0}", id);
+        var key = string.Format("gamecommand:game:get:{0}", id);
         if (!_memoryCache.TryGetValue(key, out GameInfo? info))
         {
             info = await _repository
@@ -46,7 +46,7 @@ internal class GameCacheRepository : IGameRepository
         string gameExternalId,
         CancellationToken cancellationToken = default)
     {
-        var key = string.Format("game:command:game:get:id:{0}:{1}", gameProviderId, gameExternalId);
+        var key = string.Format("gamecommand:game:get:id:{0}:{1}", gameProviderId, gameExternalId);
         if (!_memoryCache.TryGetValue(key, out int? value))
         {
             value = await _repository

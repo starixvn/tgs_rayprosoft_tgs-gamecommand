@@ -2,14 +2,14 @@
 
 public record GameProviderInfo(
     Guid GameProviderId,
-    string? Description,
+    string GameProviderCode,
+    int UniqueId,
+    string Name,
+    bool TransferWallet,
     bool AutoCloseRound,
     bool SupportTestPlayer,
     bool AllowKickPlayer,
     short PlaceBetTimeout,
     short SettleBetTimeout,
-    int UniqueId,
-    bool TransferWallet,
-    string GameProviderCode,
-    string Name,
+    string? Description,
     string? Localization);

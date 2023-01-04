@@ -156,6 +156,36 @@ public partial class GameCommandUnitTest
     }
 
     [TestMethod]
+    public async Task Game_Get_GameProviderId_ExternalGameId_Id()
+    {
+        var gameId = 1;
+        var gameProviderId = Guid.NewGuid();
+        var gameExternalId = "test";
+
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeRepository = Substitute.For<IGameRepository>();
+
+            _ = fakeRepository
+            .GetIdAsync(
+                gameProviderId: Arg.Is(gameProviderId),
+                gameExternalId: Arg.Is(gameExternalId),
+                cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(ValueTask.FromResult<int?>(gameId));
+
+            _ = services.AddSingleton(fakeRepository);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut.GameGetIdAsync(gameProviderId, gameExternalId).ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+    }
+
+    [TestMethod]
     public async Task Game_Get_Status()
     {
         var gameId = 1;

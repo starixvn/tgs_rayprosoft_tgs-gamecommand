@@ -21,7 +21,7 @@ internal class GameActionCacheRepository : IGameActionRepository
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        var key = string.Format("game:command:gameaction:query:{0}", id);
+        var key = string.Format("gamecommand:gameaction:query:{0}", id);
 
         if (!_memoryCache.TryGetValue(key, out IEnumerable<GameActionInfo>? value))
         {

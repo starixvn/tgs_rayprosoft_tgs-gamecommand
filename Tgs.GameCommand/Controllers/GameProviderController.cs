@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tgs.GameCommand.Common;
 using Tgs.GameCommand.Core;
-using Tgs.GameCommand.Core.ApplicationServices;
-using Tgs.ServiceUtility;
 
 namespace Tgs.GameCommand.Controllers;
 
@@ -12,11 +10,11 @@ public class GameProviderController : ControllerBase
 {
     [HttpGet("{id}", Name = "GameProvider_Get")]
     public ValueTask<GameProviderInfo?> GameProviderGetAsync(
-        [FromServices] IGetService<GameProviderQuery, GameProviderInfo?> service,
+        [FromServices] IGameProviderRepository repository,
         Guid id)
-        => service
+        => repository
         .GetAsync(
-            query: new GameProviderQuery(id),
+            id: id,
             cancellationToken: HttpContext.RequestAborted);
 
     [HttpGet("query/id", Name = "GameProvider_Get_GameProviderIds")]

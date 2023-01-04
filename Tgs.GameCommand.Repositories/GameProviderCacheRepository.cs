@@ -22,7 +22,7 @@ internal class GameProviderCacheRepository : IGameProviderRepository
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        var key = string.Format("game:command:gameprovider:get:{0}", id);
+        var key = string.Format("gamecommand:gameprovider:get:{0}", id);
         if (!_memoryCache.TryGetValue(key, out GameProviderInfo? model))
         {
             model = await _repository
@@ -47,7 +47,7 @@ internal class GameProviderCacheRepository : IGameProviderRepository
         CancellationToken
         cancellationToken = default)
     {
-        var key = string.Format("game:command:gameprovider:get:culture:code:{0}:{1}", gameProviderId, cultureCode);
+        var key = string.Format("gamecommand:gameprovider:get:culture:code:{0}:{1}", gameProviderId, cultureCode);
         if (!_memoryCache.TryGetValue(key, out string? gameCultureCode))
         {
             gameCultureCode = await _repository
@@ -72,7 +72,7 @@ internal class GameProviderCacheRepository : IGameProviderRepository
         string currencyCode,
         CancellationToken cancellationToken = default)
     {
-        var key = string.Format("game:command:gameprovider:get:currency:{0}:{1}", gameProviderId, currencyCode);
+        var key = string.Format("gamecommand:gameprovider:get:currency:{0}:{1}", gameProviderId, currencyCode);
         if (!_memoryCache.TryGetValue(key, out GameProviderCurrencyModel? model))
         {
             model = await _repository
@@ -97,7 +97,7 @@ internal class GameProviderCacheRepository : IGameProviderRepository
         string currencyCode,
         CancellationToken cancellationToken = default)
     {
-        var key = string.Format("game:command:gameprovider:get:currency:code:{0}:{1}", gameProviderId, currencyCode);
+        var key = string.Format("gamecommand:gameprovider:get:currency:code:{0}:{1}", gameProviderId, currencyCode);
         if (!_memoryCache.TryGetValue(key, out string? gameCurrencyCode))
         {
             gameCurrencyCode = await _repository
@@ -121,7 +121,7 @@ internal class GameProviderCacheRepository : IGameProviderRepository
         string code,
         CancellationToken cancellationToken = default)
     {
-        var key = string.Format("game:command:gameprovider:get:id:{0}", code);
+        var key = string.Format("gamecommand:gameprovider:get:id:{0}", code);
         if (!_memoryCache.TryGetValue(key, out Guid? id))
         {
             id = await _repository

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tgs.GameCommand.Common;
 using Tgs.GameCommand.Core;
-using Tgs.GameCommand.Core.ApplicationServices;
-using Tgs.ServiceUtility;
 
 namespace Tgs.GameCommand.Controllers;
 
@@ -12,11 +10,11 @@ public class PlayerController : ControllerBase
 {
     [HttpGet("{playerCode}", Name = "Player_GetPlayer")]
     public ValueTask<PlayerInfo?> GetAsncy(
-        [FromServices] IGetService<PlayerQuery, PlayerInfo?> service,
+        [FromServices] IPlayerRepository repository,
         string playerCode)
-        => service
+        => repository
         .GetAsync(
-            query: new PlayerQuery(playerCode),
+            playerCode: playerCode,
             cancellationToken: HttpContext.RequestAborted);
 
     [HttpGet("{playerCode}/status", Name = "Player_GetStatus")]
