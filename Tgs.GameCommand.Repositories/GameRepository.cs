@@ -80,7 +80,7 @@ internal class GameRepository : IGameRepository
         => _context.GameProviders.AsQueryable()
         .Where(x => x.Id == gameProviderId)
         .Join(_context.Games.AsQueryable(),
-            gameProvider => gameProviderId,
+            gameProvider => gameProvider.Id,
             game => game.GameProviderId,
             (gameProvider, game) => new GameQueryModel(
                 game.Id,
@@ -109,12 +109,12 @@ internal class GameRepository : IGameRepository
         Guid gameProviderId,
         GameType type,
         CancellationToken cancellationToken = default)
-        => _context.GameProviders.AsQueryable()
-        .Where(x => x.Id == gameProviderId)
-        .Join(_context.Games.AsQueryable(),
-            gameProvider => gameProviderId,
+        => _context.Games.AsQueryable()
+        .Where(x => x.GameProviderId == gameProviderId && x.Type == (int)type)
+        .Join(_context.GameProviders.AsQueryable(),
             game => game.GameProviderId,
-            (gameProvider, game) => new GameQueryModel(
+            gameProvider => gameProvider.Id,
+            (game, gameProvider) => new GameQueryModel(
                 game.Id,
                 game.Code,
                 gameProvider.Id,
@@ -133,8 +133,6 @@ internal class GameRepository : IGameRepository
                 game.RuleUrl,
                 (string.IsNullOrEmpty(game.AvailableCurrencies)) ? null : game.AvailableCurrencies.Split(",", StringSplitOptions.RemoveEmptyEntries),
                 game.Localization,
-                game.SubGameProviderCode)
-            )
-        .Where(x => x.Type == type)
+                game.SubGameProviderCode))
         .ToAsyncEnumerable();
 }
