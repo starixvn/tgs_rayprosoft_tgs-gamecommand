@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Tgs.GameCommand.Common;
 using Tgs.GameCommand.Core;
-using Tgs.GameCommand.Core.Models;
 
 namespace Tgs.GameCommand.Repositories;
 
@@ -70,12 +69,12 @@ internal class GameCacheRepository : IGameRepository
         CancellationToken cancellationToken = default)
         => _repository.GetStatusAsync(id, cancellationToken);
 
-    public IAsyncEnumerable<GameQueryModel> QueryAsync(
+    public IAsyncEnumerable<GameInfo> QueryAsync(
         Guid gameProviderId,
         CancellationToken cancellationToken = default)
         => _repository.QueryAsync(gameProviderId, cancellationToken);
 
-    public IAsyncEnumerable<GameQueryModel> QueryAsync(
+    public IAsyncEnumerable<GameInfo> QueryAsync(
         Guid gameProviderId,
         GameType type,
         CancellationToken cancellationToken = default)

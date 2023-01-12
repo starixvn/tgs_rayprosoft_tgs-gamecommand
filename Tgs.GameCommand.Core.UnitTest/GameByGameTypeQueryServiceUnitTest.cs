@@ -2,7 +2,6 @@
 using Tgs.GameCommand.Common;
 using Tgs.GameCommand.Core;
 using Tgs.GameCommand.Core.ApplicationServices;
-using Tgs.GameCommand.Core.Models;
 
 namespace Tgs.GameCommandRepositories.UnitTest;
 
@@ -26,14 +25,13 @@ public class GameByGameTypeQueryServiceUnitTest
                 cancellationToken: Arg.Any<CancellationToken>())
             .Returns(gameProviderId);
 
-        var games = new GameQueryModel[] {
-            new GameQueryModel(
-                1,
+        var games = new GameInfo[] {
+            new GameInfo(
+                GameId: 1,
                 "baccent",
                 gameProviderId,
                 query.GameProviderCode,
                 "1",
-                GameStatus.Active,
                 GameType.CardGame,
                 GamePlatformType.DesktopAndMobile,
                 "Baccent",

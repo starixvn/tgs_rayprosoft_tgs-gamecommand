@@ -309,4 +309,81 @@ public partial class GameCommandUnitTest
         Assert.IsNotNull(actual);
         Assert.IsTrue(actual.Any());
     }
+
+    [TestMethod]
+    public async Task Game_Query_GameProviderId()
+    {
+        var gameProviderId = Guid.NewGuid();
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeService = Substitute.For<IQueryService<GameByGameProviderIdQuery, GameInfo>>();
+
+            _ = fakeService.QueryAsync(
+                query: new GameByGameProviderIdQuery(gameProviderId),
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns((new GameInfo[] {
+                new GameInfo(
+                    GameId: 1,
+                    GameCode: "baccarat",
+                    GameProviderId: gameProviderId,
+                    GameProviderCode: "KY",
+                    GameExternalId:  "baccarat",
+                    Type: GameType.CardGame,
+                    PlatformType: GamePlatformType.DesktopAndMobile,
+                    Name: "Baccarat",
+                    SubGame: true,
+                    AvailableToBrand: false,
+                    HasTurnoverOnTieBet: false,
+                    Html5: true,
+                    Description: "Baccarat",
+                    EndpointPath: string.Empty,
+                    RuleUrl: string.Empty,
+                    AvailableCurrencies: null,
+                    Localization: string.Empty,
+                    SubGameProviderCode: "KY")  }).ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakeService);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .GameQueryAsync(gameProviderId)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.IsTrue(actual.Any());
+    }
+
+    [TestMethod]
+    public async Task Game_Query_GameProviderId_Is_Empty()
+    {
+        var gameProviderId = Guid.NewGuid();
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeService = Substitute.For<IQueryService<GameByGameProviderIdQuery, GameInfo>>();
+
+            _ = fakeService.QueryAsync(
+                query: new GameByGameProviderIdQuery(gameProviderId),
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns(Enumerable.Empty<GameInfo>().ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakeService);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .GameQueryAsync(gameProviderId)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.IsFalse(actual.Any());
+    }
 }

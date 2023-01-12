@@ -1,5 +1,4 @@
 ﻿using Tgs.GameCommand.Common;
-using Tgs.GameCommand.Core.Models;
 
 namespace Tgs.GameCommand.Core;
 
@@ -18,11 +17,11 @@ public interface IGameRepository
         int id,
         CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<GameQueryModel> QueryAsync(
+    IAsyncEnumerable<GameInfo> QueryAsync(
         Guid gameProviderId,
         CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<GameQueryModel> QueryAsync(
+    IAsyncEnumerable<GameInfo> QueryAsync(
         Guid gameProviderId,
         GameType type,
         CancellationToken cancellationToken = default);

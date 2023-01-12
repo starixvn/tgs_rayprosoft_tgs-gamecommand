@@ -36,26 +36,7 @@ internal class GameByGameProviderCodeQueryService : IQueryService<GameByGameProv
             .QueryAsync(
                 gameProviderId: gameProviderId.Value,
                 cancellationToken: cancellationToken)
-            .ToEnumerable()
-            .Select(model => new GameInfo(
-                model.GameId,
-                model.GameCode,
-                model.GameProviderId,
-                model.GameProviderCode,
-                model.GameExternalId,
-                model.Type,
-                model.PlatformType,
-                model.Name,
-                model.SubGame,
-                model.AvailableToBrand,
-                model.HasTurnoverOnTieBet,
-                model.Html5,
-                model.Description,
-                model.EndpointPath,
-                model.RuleUrl,
-                model.AvailableCurrencies,
-                model.Localization,
-                model.SubGameProviderCode));
+            .ToEnumerable();
 
         if (!results.Any())
         {

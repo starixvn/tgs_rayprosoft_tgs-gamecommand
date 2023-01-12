@@ -55,8 +55,8 @@ public class GameController : ControllerBase
             id,
             HttpContext.RequestAborted);
 
-    [HttpGet("query/{gameProviderCode}", Name = "Game_Query")]
-    public IAsyncEnumerable<GameInfo?> QueryAsync(
+    [HttpGet("query/{gameProviderCode}", Name = "Game_Query_GameProviderCode")]
+    public IAsyncEnumerable<GameInfo> QueryAsync(
         [FromServices] IQueryService<GameByGameProviderCodeQuery, GameInfo> service,
         string gameProviderCode)
         => service
@@ -64,8 +64,17 @@ public class GameController : ControllerBase
             query: new GameByGameProviderCodeQuery(gameProviderCode),
             cancellationToken: HttpContext.RequestAborted);
 
+    [HttpGet("query/{gameProviderid:guid}", Name = "Game_Query_GameProviderid")]
+    public IAsyncEnumerable<GameInfo> QueryAsync(
+        [FromServices] IQueryService<GameByGameProviderIdQuery, GameInfo> service,
+        Guid gameProviderid)
+        => service
+        .QueryAsync(
+            query: new GameByGameProviderIdQuery(gameProviderid),
+            cancellationToken: HttpContext.RequestAborted);
+
     [HttpGet("query/{gameProviderCode}/{type}", Name = "Game_QueryByGameType")]
-    public IAsyncEnumerable<GameInfo?> QueryByGameTypeAsync(
+    public IAsyncEnumerable<GameInfo> QueryByGameTypeAsync(
         [FromServices] IQueryService<GameByGameTypeQuery, GameInfo> service,
         string gameProviderCode,
         GameType type)

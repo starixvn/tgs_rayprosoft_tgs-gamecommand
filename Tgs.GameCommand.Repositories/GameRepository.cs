@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tgs.GameCommand.Common;
 using Tgs.GameCommand.Core;
-using Tgs.GameCommand.Core.Models;
 using Tgs.GameCommand.Repositories.Entities;
 
 namespace Tgs.GameCommand.Repositories;
@@ -74,7 +73,7 @@ internal class GameRepository : IGameRepository
         .FirstOrDefaultAsync(
             cancellationToken: cancellationToken);
 
-    public IAsyncEnumerable<GameQueryModel> QueryAsync(
+    public IAsyncEnumerable<GameInfo> QueryAsync(
         Guid gameProviderId,
         CancellationToken cancellationToken = default)
         => _context.GameProviders.AsQueryable()
@@ -82,13 +81,12 @@ internal class GameRepository : IGameRepository
         .Join(_context.Games.AsQueryable(),
             gameProvider => gameProvider.Id,
             game => game.GameProviderId,
-            (gameProvider, game) => new GameQueryModel(
+            (gameProvider, game) => new GameInfo(
                 game.Id,
                 game.Code,
                 gameProvider.Id,
                 gameProvider.Code,
                 game.ExternalId,
-                (GameStatus)game.Status,
                 (GameType)game.Type,
                 (GamePlatformType)game.PlatformType,
                 game.Name,
@@ -105,7 +103,7 @@ internal class GameRepository : IGameRepository
             )
         .ToAsyncEnumerable();
 
-    public IAsyncEnumerable<GameQueryModel> QueryAsync(
+    public IAsyncEnumerable<GameInfo> QueryAsync(
         Guid gameProviderId,
         GameType type,
         CancellationToken cancellationToken = default)
@@ -114,13 +112,12 @@ internal class GameRepository : IGameRepository
         .Join(_context.GameProviders.AsQueryable(),
             game => game.GameProviderId,
             gameProvider => gameProvider.Id,
-            (game, gameProvider) => new GameQueryModel(
+            (game, gameProvider) => new GameInfo(
                 game.Id,
                 game.Code,
                 gameProvider.Id,
                 gameProvider.Code,
                 game.ExternalId,
-                (GameStatus)game.Status,
                 (GameType)game.Type,
                 (GamePlatformType)game.PlatformType,
                 game.Name,
