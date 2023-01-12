@@ -266,10 +266,10 @@ public partial class GameCommandUnitTest
         var gameType = GameType.CardGame;
         await using var web = CreateTestSettingSite(services =>
         {
-            var fakeService = Substitute.For<IQueryService<GameByGameTypeQuery, GameInfo>>();
+            var fakeService = Substitute.For<IQueryService<GameByGameProviderCodeGameTypeQuery, GameInfo>>();
 
             _ = fakeService.QueryAsync(
-                new GameByGameTypeQuery(gameProviderCode, gameType),
+                new GameByGameProviderCodeGameTypeQuery(gameProviderCode, gameType),
                 cancellationToken: Arg.Any<CancellationToken>())
                 .Returns((new GameInfo[] {
                 new GameInfo(
@@ -359,7 +359,7 @@ public partial class GameCommandUnitTest
     }
 
     [TestMethod]
-    public async Task Game_Query_GameProviderId_Is_Empty()
+    public async Task Game_Query_GameProviderId_Empty()
     {
         var gameProviderId = Guid.NewGuid();
         await using var web = CreateTestSettingSite(services =>
@@ -380,6 +380,89 @@ public partial class GameCommandUnitTest
 
         var actual = await sut
             .GameQueryAsync(gameProviderId)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.IsFalse(actual.Any());
+    }
+
+    [TestMethod]
+    public async Task Game_Query_GameProviderId_GameType()
+    {
+        var gameProviderId = Guid.NewGuid();
+        var gameType = GameType.CardGame;
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeService = Substitute.For<IQueryService<GameByGameProviderIdGameTypeQuery, GameInfo>>();
+
+            _ = fakeService.QueryAsync(
+                new GameByGameProviderIdGameTypeQuery(gameProviderId, gameType),
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns((new GameInfo[] {
+                new GameInfo(
+                    GameId: 1,
+                    GameCode: "baccarat",
+                    GameProviderId: gameProviderId,
+                    GameProviderCode: "KY",
+                    GameExternalId:  "baccarat",
+                    Type: GameType.CardGame,
+                    PlatformType: GamePlatformType.DesktopAndMobile,
+                    Name: "Baccarat",
+                    SubGame: true,
+                    AvailableToBrand: false,
+                    HasTurnoverOnTieBet: false,
+                    Html5: true,
+                    Description: "Baccarat",
+                    EndpointPath: string.Empty,
+                    RuleUrl: string.Empty,
+                    AvailableCurrencies: null,
+                    Localization: string.Empty,
+                    SubGameProviderCode: "KY")  }).ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakeService);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .GameQueryAsync(
+                gameProviderId,
+                GameType.CardGame)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.IsTrue(actual.Any());
+    }
+
+    [TestMethod]
+    public async Task Game_Query_GameProviderId_GameType_Empty()
+    {
+        var gameProviderId = Guid.NewGuid();
+        var gameType = GameType.CardGame;
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeService = Substitute.For<IQueryService<GameByGameProviderIdGameTypeQuery, GameInfo>>();
+
+            _ = fakeService.QueryAsync(
+                new GameByGameProviderIdGameTypeQuery(gameProviderId, gameType),
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns(Enumerable.Empty<GameInfo>().ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakeService);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .GameQueryAsync(
+                gameProviderId,
+                GameType.CardGame)
             .ToArrayAsync()
             .ConfigureAwait(false);
 

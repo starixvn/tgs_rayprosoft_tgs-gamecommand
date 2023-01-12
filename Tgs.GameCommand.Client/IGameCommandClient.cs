@@ -115,6 +115,11 @@ public interface IGameCommandClient
         GameType gameType,
         CancellationToken cancellationToken = default);
 
+    IAsyncEnumerable<GameInfo> GameQueryAsync(
+        Guid gameProviderId,
+        GameType gameType,
+        CancellationToken cancellationToken = default);
+
     ValueTask<LicenseeStatus?> LicenseeGetStatusAsync(
         Guid licenseeId,
         CancellationToken cancellationToken = default);

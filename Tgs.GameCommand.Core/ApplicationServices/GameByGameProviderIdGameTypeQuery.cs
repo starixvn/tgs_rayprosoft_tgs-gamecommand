@@ -2,6 +2,6 @@
 
 namespace Tgs.GameCommand.Core.ApplicationServices;
 
-public record GameByGameTypeQuery(
-    string GameProviderCode,
+public record GameByGameProviderIdGameTypeQuery(
+    Guid GameProviderId,
     GameType GameType);

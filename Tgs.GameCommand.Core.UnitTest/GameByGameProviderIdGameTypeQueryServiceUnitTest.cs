@@ -6,31 +6,23 @@ using Tgs.GameCommand.Core.ApplicationServices;
 namespace Tgs.GameCommandRepositories.UnitTest;
 
 [TestClass]
-public class GameByGameTypeQueryServiceUnitTest
+public class GameByGameProviderIdGameTypeQueryServiceUnitTest
 {
     [TestMethod]
     public async Task Normal_Process()
     {
-        var fakeGameProviderRepository = Substitute.For<IGameProviderRepository>();
         var fakeGameRepository = Substitute.For<IGameRepository>();
 
-        var query = new GameByGameTypeQuery(
-            GameProviderCode: "KY",
+        var query = new GameByGameProviderIdGameTypeQuery(
+            GameProviderId: Guid.NewGuid(),
             GameType: GameType.CardGame);
-
-        var gameProviderId = Guid.NewGuid();
-        _ = fakeGameProviderRepository
-            .GetGameProviderIdAsync(
-                code: Arg.Is(query.GameProviderCode),
-                cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(gameProviderId);
 
         var games = new GameInfo[] {
             new GameInfo(
                 GameId: 1,
                 "baccent",
-                gameProviderId,
-                query.GameProviderCode,
+                query.GameProviderId,
+                "KY",
                 "1",
                 GameType.CardGame,
                 GamePlatformType.DesktopAndMobile,
@@ -48,13 +40,12 @@ public class GameByGameTypeQueryServiceUnitTest
         };
         _ = fakeGameRepository
             .QueryAsync(
-                gameProviderId: Arg.Is(gameProviderId),
+                gameProviderId: Arg.Is(query.GameProviderId),
                 type: Arg.Is(query.GameType),
                 cancellationToken: Arg.Any<CancellationToken>())
             .Returns(games.ToAsyncEnumerable());
 
-        var service = new GameByGameTypeQueryService(
-            fakeGameProviderRepository,
+        var service = new GameByGameProviderIdGameTypeQueryService(
             fakeGameRepository);
 
         var actual = await service
@@ -65,5 +56,34 @@ public class GameByGameTypeQueryServiceUnitTest
 
         Assert.IsNotNull(actual);
         Assert.IsTrue(actual.Any());
+    }
+
+    [TestMethod]
+    public async Task Empty()
+    {
+        var fakeGameRepository = Substitute.For<IGameRepository>();
+
+        var query = new GameByGameProviderIdGameTypeQuery(
+            GameProviderId: Guid.NewGuid(),
+            GameType: GameType.CardGame);
+
+        _ = fakeGameRepository
+            .QueryAsync(
+                gameProviderId: Arg.Is(query.GameProviderId),
+                type: Arg.Is(query.GameType),
+                cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(Enumerable.Empty<GameInfo>().ToAsyncEnumerable());
+
+        var service = new GameByGameProviderIdGameTypeQueryService(
+            fakeGameRepository);
+
+        var actual = await service
+            .QueryAsync(
+                query)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.IsFalse(actual.Any());
     }
 }

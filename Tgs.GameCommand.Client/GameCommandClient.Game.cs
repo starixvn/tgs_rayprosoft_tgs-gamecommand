@@ -206,4 +206,33 @@ internal partial class GameCommandClient
             yield return gameModel;
         }
     }
+
+    public async IAsyncEnumerable<GameInfo> GameQueryAsync(
+        Guid gameProviderId,
+        GameType gameType,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+
+    {
+        var response = await _httpClient
+            .GetAsync(
+                requestUri: $"/game/query/{gameProviderId}/{gameType}",
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        _ = response.EnsureSuccessStatusCode();
+
+        var contentJson = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        var gameModels = JsonSerializer.Deserialize<IEnumerable<GameInfo>>(contentJson, _SerializerOptions) ?? Enumerable.Empty<GameInfo>();
+
+        if (!gameModels.Any())
+        {
+            yield break;
+        }
+
+        foreach (var gameModel in gameModels)
+        {
+            yield return gameModel;
+        }
+    }
 }

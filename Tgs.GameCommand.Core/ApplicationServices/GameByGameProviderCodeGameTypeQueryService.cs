@@ -4,12 +4,12 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GameCommand.Core.ApplicationServices;
 
-internal class GameByGameTypeQueryService : IQueryService<GameByGameTypeQuery, GameInfo>
+internal class GameByGameProviderCodeGameTypeQueryService : IQueryService<GameByGameProviderCodeGameTypeQuery, GameInfo>
 {
     private readonly IGameProviderRepository _gameProviderRepository;
     private readonly IGameRepository _gameRepository;
 
-    public GameByGameTypeQueryService(
+    public GameByGameProviderCodeGameTypeQueryService(
         IGameProviderRepository gameProviderRepository,
         IGameRepository gameRepository)
     {
@@ -18,7 +18,7 @@ internal class GameByGameTypeQueryService : IQueryService<GameByGameTypeQuery, G
     }
 
     public async IAsyncEnumerable<GameInfo> QueryAsync(
-        GameByGameTypeQuery query,
+        GameByGameProviderCodeGameTypeQuery query,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var gameProviderId = await _gameProviderRepository
@@ -37,26 +37,7 @@ internal class GameByGameTypeQueryService : IQueryService<GameByGameTypeQuery, G
                 gameProviderId: gameProviderId.Value,
                 type: query.GameType,
                 cancellationToken: cancellationToken)
-            .ToEnumerable()
-            .Select(model => new GameInfo(
-                model.GameId,
-                model.GameCode,
-                model.GameProviderId,
-                model.GameProviderCode,
-                model.GameExternalId,
-                model.Type,
-                model.PlatformType,
-                model.Name,
-                model.SubGame,
-                model.AvailableToBrand,
-                model.HasTurnoverOnTieBet,
-                model.Html5,
-                model.Description,
-                model.EndpointPath,
-                model.RuleUrl,
-                model.AvailableCurrencies,
-                model.Localization,
-                model.SubGameProviderCode));
+            .ToEnumerable();
 
         if (!results.Any())
         {
