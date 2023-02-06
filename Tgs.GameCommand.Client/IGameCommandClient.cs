@@ -132,6 +132,12 @@ public interface IGameCommandClient
         string playerCode,
         CancellationToken cancellationToken = default);
 
+    IAsyncEnumerable<PlayerInfo> PlayerQueryAsync(
+            Guid brandId,
+        int pageIndex = 1,
+        int pageSize = 1000,
+        CancellationToken cancellationToken = default);
+
     ValueTask<ResellerStatus?> ResellerGetStatusAsync(
         Guid resellerId,
         CancellationToken cancellationToken = default);

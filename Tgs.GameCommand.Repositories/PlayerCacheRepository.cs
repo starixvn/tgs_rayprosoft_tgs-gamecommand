@@ -48,4 +48,16 @@ internal class PlayerCacheRepository : IPlayerRepository
         .GetStatusAsync(
             playerCode: playerCode,
             cancellationToken: cancellationToken);
+
+    public IAsyncEnumerable<PlayerInfo> QueryAsync(
+        Guid brandId,
+        int pageIndex = 1,
+        int pageSize = 1000,
+        CancellationToken cancellationToken = default)
+        => _repository
+        .QueryAsync(
+            brandId: brandId,
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            cancellationToken: cancellationToken);
 }

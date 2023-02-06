@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -83,5 +84,59 @@ public partial class GameCommandUnitTest
 
         Assert.IsNotNull(actual);
         Assert.AreEqual(PlayerStatus.Enabled, actual);
+    }
+
+    [TestMethod]
+    public async Task Player_Query()
+    {
+        var brandId = Guid.NewGuid();
+        int pageIndex = 1;
+        int pageSize = 1000;
+
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakePlayerRepository = Substitute.For<IPlayerRepository>();
+
+            var playerInfos = new PlayerInfo[]
+            {
+                new PlayerInfo(
+                    ResellerId: Guid.NewGuid(),
+                     ResellerCode: "TGS",
+                     LicenseeId: Guid.NewGuid(),
+                     LicenseeCode: "TGS",
+                     BrandId: brandId,
+                     BrandCode: "GPI",
+                     PlayerCode: "4ucmqplxb029",
+                     Username: "4ucmqplxb029",
+                     DefaultWalletId: Guid.NewGuid(),
+                     DefaultWalletCurrencyCode: "CNY")
+            };
+
+            _ = fakePlayerRepository
+            .QueryAsync(
+                brandId: Arg.Is(brandId),
+                pageIndex: Arg.Is(pageIndex),
+                pageSize: Arg.Is(pageSize),
+                cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(playerInfos.ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakePlayerRepository);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .PlayerQueryAsync(
+                brandId: brandId,
+                pageIndex: pageIndex,
+                pageSize: pageSize)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.IsTrue(actual.Any());
+        Assert.AreEqual(brandId, actual.First().BrandId);
     }
 }
