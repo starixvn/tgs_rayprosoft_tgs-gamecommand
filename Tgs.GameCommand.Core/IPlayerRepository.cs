@@ -11,4 +11,10 @@ public interface IPlayerRepository
     ValueTask<PlayerStatus?> GetStatusAsync(
         string playerCode,
         CancellationToken cancellationToken = default);
+
+    IAsyncEnumerable<PlayerInfo> QueryAsync(
+        Guid brandId,
+        int pageIndex = 1,
+        int pageSize = 1000,
+        CancellationToken cancellationToken = default);
 }

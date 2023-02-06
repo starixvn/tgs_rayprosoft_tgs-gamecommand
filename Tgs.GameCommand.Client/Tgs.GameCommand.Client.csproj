@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.0.5</Version>
+		<Version>0.0.6</Version>
 		<Authors>Raypro</Authors>
 		<Description>Tgs GameCommand Client</Description>
 		<PackageProjectUrl>https://gitlab.com/rayprosoft/tgs-gamecommand</PackageProjectUrl>
@@ -15,12 +15,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Tgs.GameCommand.Common\Tgs.GameCommand.Common.csproj" >
+		<ProjectReference Include="..\Tgs.GameCommand.Common\Tgs.GameCommand.Common.csproj">
 			<PrivateAssets>all</PrivateAssets>
 		</ProjectReference>
 	</ItemGroup>

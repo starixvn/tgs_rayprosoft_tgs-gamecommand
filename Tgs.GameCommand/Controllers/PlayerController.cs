@@ -22,4 +22,17 @@ public class PlayerController : ControllerBase
         [FromServices] IPlayerRepository repository,
         string playerCode)
         => repository.GetStatusAsync(playerCode);
+
+    [HttpGet("{brandId:guid}", Name = "Player_QueryA")]
+    public IAsyncEnumerable<PlayerInfo> QueryAsync(
+        [FromServices] IPlayerRepository repository,
+        Guid brandId,
+        int pageIndex = 1,
+        int pageSize = 1000)
+        => repository
+        .QueryAsync(
+            brandId: brandId,
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            cancellationToken: HttpContext.RequestAborted);
 }
