@@ -21,7 +21,4 @@ internal class GameByGameProviderIdGameTypeQueryService : IQueryService<GameByGa
                 gameProviderId: query.GameProviderId,
                 type: query.GameType,
                 cancellationToken: cancellationToken);
-
-
-
 }
