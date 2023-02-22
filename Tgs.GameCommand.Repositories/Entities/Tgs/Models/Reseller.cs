@@ -8,14 +8,26 @@ namespace Tgs.GameCommand.Repositories.Entities;
 public partial class Reseller
 {
     public Guid Id { get; set; }
+
     public short Status { get; set; }
+
     public string? Description { get; set; }
+
     public string? OperationalEmail { get; set; }
+
     public short BusinessType { get; set; }
+
     public string Code { get; set; } = null!;
+
     public string Name { get; set; } = null!;
+
     public DateTime CreatedOn { get; set; }
+
     public DateTime UpdatedOn { get; set; }
+
     public string CreatedByUsername { get; set; } = null!;
+
     public string UpdatedByUsername { get; set; } = null!;
+
+    public virtual ICollection<Licensee> Licensees { get; } = new List<Licensee>();
 }

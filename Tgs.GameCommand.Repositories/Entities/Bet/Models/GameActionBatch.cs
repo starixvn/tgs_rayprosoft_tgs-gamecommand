@@ -8,11 +8,20 @@ namespace Tgs.GameCommand.Repositories.Entities;
 public partial class GameActionBatch
 {
     public Guid Id { get; set; }
+
     public string ExternalId { get; set; } = null!;
+
     public short Error { get; set; }
+
     public string? ErrorMessage { get; set; }
+
     public int TransactionsCount { get; set; }
+
     public string? ErrorsJson { get; set; }
+
     public DateTime CreatedOn { get; set; }
+
     public Guid GameProviderId { get; set; }
+
+    public virtual ICollection<GameAction> GameActions { get; } = new List<GameAction>();
 }

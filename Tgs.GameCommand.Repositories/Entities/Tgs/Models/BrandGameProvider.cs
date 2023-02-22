@@ -8,12 +8,26 @@ namespace Tgs.GameCommand.Repositories.Entities;
 public partial class BrandGameProvider
 {
     public Guid Id { get; set; }
+
     public Guid BrandId { get; set; }
+
     public Guid GameProviderId { get; set; }
+
     public short Status { get; set; }
+
     public Guid GameProviderConfigurationId { get; set; }
+
     public string DefaultLanguageCode { get; set; } = null!;
+
     public string DesktopQueryString { get; set; } = null!;
+
     public string MobileQueryString { get; set; } = null!;
+
     public bool IsManualChangeStatus { get; set; }
+
+    public virtual Brand Brand { get; set; } = null!;
+
+    public virtual GameProvider GameProvider { get; set; } = null!;
+
+    public virtual GameProviderConfig GameProviderConfiguration { get; set; } = null!;
 }

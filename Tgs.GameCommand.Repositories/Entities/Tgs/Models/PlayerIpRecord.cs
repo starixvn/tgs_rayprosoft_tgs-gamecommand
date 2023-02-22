@@ -8,8 +8,14 @@ namespace Tgs.GameCommand.Repositories.Entities;
 public partial class PlayerIpRecord
 {
     public string PlayerCode { get; set; } = null!;
+
     public short IpType { get; set; }
+
     public string Ip { get; set; } = null!;
+
     public DateTime RecordOn { get; set; }
+
     public string? Host { get; set; }
+
+    public virtual Player PlayerCodeNavigation { get; set; } = null!;
 }
