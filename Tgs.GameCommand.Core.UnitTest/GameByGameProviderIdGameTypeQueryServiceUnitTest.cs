@@ -9,6 +9,35 @@ namespace Tgs.GameCommandRepositories.UnitTest;
 public class GameByGameProviderIdGameTypeQueryServiceUnitTest
 {
     [TestMethod]
+    public async Task Empty()
+    {
+        var fakeGameRepository = Substitute.For<IGameRepository>();
+
+        var query = new GameByGameProviderIdGameTypeQuery(
+            GameProviderId: Guid.NewGuid(),
+            GameType: GameType.CardGame);
+
+        _ = fakeGameRepository
+            .QueryAsync(
+                gameProviderId: Arg.Is(query.GameProviderId),
+                type: Arg.Is(query.GameType),
+                cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(Enumerable.Empty<GameInfo>().ToAsyncEnumerable());
+
+        var service = new GameByGameProviderIdGameTypeQueryService(
+            fakeGameRepository);
+
+        var actual = await service
+            .QueryAsync(
+                query)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.IsFalse(actual.Any());
+    }
+
+    [TestMethod]
     public async Task Normal_Process()
     {
         var fakeGameRepository = Substitute.For<IGameRepository>();
@@ -56,34 +85,5 @@ public class GameByGameProviderIdGameTypeQueryServiceUnitTest
 
         Assert.IsNotNull(actual);
         Assert.IsTrue(actual.Any());
-    }
-
-    [TestMethod]
-    public async Task Empty()
-    {
-        var fakeGameRepository = Substitute.For<IGameRepository>();
-
-        var query = new GameByGameProviderIdGameTypeQuery(
-            GameProviderId: Guid.NewGuid(),
-            GameType: GameType.CardGame);
-
-        _ = fakeGameRepository
-            .QueryAsync(
-                gameProviderId: Arg.Is(query.GameProviderId),
-                type: Arg.Is(query.GameType),
-                cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(Enumerable.Empty<GameInfo>().ToAsyncEnumerable());
-
-        var service = new GameByGameProviderIdGameTypeQueryService(
-            fakeGameRepository);
-
-        var actual = await service
-            .QueryAsync(
-                query)
-            .ToArrayAsync()
-            .ConfigureAwait(false);
-
-        Assert.IsNotNull(actual);
-        Assert.IsFalse(actual.Any());
     }
 }
