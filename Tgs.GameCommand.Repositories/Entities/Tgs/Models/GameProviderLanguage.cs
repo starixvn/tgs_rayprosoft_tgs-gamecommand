@@ -8,6 +8,10 @@ namespace Tgs.GameCommand.Repositories.Entities;
 public partial class GameProviderLanguage
 {
     public Guid GameProviderId { get; set; }
+
     public string CultureCode { get; set; } = null!;
+
     public string GameProviderCultureCode { get; set; } = null!;
+
+    public virtual GameProvider GameProvider { get; set; } = null!;
 }

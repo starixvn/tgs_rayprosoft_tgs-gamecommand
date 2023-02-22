@@ -8,20 +8,48 @@ namespace Tgs.GameCommand.Repositories.Entities;
 public partial class GameProvider
 {
     public Guid Id { get; set; }
+
     public short Status { get; set; }
+
     public string? Description { get; set; }
+
     public bool AutoCloseRound { get; set; }
+
     public bool SupportTestPlayer { get; set; }
+
     public bool AllowKickPlayer { get; set; }
+
     public short PlaceBetTimeout { get; set; }
+
     public short SettleBetTimeout { get; set; }
+
     public int UniqueId { get; set; }
+
     public bool TransferWallet { get; set; }
+
     public string Code { get; set; } = null!;
+
     public string Name { get; set; } = null!;
+
     public DateTime CreatedOn { get; set; }
+
     public DateTime UpdatedOn { get; set; }
+
     public string CreatedByUsername { get; set; } = null!;
+
     public string UpdatedByUsername { get; set; } = null!;
+
     public string? Localization { get; set; }
+
+    public virtual ICollection<BrandGameProvider> BrandGameProviders { get; } = new List<BrandGameProvider>();
+
+    public virtual ICollection<GameProviderConfig> GameProviderConfigs { get; } = new List<GameProviderConfig>();
+
+    public virtual ICollection<GameProviderCurrency> GameProviderCurrencies { get; } = new List<GameProviderCurrency>();
+
+    public virtual ICollection<GameProviderLanguage> GameProviderLanguages { get; } = new List<GameProviderLanguage>();
+
+    public virtual ICollection<Game> Games { get; } = new List<Game>();
+
+    public virtual ICollection<SubGameProvider> SubGameProviders { get; } = new List<SubGameProvider>();
 }

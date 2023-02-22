@@ -8,26 +8,56 @@ namespace Tgs.GameCommand.Repositories.Entities;
 public partial class GameAction
 {
     public Guid Id { get; set; }
+
     public Guid RoundId { get; set; }
+
     public string PlayerCode { get; set; } = null!;
+
     public string ExternalTransactionId { get; set; } = null!;
+
     public short Type { get; set; }
+
     public decimal Amount { get; set; }
+
     public decimal Turnover { get; set; }
+
     public decimal WinLoss { get; set; }
+
     public decimal UnsettledBets { get; set; }
+
     public decimal Balance { get; set; }
+
     public string? BetType { get; set; }
+
     public string ExternalBetId { get; set; } = null!;
+
     public string ExternalGameActionGroupId { get; set; } = null!;
+
     public Guid? ReferencedGameActionId { get; set; }
+
     public Guid? GameActionBatchId { get; set; }
+
     public DateTime RecordedOn { get; set; }
+
     public DateTime? SentOn { get; set; }
+
     public bool IsClosingRound { get; set; }
+
     public bool? ClosingRoundExplicitRequest { get; set; }
+
     public string PlayerIp { get; set; } = null!;
+
     public string? ExtraData { get; set; }
+
     public string? JackpotContribution { get; set; }
+
     public DateTime StoredOn { get; set; }
+
+    public virtual GameActionBatch? GameActionBatch { get; set; }
+
+    public virtual ICollection<GameAction> InverseReferencedGameAction { get; } = new List<GameAction>();
+
+    public virtual GameAction? ReferencedGameAction { get; set; }
+
+    public virtual Round Round { get; set; } = null!;
 }

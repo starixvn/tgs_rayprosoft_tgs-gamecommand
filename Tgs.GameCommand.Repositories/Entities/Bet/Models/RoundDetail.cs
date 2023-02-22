@@ -8,5 +8,8 @@ namespace Tgs.GameCommand.Repositories.Entities;
 public partial class RoundDetail
 {
     public Guid RoundId { get; set; }
+
     public string AdditionalData { get; set; } = null!;
+
+    public virtual Round Round { get; set; } = null!;
 }
