@@ -122,7 +122,7 @@ deploy-dev:
   script:
     - export resources=$(kubectl get cm resources-setting -o jsonpath={.data.$SettingKey})
     - export dedicated=$(kubectl get cm tgs-settings -o jsonpath={.data.dedicated_ondemand})
-    - export node_selector=$(kubectl get cm tgs-settings -o jsonpath={.data.dedicated_ondemand})
+    - export node_selector=$(kubectl get cm tgs-settings -o jsonpath={.data.node-selector_ondemand})
     - export autoscaling=$(kubectl get cm autoscaling-setting -o jsonpath={.data.$SettingKey})
     - |
       cat << EOF | yq e -P | helm template artifacts/k8s/$HelmTemplateFolderName \
@@ -169,7 +169,7 @@ deploy-staging:
   script:
     - export resources=$(kubectl get cm resources-setting -o jsonpath={.data.$SettingKey})
     - export dedicated=$(kubectl get cm tgs-settings -o jsonpath={.data.dedicated_ondemand})
-    - export node_selector=$(kubectl get cm tgs-settings -o jsonpath={.data.dedicated_ondemand})
+    - export node_selector=$(kubectl get cm tgs-settings -o jsonpath={.data.node-selector_ondemand})
     - export autoscaling=$(kubectl get cm autoscaling-setting -o jsonpath={.data.$SettingKey})
     - |
       cat << EOF | yq e -P | helm template artifacts/k8s/$HelmTemplateFolderName \
@@ -216,7 +216,7 @@ deploy-prod:
   script:
     - export resources=$(kubectl get cm resources-setting -o jsonpath={.data.$SettingKey})
     - export dedicated=$(kubectl get cm tgs-settings -o jsonpath={.data.dedicated_ondemand})
-    - export node_selector=$(kubectl get cm tgs-settings -o jsonpath={.data.dedicated_ondemand})
+    - export node_selector=$(kubectl get cm tgs-settings -o jsonpath={.data.node-selector_ondemand})
     - export autoscaling=$(kubectl get cm autoscaling-setting -o jsonpath={.data.$SettingKey})
     - |
       cat << EOF | yq e -P | helm template artifacts/k8s/$HelmTemplateFolderName \
