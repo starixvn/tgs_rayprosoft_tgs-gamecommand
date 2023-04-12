@@ -61,10 +61,11 @@ internal partial class GameCommandClient
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
 
     {
-        var queryStrings = new QueryBuilder();
-
-        queryStrings.Add("pageIndex", pageIndex.ToString());
-        queryStrings.Add("pageSize", pageSize.ToString());
+        var queryStrings = new QueryBuilder
+        {
+            { "pageIndex", pageIndex.ToString() },
+            { "pageSize", pageSize.ToString() }
+        };
 
         var response = await _httpClient
         .GetAsync(
