@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using System.Web;
 using Tgs.GameCommand.Common;
 
 namespace Tgs.GameCommand.Client;
@@ -58,9 +59,13 @@ internal partial class GameCommandClient
         string cultureCode,
         CancellationToken cancellationToken = default)
     {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/gameprovider/{gameProviderId}/culturecode"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["cultureCode"] = cultureCode.ToString();
+        uriBuilder.Query = query.ToString();
         var response = await _httpClient
             .GetAsync(
-                 requestUri: $"/gameprovider/{gameProviderId}/culturecode?cultureCode={cultureCode}",
+                 requestUri: uriBuilder.ToString(),
                  cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
@@ -82,9 +87,13 @@ internal partial class GameCommandClient
         string currencyCode,
         CancellationToken cancellationToken = default)
     {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/gameprovider/{gameProviderId}/currency"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["currencyCode"] = currencyCode.ToString();
+        uriBuilder.Query = query.ToString();
         var response = await _httpClient
             .GetAsync(
-                requestUri: $"/gameprovider/{gameProviderId}/currency?currencyCode={currencyCode}",
+                requestUri: uriBuilder.ToString(),
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
@@ -106,9 +115,13 @@ internal partial class GameCommandClient
         string currencyCode,
         CancellationToken cancellationToken = default)
     {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/gameprovider/{gameProviderId}/currencycode"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["currencyCode"] = currencyCode.ToString();
+        uriBuilder.Query = query.ToString();
         var response = await _httpClient
             .GetAsync(
-                requestUri: $"/gameprovider/{gameProviderId}/currencycode?currencyCode={currencyCode}",
+                requestUri: uriBuilder.ToString(),
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 

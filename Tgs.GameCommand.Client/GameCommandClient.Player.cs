@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http.Extensions;
+using System.Web;
 using Tgs.GameCommand.Common;
 
 namespace Tgs.GameCommand.Client;
@@ -61,15 +61,14 @@ internal partial class GameCommandClient
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
 
     {
-        var queryStrings = new QueryBuilder
-        {
-            { "pageIndex", pageIndex.ToString() },
-            { "pageSize", pageSize.ToString() }
-        };
-
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/player/{brandId}"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["pageIndex"] = pageIndex.ToString();
+        query["pageSize"] = pageSize.ToString();
+        uriBuilder.Query = query.ToString();
         var response = await _httpClient
         .GetAsync(
-                requestUri: $"/player/{brandId}{queryStrings.ToQueryString().Value}",
+                requestUri: uriBuilder.Uri,
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
+using System.Web;
 using Tgs.GameCommand.Common;
 
 namespace Tgs.GameCommand.Client;
@@ -34,9 +35,13 @@ internal partial class GameCommandClient
         string currencyCode,
         CancellationToken cancellationToken = default)
     {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/brand/{brandId}/currency"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["currencyCode"] = currencyCode.ToString();
+        uriBuilder.Query = query.ToString();
         var response = await _httpClient
             .GetAsync(
-                requestUri: $"/brand/{brandId}/currency?currencyCode={currencyCode}",
+                requestUri: uriBuilder.ToString(),
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
@@ -58,9 +63,13 @@ internal partial class GameCommandClient
         Guid gameProviderId,
         CancellationToken cancellationToken = default)
     {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/brand/{brandId}/gp/configuration"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["gameProviderId"] = gameProviderId.ToString();
+        uriBuilder.Query = query.ToString();
         var response = await _httpClient
             .GetAsync(
-                requestUri: $"/brand/{brandId}/gp/configuration?gameProviderId={gameProviderId}",
+                requestUri: uriBuilder.ToString(),
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
@@ -82,9 +91,13 @@ internal partial class GameCommandClient
         Guid gameProviderId,
         CancellationToken cancellationToken = default)
     {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/brand/{brandId}/gp/configuration/id"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["gameProviderId"] = gameProviderId.ToString();
+        uriBuilder.Query = query.ToString();
         var response = await _httpClient
             .GetAsync(
-                requestUri: $"/brand/{brandId}/gp/configuration/id?gameProviderId={gameProviderId}",
+                requestUri: uriBuilder.ToString(),
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
@@ -106,9 +119,13 @@ internal partial class GameCommandClient
         Guid gameProviderId,
         CancellationToken cancellationToken = default)
     {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/brand/{brandId}/gp/status"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["gameProviderId"] = gameProviderId.ToString();
+        uriBuilder.Query = query.ToString();
         var response = await _httpClient
             .GetAsync(
-                requestUri: $"/brand/{brandId}/gp/status?gameProviderId={gameProviderId}",
+                requestUri: uriBuilder.ToString(),
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
@@ -130,9 +147,13 @@ internal partial class GameCommandClient
         int gameId,
         CancellationToken cancellationToken = default)
     {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/brand/{brandId}/game/status"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        query["gameId"] = gameId.ToString();
+        uriBuilder.Query = query.ToString();
         var response = await _httpClient
             .GetAsync(
-                requestUri: $"/brand/{brandId}/game/status?gameId={gameId}",
+                requestUri: uriBuilder.ToString(),
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
@@ -153,9 +174,10 @@ internal partial class GameCommandClient
         Guid brandId,
         CancellationToken cancellationToken = default)
     {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/brand/{brandId}/status"));
         var response = await _httpClient
             .GetAsync(
-                requestUri: $"/brand/{brandId}/status",
+                requestUri: uriBuilder.ToString(),
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 

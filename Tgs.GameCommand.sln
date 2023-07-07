@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32002.185
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{27E9483C-DB05-44D2-BDD7-3F99B4662A09}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		nuget.config = nuget.config
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameCommand", "Tgs.GameCommand\Tgs.GameCommand.csproj", "{A8DF200F-849E-45A5-BAEE-BC74A42E59AB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameCommand.Core", "Tgs.GameCommand.Core\Tgs.GameCommand.Core.csproj", "{A2691CA1-012F-4F97-946E-5EF49FBAD1EA}"
@@ -23,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameCommand.Integration
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameCommand.Common", "Tgs.GameCommand.Common\Tgs.GameCommand.Common.csproj", "{A61510C4-F15D-493E-BEA2-76FB5FDBE5B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameCommand.Core.UnitTest", "Tgs.GameCommand.Core.UnitTest\Tgs.GameCommand.Core.UnitTest.csproj", "{C98CA923-93DB-4F38-BE9E-675EE19234E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameCommand.Core.UnitTest", "Tgs.GameCommand.Core.UnitTest\Tgs.GameCommand.Core.UnitTest.csproj", "{C98CA923-93DB-4F38-BE9E-675EE19234E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
