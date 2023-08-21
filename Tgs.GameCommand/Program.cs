@@ -54,12 +54,18 @@ builder.Services
     .AddGameCommand((sp, dbBuilder) =>
     {
         var config = sp.GetRequiredService<IConfiguration>();
-        _ = dbBuilder.UseNpgsql(config.GetConnectionString("Tgs"));
+        _ = dbBuilder.UseNpgsql(config.GetConnectionString("Tgs"), builder =>
+        {
+            _ = builder.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(15), errorCodesToAdd: null);
+        });
     },
     ((sp, dbBuilder) =>
     {
         var config = sp.GetRequiredService<IConfiguration>();
-        _ = dbBuilder.UseNpgsql(config.GetConnectionString("Tgs"));
+        _ = dbBuilder.UseNpgsql(config.GetConnectionString("Tgs"), builder =>
+        {
+            _ = builder.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(15), errorCodesToAdd: null);
+        });
     })
     );
 
