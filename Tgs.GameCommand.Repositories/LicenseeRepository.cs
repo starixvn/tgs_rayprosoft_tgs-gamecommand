@@ -13,10 +13,26 @@ internal class LicenseeRepository : ILicenseeRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public ValueTask<LicenseeStatus> GetStatusAsync(Guid licenseeId)
+    public ValueTask<LicenseeStatus> GetStatusAsync(
+        Guid licenseeId,
+        CancellationToken cancellationToken = default)
         => _context.Licensees
         .Where(x => x.Id == licenseeId)
         .Select(x => (LicenseeStatus)x.Status)
         .ToAsyncEnumerable()
-        .FirstOrDefaultAsync();
+        .FirstOrDefaultAsync(
+            cancellationToken: cancellationToken);
+
+    public IAsyncEnumerable<LicenseeInfo> QueryAsync(
+        CancellationToken cancellationToken = default)
+        => (from licensee in _context.Licensees.AsQueryable()
+            join reseller in _context.Resellers.AsQueryable()
+            on licensee.ResellerId equals reseller.Id
+            where licensee.Status != (int)LicenseeStatus.Archived
+            select new LicenseeInfo(
+                reseller.Id,
+                reseller.Code,
+                licensee.Id,
+                licensee.Code))
+        .ToAsyncEnumerable();
 }

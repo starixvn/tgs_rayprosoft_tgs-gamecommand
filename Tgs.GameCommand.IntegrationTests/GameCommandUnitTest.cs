@@ -4,13 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenTelemetry.Exporter;
 using Tgs.GameCommand.Repositories.Entities;
 
 namespace Tgs.GameCommand.IntegrationTests;
 
-[TestClass]
 public partial class GameCommandUnitTest
 {
     private static WebApplicationFactory<Program> CreateTestSettingSite(Action<IServiceCollection>? configureServices = null)

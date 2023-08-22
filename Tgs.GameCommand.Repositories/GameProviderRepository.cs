@@ -106,4 +106,22 @@ internal class GameProviderRepository : IGameProviderRepository
         .Select(x => (GameProviderStatus)x.Status)
         .ToAsyncEnumerable()
         .FirstOrDefaultAsync(cancellationToken);
+
+    public IAsyncEnumerable<GameProviderInfo> QueryAsync(
+        CancellationToken cancellationToken = default)
+        => _context.GameProviders.AsQueryable()
+        .Select(x => new GameProviderInfo(
+            x.Id,
+            x.Code,
+            x.UniqueId,
+            x.Name,
+            x.TransferWallet,
+            x.AutoCloseRound,
+            x.SupportTestPlayer,
+            x.AllowKickPlayer,
+            x.PlaceBetTimeout,
+            x.SettleBetTimeout,
+            x.Description,
+            x.Localization))
+        .ToAsyncEnumerable();
 }

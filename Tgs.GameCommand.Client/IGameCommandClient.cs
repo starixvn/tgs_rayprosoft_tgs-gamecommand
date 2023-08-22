@@ -37,6 +37,9 @@ public interface IGameCommandClient
         Guid brandId,
         CancellationToken cancellationToken = default);
 
+    IAsyncEnumerable<BrandInfo> BrandQueryAsync(
+        CancellationToken cancellationToken = default);
+
     ValueTask<IEnumerable<GameActionInfo>?> GameActionQueryAsync(
         Guid roundId,
         CancellationToken cancellationToken = default);
@@ -95,12 +98,16 @@ public interface IGameCommandClient
         string gameProviderCode,
         CancellationToken cancellationToken = default);
 
+    [Obsolete("已過時，請改使用GameProviderQueryAsync")]
     IAsyncEnumerable<GameProviderIdInfo> GameProviderGetGameProviderIdsAsync(
         CancellationToken cancellationToken = default);
 
     ValueTask<GameProviderStatus?> GameProviderGetStatusAsync(
         Guid gameProviderId,
         CancellationToken cancellationToken = default);
+
+    IAsyncEnumerable<GameProviderInfo> GameProviderQueryAsync(
+            CancellationToken cancellationToken = default);
 
     IAsyncEnumerable<GameInfo> GameQueryAsync(
         string gameProviderCode,
@@ -124,6 +131,9 @@ public interface IGameCommandClient
         Guid licenseeId,
         CancellationToken cancellationToken = default);
 
+    IAsyncEnumerable<LicenseeInfo> LicenseeQueryAsync(
+        CancellationToken cancellationToken = default);
+
     ValueTask<PlayerInfo?> PlayerGetAsync(
         string playerCode,
         CancellationToken cancellationToken = default);
@@ -140,6 +150,9 @@ public interface IGameCommandClient
 
     ValueTask<ResellerStatus?> ResellerGetStatusAsync(
         Guid resellerId,
+        CancellationToken cancellationToken = default);
+
+    IAsyncEnumerable<ResellerInfo> ResellerQueryAsync(
         CancellationToken cancellationToken = default);
 
     ValueTask<TConfiguration?> SettingGetConfigurationAsync<TConfiguration>(

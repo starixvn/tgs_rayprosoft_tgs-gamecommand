@@ -13,10 +13,22 @@ internal class ResellerRepository : IResellerRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public ValueTask<ResellerStatus> GetStatusAsync(Guid resellerId)
+    public ValueTask<ResellerStatus> GetStatusAsync(
+        Guid resellerId,
+        CancellationToken cancellationToken = default)
         => _context.Resellers.AsQueryable()
         .Where(x => x.Id == resellerId)
         .Select(x => (ResellerStatus)x.Status)
         .ToAsyncEnumerable()
-        .FirstOrDefaultAsync();
+        .FirstOrDefaultAsync(
+            cancellationToken: cancellationToken);
+
+    public IAsyncEnumerable<ResellerInfo> QueryAsync(
+        CancellationToken cancellationToken = default)
+        => (from reseller in _context.Resellers.AsQueryable()
+            where reseller.Status != (int)LicenseeStatus.Archived
+            select new ResellerInfo(
+                reseller.Id,
+                reseller.Code))
+        .ToAsyncEnumerable();
 }

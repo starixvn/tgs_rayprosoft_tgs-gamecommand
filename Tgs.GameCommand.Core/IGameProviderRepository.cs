@@ -34,4 +34,7 @@ public interface IGameProviderRepository
     ValueTask<GameProviderStatus> GetStatusAsync(
         Guid id,
         CancellationToken cancellationToken = default);
+
+    IAsyncEnumerable<GameProviderInfo> QueryAsync(
+            CancellationToken cancellationToken = default);
 }

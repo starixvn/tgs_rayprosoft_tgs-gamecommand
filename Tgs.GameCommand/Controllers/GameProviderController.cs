@@ -99,4 +99,11 @@ public class GameProviderController : ControllerBase
         .GetStatusAsync(
             id,
             HttpContext.RequestAborted);
+
+    [HttpGet(Name = "GameProvider_Query")]
+    public IAsyncEnumerable<GameProviderInfo> QueryAsync(
+        [FromServices] IGameProviderRepository repository)
+        => repository
+        .QueryAsync(
+            HttpContext.RequestAborted);
 }

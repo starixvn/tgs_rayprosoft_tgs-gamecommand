@@ -209,4 +209,34 @@ internal partial class GameCommandClient
                     .ConfigureAwait(false),
                 options: _SerializerOptions);
     }
+
+    public async IAsyncEnumerable<GameProviderInfo> GameProviderQueryAsync(
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/gameprovider"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        uriBuilder.Query = query.ToString();
+
+        var response = await _httpClient
+            .GetAsync(
+            requestUri: uriBuilder.Uri,
+            cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        _ = response.EnsureSuccessStatusCode();
+
+        var contentJson = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        var infos = JsonSerializer.Deserialize<IEnumerable<GameProviderInfo>>(contentJson, _SerializerOptions) ?? Enumerable.Empty<GameProviderInfo>();
+
+        if (!infos.Any())
+        {
+            yield break;
+        }
+
+        foreach (var info in infos)
+        {
+            yield return info;
+        }
+    }
 }

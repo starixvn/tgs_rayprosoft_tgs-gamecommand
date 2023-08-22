@@ -5,10 +5,9 @@ using Tgs.GameCommand.Core.ApplicationServices;
 
 namespace Tgs.GameCommandRepositories.UnitTest;
 
-[TestClass]
 public class GameByGameProviderCodeQueryServiceUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process()
     {
         var fakeGameProviderRepository = Substitute.For<IGameProviderRepository>();
@@ -61,7 +60,7 @@ public class GameByGameProviderCodeQueryServiceUnitTest
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.Any());
+        Assert.NotNull(actual);
+        Assert.True(actual.Any());
     }
 }

@@ -4,13 +4,15 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.0.8</Version>
+		<Version>0.0.9</Version>
 		<Authors>Raypro</Authors>
-		<Description>Tgs GameCommand Client</Description>
+		<RootNamespace>Tgs.GameCommand.Client</RootNamespace>
+		<PackageId>Tgs.GameCommand.Client</PackageId>
+		<Title>Tgs.GameCommand.Client</Title>
 		<PackageProjectUrl>https://gitlab.com/rayprosoft/tgs-gamecommand</PackageProjectUrl>
 		<RepositoryUrl>https://gitlab.com/rayprosoft/tgs-gamecommand.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>tgs-gamecommand</PackageTags>
+		<PackageTags>Tgs GameCommand Client</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>

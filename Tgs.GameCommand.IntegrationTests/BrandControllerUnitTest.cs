@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
@@ -12,7 +12,7 @@ namespace Tgs.GameCommand.IntegrationTests;
 
 public partial class GameCommandUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Brand_Get_BrandId()
     {
         var brandCode = "GPI";
@@ -34,11 +34,10 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.BrandGetBrandIdAsync(brandCode).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(brandId, actual);
+        Assert.Equal(brandId, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Brand_Get_Currency()
     {
         var currencyCode = "CNY";
@@ -64,11 +63,11 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.BrandGetCurrencyAsync(brandId, currencyCode).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(brandCurrencyCode, actual);
+        Assert.NotNull(actual);
+        Assert.Equal(brandCurrencyCode, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Brand_Get_GameProviderConfiguration()
     {
         var brandId = Guid.NewGuid();
@@ -102,13 +101,13 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.BrandGetGameProviderConfigurationAsync(brandId, gameProviderId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(brandId, actual.BrandId);
-        Assert.AreEqual(gameProviderId, actual.GameProviderId);
-        Assert.AreEqual(gameProviderConfigurationId, actual.GameProviderConfigurationId);
+        Assert.NotNull(actual);
+        Assert.Equal(brandId, actual.BrandId);
+        Assert.Equal(gameProviderId, actual.GameProviderId);
+        Assert.Equal(gameProviderConfigurationId, actual.GameProviderConfigurationId);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Brand_Get_GameProviderConfigurationId()
     {
         var brandId = Guid.NewGuid();
@@ -133,11 +132,10 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.BrandGetGameProviderConfigurationIdAsync(brandId, gameProviderId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(gameProviderConfigurationId, actual);
+        Assert.Equal(gameProviderConfigurationId, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Brand_Get_GameProviderStatus()
     {
         var expected = GameProviderStatus.Active;
@@ -163,11 +161,10 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.BrandGetGameProviderStatusAsync(brandId, gameProviderId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Brand_Get_GameStatus()
     {
         var expected = GameStatus.Active;
@@ -193,11 +190,10 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.BrandGetGameStatusAsync(brandId, gameId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Brand_Get_Status()
     {
         var expected = BrandStatus.Active;
@@ -221,7 +217,44 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.BrandGetStatusAsync(brandId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async Task Brand_Query()
+    {
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeRepository = Substitute.For<IBrandRepository>();
+
+            _ = fakeRepository
+            .QueryAsync(
+                cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(new BrandInfo[]
+            {
+                new BrandInfo(
+                    Guid.NewGuid(),
+                    "TGS",
+                    Guid.NewGuid(),
+                    "TGS",
+                    Guid.NewGuid(),
+                    "GPI"
+                    )
+            }.ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakeRepository);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .BrandQueryAsync()
+            .ToArrayAsync()
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<BrandInfo>();
+
+        Assert.True(actual.Any());
     }
 }

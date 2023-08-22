@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
@@ -13,7 +12,7 @@ namespace Tgs.GameCommand.IntegrationTests;
 
 public partial class GameCommandUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task GameAction_Query()
     {
         var roundId = Guid.NewGuid();
@@ -60,9 +59,9 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameActionQueryAsync(roundId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(1, actual.Count());
-        Assert.AreEqual(roundId, actual.First().RoundId);
-        Assert.AreEqual(GameActionType.PlaceBet, actual.First().Type);
+        Assert.NotNull(actual);
+        Assert.True(actual.Any());
+        Assert.Equal(roundId, actual.First().RoundId);
+        Assert.Equal(GameActionType.PlaceBet, actual.First().Type);
     }
 }

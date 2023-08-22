@@ -78,4 +78,10 @@ public class BrandController : ControllerBase
         => repository.GetStatusAsync(
             brandId: brandId,
             cancellationToken: HttpContext.RequestAborted);
+
+    [HttpGet(Name = "Brand_Query")]
+    public IAsyncEnumerable<BrandInfo> QueryAsync(
+        [FromServices] IBrandRepository repository)
+        => repository.QueryAsync(
+            cancellationToken: HttpContext.RequestAborted);
 }

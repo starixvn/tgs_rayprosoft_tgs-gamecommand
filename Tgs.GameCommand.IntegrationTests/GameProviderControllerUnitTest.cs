@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using ExpectedObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
@@ -16,7 +15,7 @@ namespace Tgs.GameCommand.IntegrationTests;
 
 public partial class GameCommandUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task GameProvider_Get()
     {
         var gameProviderCode = "ky";
@@ -56,11 +55,11 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameProviderGetAsync(gameProviderId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
+        Assert.NotNull(actual);
         expected.ToExpectedObject().ShouldEqual(actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task GameProvider_Get_CultureCode()
     {
         var gameProviderId = Guid.NewGuid();
@@ -87,11 +86,11 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameProviderGetCultureCodeAsync(gameProviderId, cultureCode).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(gameProviderCultureCode, actual);
+        Assert.NotNull(actual);
+        Assert.Equal(gameProviderCultureCode, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task GameProvider_Get_Currency()
     {
         var gameProviderId = Guid.NewGuid();
@@ -121,12 +120,12 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameProviderGetCurrencyAsync(gameProviderId, currencyCode).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(currencyCode, actual.CurrencyCode);
-        Assert.AreEqual(gameProviderCurrencyCode, actual.GameProviderCurrencyCode);
+        Assert.NotNull(actual);
+        Assert.Equal(currencyCode, actual.CurrencyCode);
+        Assert.Equal(gameProviderCurrencyCode, actual.GameProviderCurrencyCode);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task GameProvider_Get_CurrencyCode()
     {
         var gameProviderId = Guid.NewGuid();
@@ -152,11 +151,11 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameProviderGetCurrencyCodeAsync(gameProviderId, currencyCode).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(gameProviderCurrencyCode, actual);
+        Assert.NotNull(actual);
+        Assert.Equal(gameProviderCurrencyCode, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task GameProvider_Get_GameProviderId()
     {
         var gameProviderCode = "ky";
@@ -182,11 +181,10 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameProviderGetGameProviderIdAsync(gameProviderCode).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(gameProviderId, actual);
+        Assert.Equal(gameProviderId, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task GameProvider_Get_GameProviderIds()
     {
         await using var web = CreateTestSettingSite(services =>
@@ -222,11 +220,11 @@ public partial class GameCommandUnitTest
                 .ToArrayAsync()
                 .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.Any());
+        Assert.NotNull(actual);
+        Assert.True(actual.Any());
     }
 
-    [TestMethod]
+    [Fact]
     public async Task GameProvider_Id_GetStatus()
     {
         var gameProviderId = Guid.NewGuid();
@@ -250,7 +248,49 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameProviderGetStatusAsync(gameProviderId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(GameProviderStatus.Active, actual);
+        Assert.Equal(GameProviderStatus.Active, actual);
+    }
+
+    [Fact]
+    public async Task GameProvider_Query()
+    {
+        var gameProviderId = Guid.NewGuid();
+
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeRepository = Substitute.For<IGameProviderRepository>();
+
+            _ = fakeRepository
+                .QueryAsync(
+                 cancellationToken: Arg.Any<CancellationToken>())
+                .Returns(new GameProviderInfo[] {
+                    new GameProviderInfo(
+                        GameProviderId: gameProviderId,
+                        GameProviderCode: "KY",
+                        UniqueId: 1,
+                        Name: "KY",
+                        TransferWallet: true,
+                        AutoCloseRound: false,
+                        SupportTestPlayer: false,
+                        AllowKickPlayer: true,
+                        PlaceBetTimeout: 0,
+                        SettleBetTimeout: 0,
+                        Description: string.Empty,
+                        Localization: null) }.ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakeRepository);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .GameProviderQueryAsync()
+            .ToArrayAsync()
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameProviderInfo>();
+
+        Assert.True(actual.Any());
     }
 }

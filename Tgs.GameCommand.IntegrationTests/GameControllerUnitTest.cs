@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
@@ -15,7 +14,7 @@ namespace Tgs.GameCommand.IntegrationTests;
 
 public partial class GameCommandUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Game_Get()
     {
         var gameId = 1;
@@ -57,13 +56,13 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameGetAsync(gameId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(gameProviderId, actual.GameProviderId);
-        Assert.AreEqual(gameId, actual.GameId);
-        Assert.AreEqual(gameExternalId, actual.GameExternalId);
+        Assert.NotNull(actual);
+        Assert.Equal(gameProviderId, actual.GameProviderId);
+        Assert.Equal(gameId, actual.GameId);
+        Assert.Equal(gameExternalId, actual.GameExternalId);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Game_Get_GameProviderCode_ExternalGameId()
     {
         var gameId = 1;
@@ -106,10 +105,10 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameGetAsync(gameProviderCode, gameExternalId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
+        Assert.NotNull(actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Game_Get_GameProviderId_ExternalGameId()
     {
         var gameId = 1;
@@ -152,10 +151,10 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameGetAsync(gameProviderId, gameExternalId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
+        Assert.NotNull(actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Game_Get_GameProviderId_ExternalGameId_Id()
     {
         var gameId = 1;
@@ -182,10 +181,10 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameGetIdAsync(gameProviderId, gameExternalId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
+        Assert.Equal(gameId, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Game_Get_Status()
     {
         var gameId = 1;
@@ -207,11 +206,10 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.GameGetStatusAsync(gameId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(GameStatus.Active, actual);
+        Assert.Equal(GameStatus.Active, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Game_Query_GameProviderCode()
     {
         var gameProviderCode = "KY";
@@ -255,11 +253,11 @@ public partial class GameCommandUnitTest
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.Any());
+        Assert.NotNull(actual);
+        Assert.True(actual.Any());
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Game_Query_GameProviderCode_GameType()
     {
         var gameProviderCode = "KY";
@@ -306,11 +304,11 @@ public partial class GameCommandUnitTest
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.Any());
+        Assert.NotNull(actual);
+        Assert.True(actual.Any());
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Game_Query_GameProviderId()
     {
         var gameProviderId = Guid.NewGuid();
@@ -354,11 +352,11 @@ public partial class GameCommandUnitTest
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.Any());
+        Assert.NotNull(actual);
+        Assert.True(actual.Any());
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Game_Query_GameProviderId_Empty()
     {
         var gameProviderId = Guid.NewGuid();
@@ -383,11 +381,11 @@ public partial class GameCommandUnitTest
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsFalse(actual.Any());
+        Assert.NotNull(actual);
+        Assert.False(actual.Any());
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Game_Query_GameProviderId_GameType()
     {
         var gameProviderId = Guid.NewGuid();
@@ -434,11 +432,11 @@ public partial class GameCommandUnitTest
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.Any());
+        Assert.NotNull(actual);
+        Assert.True(actual.Any());
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Game_Query_GameProviderId_GameType_Empty()
     {
         var gameProviderId = Guid.NewGuid();
@@ -466,7 +464,7 @@ public partial class GameCommandUnitTest
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsFalse(actual.Any());
+        Assert.NotNull(actual);
+        Assert.False(actual.Any());
     }
 }

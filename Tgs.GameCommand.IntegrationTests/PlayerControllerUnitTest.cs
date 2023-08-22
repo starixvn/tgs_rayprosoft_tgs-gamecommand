@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
@@ -13,7 +12,7 @@ namespace Tgs.GameCommand.IntegrationTests;
 
 public partial class GameCommandUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Player_Get()
     {
         var resellerId = Guid.NewGuid();
@@ -54,14 +53,14 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.PlayerGetAsync(playerCode).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(resellerId, actual.ResellerId);
-        Assert.AreEqual(licenseeId, actual.LicenseeId);
-        Assert.AreEqual(brandId, actual.BrandId);
-        Assert.AreEqual(playerCode, actual.PlayerCode);
+        Assert.NotNull(actual);
+        Assert.Equal(resellerId, actual.ResellerId);
+        Assert.Equal(licenseeId, actual.LicenseeId);
+        Assert.Equal(brandId, actual.BrandId);
+        Assert.Equal(playerCode, actual.PlayerCode);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Player_Get_Status()
     {
         var playerCode = "4ucmqplxb029";
@@ -82,11 +81,10 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.PlayerGetStatusAsync(playerCode).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(PlayerStatus.Enabled, actual);
+        Assert.Equal(PlayerStatus.Enabled, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Player_Query()
     {
         var brandId = Guid.NewGuid();
@@ -135,8 +133,8 @@ public partial class GameCommandUnitTest
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.Any());
-        Assert.AreEqual(brandId, actual.First().BrandId);
+        Assert.NotNull(actual);
+        Assert.True(actual.Any());
+        Assert.Equal(brandId, actual.First().BrandId);
     }
 }

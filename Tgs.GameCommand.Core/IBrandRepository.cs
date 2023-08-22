@@ -8,7 +8,7 @@ public interface IBrandRepository
         CancellationToken cancellationToken = default);
 
     ValueTask<Guid?> GetBrandIdAsync(
-            string brandCode,
+        string brandCode,
         CancellationToken cancellationToken = default);
 
     ValueTask<string?> GetCurrencyAsync(
@@ -38,5 +38,8 @@ public interface IBrandRepository
 
     ValueTask<BrandStatus?> GetStatusAsync(
         Guid brandId,
+        CancellationToken cancellationToken = default);
+
+    IAsyncEnumerable<BrandInfo> QueryAsync(
         CancellationToken cancellationToken = default);
 }

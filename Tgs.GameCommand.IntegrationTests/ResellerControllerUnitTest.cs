@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
@@ -11,7 +12,7 @@ namespace Tgs.GameCommand.IntegrationTests;
 
 public partial class GameCommandUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Reseller_Get_Status()
     {
         var expected = ResellerStatus.Active;
@@ -32,7 +33,40 @@ public partial class GameCommandUnitTest
 
         var actual = await sut.ResellerGetStatusAsync(resellerId).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(expected, actual);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async Task Reseller_Query()
+    {
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeRepository = Substitute.For<IResellerRepository>();
+
+            _ = fakeRepository
+            .QueryAsync(
+                cancellationToken: Arg.Any<CancellationToken>())
+            .Returns(new ResellerInfo[]
+            {
+                new ResellerInfo(
+                    Guid.NewGuid(),
+                    "TGS"
+                    )
+            }.ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakeRepository);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .ResellerQueryAsync()
+            .ToArrayAsync()
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<ResellerInfo>();
+
+        Assert.True(actual.Any());
     }
 }

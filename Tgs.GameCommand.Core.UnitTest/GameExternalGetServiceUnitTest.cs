@@ -5,10 +5,9 @@ using Tgs.GameCommand.Core.ApplicationServices;
 
 namespace Tgs.GameCommandRepositories.UnitTest;
 
-[TestClass]
 public class GameExternalGetServiceUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process()
     {
         var fakeGameProviderRepository = Substitute.For<IGameProviderRepository>();
@@ -68,7 +67,7 @@ public class GameExternalGetServiceUnitTest
                 query)
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(gameId, actual.GameId);
+        Assert.NotNull(actual);
+        Assert.Equal(gameId, actual.GameId);
     }
 }

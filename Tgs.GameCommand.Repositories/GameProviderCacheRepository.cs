@@ -148,4 +148,9 @@ internal class GameProviderCacheRepository : IGameProviderRepository
         .GetStatusAsync(
             id: id,
             cancellationToken: cancellationToken);
+
+    public IAsyncEnumerable<GameProviderInfo> QueryAsync(CancellationToken cancellationToken = default)
+        => _repository
+        .QueryAsync(
+            cancellationToken: cancellationToken);
 }

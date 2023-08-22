@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using Tgs.GameCommand.Client;
 using Tgs.GameCommand.Common;
@@ -13,7 +12,7 @@ namespace Tgs.GameCommand.IntegrationTests;
 
 public partial class GameCommandUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task GameProviderConfiguration_Get()
     {
         var gameProviderConfigId = Guid.NewGuid();
@@ -54,11 +53,11 @@ public partial class GameCommandUnitTest
             .GameProviderConfigurationGetAsync(gameProviderConfigId)
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(gameProviderId, actual.GameProviderId);
+        Assert.NotNull(actual);
+        Assert.Equal(gameProviderId, actual.GameProviderId);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task GameProviderConfiguration_GetIs_Empty()
     {
         var gameProviderConfigId = Guid.NewGuid();
@@ -84,10 +83,10 @@ public partial class GameCommandUnitTest
             .GameProviderConfigurationGetAsync(gameProviderConfigId)
             .ConfigureAwait(false);
 
-        Assert.IsNull(actual);
+        Assert.Null(actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task GameProviderConfiguration_Query()
     {
         var gameProviderId = Guid.NewGuid();
@@ -143,11 +142,11 @@ public partial class GameCommandUnitTest
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.Any());
+        Assert.NotNull(actual);
+        Assert.True(actual.Any());
     }
 
-    [TestMethod]
+    [Fact]
     public async Task GameProviderConfiguration_Query_Is_Empty()
     {
         var gameProviderId = Guid.NewGuid();
@@ -175,7 +174,7 @@ public partial class GameCommandUnitTest
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsFalse(actual.Any());
+        Assert.NotNull(actual);
+        Assert.False(actual.Any());
     }
 }

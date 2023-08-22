@@ -116,4 +116,21 @@ internal class BrandRepository : IBrandRepository
         .ToAsyncEnumerable()
         .FirstOrDefaultAsync(
             cancellationToken: cancellationToken);
+
+    public IAsyncEnumerable<BrandInfo> QueryAsync(
+        CancellationToken cancellationToken = default)
+        => (from brand in _context.Brands.AsQueryable()
+            join licensee in _context.Licensees.AsQueryable()
+            on brand.LicenseeId equals licensee.Id
+            join reseller in _context.Resellers.AsQueryable()
+            on licensee.ResellerId equals reseller.Id
+            where brand.Status != (int)BrandStatus.Archived
+            select new BrandInfo(
+                reseller.Id,
+                reseller.Code,
+                licensee.Id,
+                licensee.Code,
+                brand.Id,
+                brand.Code))
+        .ToAsyncEnumerable();
 }

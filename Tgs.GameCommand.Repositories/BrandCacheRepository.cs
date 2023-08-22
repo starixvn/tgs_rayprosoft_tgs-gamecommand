@@ -100,4 +100,10 @@ internal class BrandCacheRepository : IBrandRepository
         .GetStatusAsync(
             brandId,
             cancellationToken);
+
+    public IAsyncEnumerable<BrandInfo> QueryAsync(
+        CancellationToken cancellationToken = default)
+        => _repository
+        .QueryAsync(
+            cancellationToken: cancellationToken);
 }
