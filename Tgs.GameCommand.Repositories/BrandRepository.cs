@@ -63,7 +63,7 @@ internal class BrandRepository : IBrandRepository
                 brandGameProvider.MobileQueryString))
         .ToAsyncEnumerable()
         .FirstOrDefaultAsync(
-                cancellationToken: cancellationToken);
+            cancellationToken: cancellationToken);
 
     public async ValueTask<Guid?> GetGameProviderConfigurationIdAsync(
         Guid brandId,
@@ -132,5 +132,23 @@ internal class BrandRepository : IBrandRepository
                 licensee.Code,
                 brand.Id,
                 brand.Code))
+        .ToAsyncEnumerable();
+    public IAsyncEnumerable<BrandGameProviderInfo> QueryGameProviderAsync(
+        Guid brandId,
+        CancellationToken cancellationToken = default)
+        => (from brand in _context.Brands.AsQueryable()
+            join brandGameProvider in _context.BrandGameProviders.AsQueryable()
+            on brand.Id equals brandGameProvider.BrandId
+            join gameProvider in _context.GameProviders.AsQueryable()
+            on brandGameProvider.GameProviderId equals gameProvider.Id
+            select new BrandGameProviderInfo(
+                brand.Id,
+                brand.Code,
+                gameProvider.Id,
+                gameProvider.Code,
+                brandGameProvider.GameProviderConfigurationId,
+                brandGameProvider.DefaultLanguageCode,
+                brandGameProvider.DesktopQueryString,
+                brandGameProvider.MobileQueryString))
         .ToAsyncEnumerable();
 }

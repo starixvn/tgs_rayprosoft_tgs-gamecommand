@@ -17,7 +17,7 @@ public class BrandController : ControllerBase
             brandCode: brandCode,
             cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{brandId}/currency", Name = "Brand_GetCurrency")]
+    [HttpGet("{brandId:guid}/currency", Name = "Brand_GetCurrency")]
     public ValueTask<string?> GetCurrencyAsync(
         [FromServices] IBrandRepository repository,
         Guid brandId,
@@ -27,7 +27,7 @@ public class BrandController : ControllerBase
             currencyCode: currencyCode,
             cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{brandId}/gp/configuration", Name = "Brand_GetGameProviderConfiguration")]
+    [HttpGet("{brandId:guid}/gp/configuration", Name = "Brand_GetGameProviderConfiguration")]
     public ValueTask<BrandGameProviderInfo?> GetGameProviderConfigurationAsync(
         [FromServices] IBrandRepository repository,
         Guid brandId,
@@ -38,7 +38,16 @@ public class BrandController : ControllerBase
             gameProviderId: gameProviderId,
             cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{brandId}/gp/configuration/id", Name = "Brand_GetGameProviderConfigurationId")]
+    [HttpGet("{brandId:guid}/gp/query", Name = "Brand_Query_GameProvider")]
+    public IAsyncEnumerable<BrandGameProviderInfo> QueryGameProviderAsync(
+        [FromServices] IBrandRepository repository,
+        Guid brandId)
+        => repository
+        .QueryGameProviderAsync(
+            brandId: brandId,
+            cancellationToken: HttpContext.RequestAborted);
+
+    [HttpGet("{brandId:guid}/gp/configuration/id", Name = "Brand_GetGameProviderConfigurationId")]
     public ValueTask<Guid?> GetGameProviderConfigurationIdAsync(
         [FromServices] IBrandRepository repository,
         Guid brandId,
@@ -49,7 +58,7 @@ public class BrandController : ControllerBase
             gameProviderId: gameProviderId,
             cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{brandId}/gp/status", Name = "Brand_GetGameProviderStatus")]
+    [HttpGet("{brandId:guid}/gp/status", Name = "Brand_GetGameProviderStatus")]
     public ValueTask<GameProviderStatus?> GetGameProviderStatusAsync(
         [FromServices] IBrandRepository repository,
         Guid brandId,
@@ -60,7 +69,7 @@ public class BrandController : ControllerBase
             gameProviderId: gameProviderId,
             cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{brandId}/game/status", Name = "Brand_GetGameStatus")]
+    [HttpGet("{brandId:guid}/game/status", Name = "Brand_GetGameStatus")]
     public ValueTask<GameStatus?> GetGameStatusAsync(
         [FromServices] IBrandRepository repository,
         Guid brandId,
@@ -71,7 +80,7 @@ public class BrandController : ControllerBase
             gameId: gameId,
             cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{brandId}/status", Name = "Brand_GetStatus")]
+    [HttpGet("{brandId:guid}/status", Name = "Brand_GetStatus")]
     public ValueTask<BrandStatus?> GetStatusAsync(
         [FromServices] IBrandRepository repository,
         Guid brandId)

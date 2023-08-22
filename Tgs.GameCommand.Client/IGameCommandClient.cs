@@ -18,6 +18,10 @@ public interface IGameCommandClient
         Guid gameProviderId,
         CancellationToken cancellationToken = default);
 
+    IAsyncEnumerable<BrandGameProviderInfo> BrandQueryGameProviderAsync(
+        Guid brandId,
+        CancellationToken cancellationToken = default);
+
     ValueTask<Guid?> BrandGetGameProviderConfigurationIdAsync(
         Guid brandId,
         Guid gameProviderId,

@@ -21,6 +21,10 @@ public interface IBrandRepository
         Guid gameProviderId,
         CancellationToken cancellationToken = default);
 
+    IAsyncEnumerable<BrandGameProviderInfo> QueryGameProviderAsync(
+        Guid brandId,
+        CancellationToken cancellationToken = default);
+
     ValueTask<Guid?> GetGameProviderConfigurationIdAsync(
         Guid brandId,
         Guid gameProviderId,
