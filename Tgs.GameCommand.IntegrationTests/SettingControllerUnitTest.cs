@@ -31,7 +31,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.SettingGetConfigurationAsync<TConfiguration>(key).ConfigureAwait(false);
+        var actual = await sut.SettingGetConfigurationAsync<TConfiguration>(key);
 
         Assert.NotNull(actual);
         Assert.Equal(configuration.CreateOn, actual.CreateOn);
@@ -58,7 +58,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.SettingGetConfigurationStringAsync(key).ConfigureAwait(false);
+        var actual = await sut.SettingGetConfigurationStringAsync(key);
 
         Assert.NotNull(actual);
     }

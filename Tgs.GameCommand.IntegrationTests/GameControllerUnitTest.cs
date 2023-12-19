@@ -54,7 +54,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.GameGetAsync(gameId).ConfigureAwait(false);
+        var actual = await sut.GameGetAsync(gameId);
 
         Assert.NotNull(actual);
         Assert.Equal(gameProviderId, actual.GameProviderId);
@@ -103,7 +103,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.GameGetAsync(gameProviderCode, gameExternalId).ConfigureAwait(false);
+        var actual = await sut.GameGetAsync(gameProviderCode, gameExternalId);
 
         Assert.NotNull(actual);
     }
@@ -149,7 +149,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.GameGetAsync(gameProviderId, gameExternalId).ConfigureAwait(false);
+        var actual = await sut.GameGetAsync(gameProviderId, gameExternalId);
 
         Assert.NotNull(actual);
     }
@@ -179,7 +179,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.GameGetIdAsync(gameProviderId, gameExternalId).ConfigureAwait(false);
+        var actual = await sut.GameGetIdAsync(gameProviderId, gameExternalId);
 
         Assert.Equal(gameId, actual);
     }
@@ -204,7 +204,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.GameGetStatusAsync(gameId).ConfigureAwait(false);
+        var actual = await sut.GameGetStatusAsync(gameId);
 
         Assert.Equal(GameStatus.Active, actual);
     }
@@ -248,10 +248,8 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .GameQueryAsync(gameProviderCode)
+        var actual = await sut.GameQueryAsync(gameProviderCode)
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
@@ -298,12 +296,10 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .GameQueryAsync(
-                gameProviderCode,
-                GameType.CardGame)
+        var actual = await sut.GameQueryAsync(
+            gameProviderCode,
+            GameType.CardGame)
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
@@ -349,10 +345,8 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .GameQueryAsync(gameProviderId)
+        var actual = await sut.GameQueryAsync(gameProviderId)
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
@@ -379,10 +373,8 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .GameQueryAsync(gameProviderId)
+        var actual = await sut.GameQueryAsync(gameProviderId)
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
@@ -429,12 +421,10 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .GameQueryAsync(
-                gameProviderId,
-                GameType.CardGame)
+        var actual = await sut.GameQueryAsync(
+            gameProviderId,
+            GameType.CardGame)
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
@@ -462,12 +452,10 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .GameQueryAsync(
-                gameProviderId,
-                GameType.CardGame)
+        var actual = await sut.GameQueryAsync(
+            gameProviderId,
+            GameType.CardGame)
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);

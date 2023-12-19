@@ -29,7 +29,6 @@ public class GameByGameProviderIdGameTypeQueryServiceUnitTest
         var actual = await service.QueryAsync(
             query: query)
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
@@ -76,10 +75,8 @@ public class GameByGameProviderIdGameTypeQueryServiceUnitTest
         var service = new GameByGameProviderIdGameTypeQueryService(
             fakeGameRepository);
 
-        var actual = await service.QueryAsync(
-            query)
+        var actual = await service.QueryAsync(query)
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);

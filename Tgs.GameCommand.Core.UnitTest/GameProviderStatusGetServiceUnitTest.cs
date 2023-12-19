@@ -32,10 +32,7 @@ public class GameProviderStatusGetServiceUnitTest
         var service = new GameProviderStatusGetService(
             fakeGameProviderRepository);
 
-        var actual = await service
-            .GetAsync(
-                query)
-            .ConfigureAwait(false);
+        var actual = await service.GetAsync(query);
 
         Assert.Equal(status, actual);
     }

@@ -62,10 +62,7 @@ public class GameExternalGetServiceUnitTest
             fakeGameProviderRepository,
             fakeGameRepository);
 
-        var actual = await service
-            .GetAsync(
-                query)
-            .ConfigureAwait(false);
+        var actual = await service.GetAsync(query);
 
         Assert.NotNull(actual);
         Assert.Equal(gameId, actual.GameId);

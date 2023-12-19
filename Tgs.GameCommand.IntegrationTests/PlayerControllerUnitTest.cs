@@ -51,7 +51,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.PlayerGetAsync(playerCode).ConfigureAwait(false);
+        var actual = await sut.PlayerGetAsync(playerCode);
 
         Assert.NotNull(actual);
         Assert.Equal(resellerId, actual.ResellerId);
@@ -79,7 +79,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.PlayerGetStatusAsync(playerCode).ConfigureAwait(false);
+        var actual = await sut.PlayerGetStatusAsync(playerCode);
 
         Assert.Equal(PlayerStatus.Enabled, actual);
     }
@@ -125,13 +125,13 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .PlayerQueryAsync(
-                brandId: brandId,
-                pageIndex: pageIndex,
-                pageSize: pageSize)
+        var actual = await sut.PlayerQueryAsync(
+            brandId: brandId,
+            pageIndex: pageIndex,
+            pageSize: pageSize)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            ?? Enumerable.Empty<PlayerInfo>();
+        ;
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());

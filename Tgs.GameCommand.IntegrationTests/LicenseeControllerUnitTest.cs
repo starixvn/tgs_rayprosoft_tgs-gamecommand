@@ -31,7 +31,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.LicenseeGetStatusAsync(licenseeId).ConfigureAwait(false);
+        var actual = await sut.LicenseeGetStatusAsync(licenseeId);
 
         Assert.Equal(expected, actual);
     }
@@ -66,7 +66,6 @@ public partial class GameCommandUnitTest
         var actual = await sut
             .LicenseeQueryAsync()
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<LicenseeInfo>();
 
         Assert.True(actual.Any());

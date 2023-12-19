@@ -57,7 +57,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.GameActionQueryAsync(roundId).ConfigureAwait(false);
+        var actual = await sut.GameActionQueryAsync(roundId);
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());

@@ -49,9 +49,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .GameProviderConfigurationGetAsync(gameProviderConfigId)
-            .ConfigureAwait(false);
+        var actual = await sut.GameProviderConfigurationGetAsync(gameProviderConfigId);
 
         Assert.NotNull(actual);
         Assert.Equal(gameProviderId, actual.GameProviderId);
@@ -79,9 +77,7 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .GameProviderConfigurationGetAsync(gameProviderConfigId)
-            .ConfigureAwait(false);
+        var actual = await sut.GameProviderConfigurationGetAsync(gameProviderConfigId);
 
         Assert.Null(actual);
     }
@@ -137,10 +133,9 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .GameProviderConfigurationQueryAsync(gameProviderCode)
+        var actual = await sut.GameProviderConfigurationQueryAsync(gameProviderCode)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            ?? Enumerable.Empty<GameProviderConfigInfo>();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -169,10 +164,9 @@ public partial class GameCommandUnitTest
 
         var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .GameProviderConfigurationQueryAsync(gameProviderCode)
+        var actual = await sut.GameProviderConfigurationQueryAsync(gameProviderCode)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            ?? Enumerable.Empty<GameProviderConfigInfo>();
 
         Assert.NotNull(actual);
         Assert.False(actual.Any());
