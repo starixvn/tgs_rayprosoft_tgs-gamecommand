@@ -26,7 +26,7 @@ public partial class GameCommandUnitTest
                 id: Arg.Is(roundId),
                 cancellationToken: Arg.Any<CancellationToken>())
             .Returns((new GameActionInfo[] {
-                new GameActionInfo(
+                new(
                     Guid.NewGuid(),
                     roundId,
                     string.Empty,

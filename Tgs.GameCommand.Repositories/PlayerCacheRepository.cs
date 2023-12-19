@@ -4,38 +4,28 @@ using Tgs.GameCommand.Core;
 
 namespace Tgs.GameCommand.Repositories;
 
-internal class PlayerCacheRepository : IPlayerRepository
+internal class PlayerCacheRepository(
+    IPlayerRepository repository,
+    IMemoryCache memoryCache,
+    TimeSpan absoluteExpirationRelativeToNow) : IPlayerRepository
 {
-    private readonly IMemoryCache _memoryCache;
-    private readonly IPlayerRepository _repository;
-
-    public PlayerCacheRepository(
-        IPlayerRepository repository,
-        IMemoryCache memoryCache
-        )
-    {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
-    }
-
     public async ValueTask<PlayerInfo?> GetAsync(
         string playerCode,
         CancellationToken cancellationToken = default)
     {
         var key = string.Format("gamecommand:player:get:{0}", playerCode);
-        if (!_memoryCache.TryGetValue(key, out PlayerInfo? playerInfo))
+        if (!memoryCache.TryGetValue(key, out PlayerInfo? playerInfo))
         {
-            playerInfo = await _repository
-                        .GetAsync(
-                           playerCode: playerCode,
-                           cancellationToken: cancellationToken)
-                        .ConfigureAwait(false);
+            playerInfo = await repository.GetAsync(
+                playerCode: playerCode,
+                cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
             if (playerInfo is not null)
             {
-                _ = _memoryCache.Set(
+                _ = memoryCache.Set(
                     key: key,
                     value: playerInfo,
-                    absoluteExpirationRelativeToNow: TimeSpan.FromDays(1));
+                    absoluteExpirationRelativeToNow: absoluteExpirationRelativeToNow);
             }
         }
         return playerInfo;
@@ -44,8 +34,7 @@ internal class PlayerCacheRepository : IPlayerRepository
     public ValueTask<PlayerStatus?> GetStatusAsync(
         string playerCode,
         CancellationToken cancellationToken = default)
-        => _repository
-        .GetStatusAsync(
+        => repository.GetStatusAsync(
             playerCode: playerCode,
             cancellationToken: cancellationToken);
 
@@ -54,8 +43,7 @@ internal class PlayerCacheRepository : IPlayerRepository
         int pageIndex = 1,
         int pageSize = 1000,
         CancellationToken cancellationToken = default)
-        => _repository
-        .QueryAsync(
+        => repository.QueryAsync(
             brandId: brandId,
             pageIndex: pageIndex,
             pageSize: pageSize,

@@ -29,7 +29,7 @@ public static class ServiceCollecitonExtensions
         .Decorate<IGameRepository>((innerRepository, sp) => ActivatorUtilities.CreateInstance<GameCacheRepository>(sp, innerRepository))
         .AddTransient<ILicenseeRepository, LicenseeRepository>()
         .AddTransient<IPlayerRepository, PlayerRepository>()
-        .Decorate<IPlayerRepository>((innerRepository, sp) => ActivatorUtilities.CreateInstance<PlayerCacheRepository>(sp, innerRepository))
+        .Decorate<IPlayerRepository>((innerRepository, sp) => ActivatorUtilities.CreateInstance<PlayerCacheRepository>(sp, innerRepository, TimeSpan.FromDays(1)))
         .AddTransient<IResellerRepository, ResellerRepository>()
         .AddTransient<ISettingRepository, SettingRepository>();
 }

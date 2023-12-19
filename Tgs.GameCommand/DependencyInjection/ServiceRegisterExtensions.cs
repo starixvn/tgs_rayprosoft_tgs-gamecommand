@@ -2,7 +2,7 @@
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-public static class GameCommandRegisterExtensions
+public static class ServiceRegisterExtensions
 {
     public static async Task<WebApplication> UseGameCommandRegister(this WebApplication app)
     {
@@ -17,13 +17,11 @@ public static class GameCommandRegisterExtensions
 
             foreach (var gameProviderIdInfo in gameProviderIdInfos)
             {
-                _ = await gameProviderRepository
-                    .GetGameProviderIdAsync(
-                        gameProviderIdInfo.GameProviderCode)
+                _ = await gameProviderRepository.GetGameProviderIdAsync(
+                    gameProviderIdInfo.GameProviderCode)
                     .ConfigureAwait(false);
-                _ = await gameProviderRepository
-                    .GetAsync(
-                        gameProviderIdInfo.GameProviderId)
+                _ = await gameProviderRepository.GetAsync(
+                    gameProviderIdInfo.GameProviderId)
                     .ConfigureAwait(false);
             }
 
@@ -36,10 +34,9 @@ public static class GameCommandRegisterExtensions
 
             foreach (var brandCode in brandCodes)
             {
-                _ = await brandRepository
-                .GetBrandIdAsync(
-                        brandCode)
-                .ConfigureAwait(false);
+                _ = await brandRepository.GetBrandIdAsync(
+                    brandCode: brandCode)
+                    .ConfigureAwait(false);
             }
         }
 

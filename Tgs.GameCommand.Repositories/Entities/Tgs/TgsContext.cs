@@ -57,23 +57,23 @@ public partial class TgsContext : DbContext
             .HasPostgresExtension("pg_trgm")
             .HasPostgresExtension("uuid-ossp");
 
-            modelBuilder.ApplyConfiguration(new Configurations.BrandConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.BrandCurrencyConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.BrandGameConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.BrandGameProviderConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.BrandLanguageConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.GameConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.GameProviderConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.GameProviderConfigConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.GameProviderCurrencyConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.GameProviderLanguageConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.LicenseeConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.PlayerConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.PlayerIpRecordConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.PlayerLoginRecordConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.ResellerConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.SettingConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.SubGameProviderConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.BrandConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.BrandCurrencyConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.BrandGameConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.BrandGameProviderConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.BrandLanguageConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.GameConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.GameProviderConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.GameProviderConfigConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.GameProviderCurrencyConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.GameProviderLanguageConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.LicenseeConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.PlayerConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.PlayerIpRecordConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.PlayerLoginRecordConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.ResellerConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.SettingConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.SubGameProviderConfiguration());
         OnModelCreatingPartial(modelBuilder);
     }
 

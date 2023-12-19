@@ -48,7 +48,7 @@ public partial class GameCommandUnitTest
                 cancellationToken: Arg.Any<CancellationToken>())
             .Returns(new ResellerInfo[]
             {
-                new ResellerInfo(
+                new(
                     Guid.NewGuid(),
                     "TGS"
                     )

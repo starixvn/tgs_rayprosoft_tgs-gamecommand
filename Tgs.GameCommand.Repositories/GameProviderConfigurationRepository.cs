@@ -4,19 +4,14 @@ using Tgs.GameCommand.Repositories.Entities;
 
 namespace Tgs.GameCommand.Repositories;
 
-internal class GameProviderConfigurationRepository : IGameProviderConfigurationRepository
+internal class GameProviderConfigurationRepository(
+    TgsContext context) : IGameProviderConfigurationRepository
 {
-    private readonly TgsContext _context;
-
-    public GameProviderConfigurationRepository(
-        TgsContext context)
-        => _context = context ?? throw new ArgumentNullException(nameof(context));
-
     public ValueTask<GameProviderConfigInfo?> GetAsync(
         Guid gameProviderConfigId,
         CancellationToken cancellationToken = default)
-        => _context.GameProviderConfigs.AsQueryable()
-            .Join(_context.GameProviders.AsQueryable(),
+        => context.GameProviderConfigs.AsQueryable()
+            .Join(context.GameProviders.AsQueryable(),
                 config => config.GameProviderId,
                 gameProvider => gameProvider.Id,
                 (config, gameProvider) => new
@@ -55,8 +50,8 @@ internal class GameProviderConfigurationRepository : IGameProviderConfigurationR
     public IAsyncEnumerable<GameProviderConfigInfo> QueryAsync(
         string gameProviderCode,
         CancellationToken cancellationToken = default)
-        => _context.GameProviderConfigs.AsQueryable()
-            .Join(_context.GameProviders.AsQueryable(),
+        => context.GameProviderConfigs.AsQueryable()
+            .Join(context.GameProviders.AsQueryable(),
                 config => config.GameProviderId,
                 gameProvider => gameProvider.Id,
                 (config, gameProvider) => new

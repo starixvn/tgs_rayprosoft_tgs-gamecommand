@@ -73,9 +73,11 @@ public partial class Player
 
     public string? Birthday { get; set; }
 
+    public Guid? SnapshotEventId { get; set; }
+
     public virtual Brand Brand { get; set; } = null!;
 
-    public virtual ICollection<PlayerIpRecord> PlayerIpRecords { get; } = new List<PlayerIpRecord>();
+    public virtual ICollection<PlayerIpRecord> PlayerIpRecords { get; set; } = new List<PlayerIpRecord>();
 
-    public virtual ICollection<PlayerLoginRecord> PlayerLoginRecords { get; } = new List<PlayerLoginRecord>();
+    public virtual ICollection<PlayerLoginRecord> PlayerLoginRecords { get; set; } = new List<PlayerLoginRecord>();
 }

@@ -33,11 +33,11 @@ public partial class BetContext : DbContext
             .HasPostgresExtension("pg_trgm")
             .HasPostgresExtension("uuid-ossp");
 
-            modelBuilder.ApplyConfiguration(new Configurations.FailedGameRecordOperationConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.GameActionConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.GameActionBatchConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.RoundConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.RoundDetailConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.FailedGameRecordOperationConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.GameActionConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.GameActionBatchConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.RoundConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.RoundDetailConfiguration());
         OnModelCreatingPartial(modelBuilder);
     }
 

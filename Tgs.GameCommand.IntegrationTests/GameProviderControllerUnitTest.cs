@@ -216,9 +216,10 @@ public partial class GameCommandUnitTest
         var sut = new GameCommandClient(httpClient);
 
         var actual = await sut
-                .GameProviderGetGameProviderIdsAsync()
-                .ToArrayAsync()
-                .ConfigureAwait(false);
+            .GameProviderGetGameProviderIdsAsync()
+            .ToArrayAsync()
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameProviderIdInfo>();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -264,7 +265,7 @@ public partial class GameCommandUnitTest
                 .QueryAsync(
                  cancellationToken: Arg.Any<CancellationToken>())
                 .Returns(new GameProviderInfo[] {
-                    new GameProviderInfo(
+                    new(
                         GameProviderId: gameProviderId,
                         GameProviderCode: "KY",
                         UniqueId: 1,

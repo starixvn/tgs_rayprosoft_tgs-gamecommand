@@ -50,7 +50,7 @@ public class GameRepositoryUnitTest
             Localization = null,
         };
         var games = new Game[] {
-                new Game(){
+                new(){
                     Id=gameId,
                     Status= (short)GameStatus.Active,
                     ExternalId= gameExternalId,
@@ -74,7 +74,7 @@ public class GameRepositoryUnitTest
                     Localization=    null,
                     SubGameProviderCode=  gameProviderCode
                 },
-                new Game(){
+                new(){
                     Id=2,
                     Status= (short)GameStatus.Active,
                     ExternalId= "VR",
@@ -147,7 +147,7 @@ public class GameRepositoryUnitTest
             Localization = null,
         };
         var games = new Game[] {
-                new Game(){
+                new(){
                     Id=gameId,
                     Status= (short)GameStatus.Active,
                     ExternalId= gameExternalId,
@@ -171,7 +171,7 @@ public class GameRepositoryUnitTest
                     Localization=    null,
                     SubGameProviderCode= gameProviderCode
                 },
-                new Game(){
+                new(){
                     Id=2,
                     Status= (short)GameStatus.Active,
                     ExternalId= "VR",
@@ -244,7 +244,7 @@ public class GameRepositoryUnitTest
             Localization = null,
         };
         var games = new Game[] {
-                new Game(){
+                new(){
                     Id=gameId,
                     Status= (short)GameStatus.Active,
                     ExternalId= gameExternalId,
@@ -268,7 +268,7 @@ public class GameRepositoryUnitTest
                     Localization=    null,
                     SubGameProviderCode=  gameProviderCode
                 },
-                new Game(){
+                new(){
                     Id=2,
                     Status= (short)GameStatus.Active,
                     ExternalId= "VR",
@@ -297,7 +297,13 @@ public class GameRepositoryUnitTest
         await context.Games.AddRangeAsync(games).ConfigureAwait(false);
         _ = await context.SaveChangesAsync().ConfigureAwait(false);
 
-        var actual = await fakeRepository.QueryAsync(gameProviderId, GameType.CardGame).ToArrayAsync().ConfigureAwait(false);
+        var actual = await fakeRepository.QueryAsync(
+            gameProviderId: gameProviderId,
+            type: GameType.CardGame)
+            .ToArrayAsync()
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
+
         Assert.IsNotNull(actual);
         Assert.IsTrue(actual.Any());
     }

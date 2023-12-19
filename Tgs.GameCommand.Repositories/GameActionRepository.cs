@@ -5,16 +5,10 @@ using Tgs.GameCommand.Repositories.Entities;
 
 namespace Tgs.GameCommand.Repositories;
 
-internal class GameActionRepository : IGameActionRepository
+internal class GameActionRepository(
+    BetContext context) : IGameActionRepository
 {
-    private readonly BetContext _context;
-
-    public GameActionRepository(
-        BetContext context
-        )
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+    private readonly BetContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
     public IAsyncEnumerable<GameActionInfo> QueryAsync(
         Guid id,

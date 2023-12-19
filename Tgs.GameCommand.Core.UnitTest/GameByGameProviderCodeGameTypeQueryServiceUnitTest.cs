@@ -25,7 +25,7 @@ public class GameByGameProviderCodeGameTypeQueryServiceUnitTest
             .Returns(gameProviderId);
 
         var games = new GameInfo[] {
-            new GameInfo(
+            new(
                 GameId: 1,
                 "baccent",
                 gameProviderId,
@@ -60,7 +60,8 @@ public class GameByGameProviderCodeGameTypeQueryServiceUnitTest
             .QueryAsync(
                 query)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());

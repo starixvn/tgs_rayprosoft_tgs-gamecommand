@@ -5,18 +5,13 @@ using Tgs.GameCommand.Repositories.Entities;
 
 namespace Tgs.GameCommand.Repositories;
 
-internal class GameProviderRepository : IGameProviderRepository
+internal class GameProviderRepository(
+    TgsContext context) : IGameProviderRepository
 {
-    private readonly TgsContext _context;
-
-    public GameProviderRepository(
-        TgsContext context)
-        => _context = context ?? throw new ArgumentNullException(nameof(context));
-
     public ValueTask<GameProviderInfo?> GetAsync(
         Guid id,
         CancellationToken cancellationToken = default)
-        => _context.GameProviders.AsQueryable()
+        => context.GameProviders.AsQueryable()
         .Where(x => x.Id == id)
         .Select(x => new GameProviderInfo(
             x.Id,
@@ -38,10 +33,9 @@ internal class GameProviderRepository : IGameProviderRepository
         Guid gameProviderId,
         string cultureCode,
         CancellationToken cancellationToken = default)
-        => _context.GameProviderLanguages.AsQueryable()
-        .Where(x =>
-                x.GameProviderId == gameProviderId &&
-                x.CultureCode.ToLower() == cultureCode.ToLower())
+        => context.GameProviderLanguages.AsQueryable()
+        .Where(x => x.GameProviderId == gameProviderId &&
+        x.CultureCode.ToLower() == cultureCode.ToLower())
         .Select(x => x.GameProviderCultureCode)
         .ToAsyncEnumerable()
         .FirstOrDefaultAsync(cancellationToken);
@@ -50,7 +44,7 @@ internal class GameProviderRepository : IGameProviderRepository
         Guid gameProviderId,
         string currencyCode,
         CancellationToken cancellationToken = default)
-        => _context.GameProviderCurrencies.AsQueryable()
+        => context.GameProviderCurrencies.AsQueryable()
         .Where(x => x.GameProviderId == gameProviderId &&
                 x.CurrencyCode.ToLower() == currencyCode.ToLower())
         .Select(x => new Core.Models.GameProviderCurrencyModel(
@@ -77,7 +71,7 @@ internal class GameProviderRepository : IGameProviderRepository
     public ValueTask<Guid?> GetGameProviderIdAsync(
         string code,
         CancellationToken cancellationToken = default)
-        => _context.GameProviders.AsQueryable()
+        => context.GameProviders.AsQueryable()
         .Where(x => x.Code.ToLower() == code.ToLower())
         .Select(x => (Guid?)x.Id)
         .ToAsyncEnumerable()
@@ -85,14 +79,14 @@ internal class GameProviderRepository : IGameProviderRepository
 
     public IAsyncEnumerable<GameProviderIdInfo> GetGameProviderIdsAsync(
         CancellationToken cancellationToken = default)
-        => _context.GameProviders.AsQueryable()
+        => context.GameProviders.AsQueryable()
         .Select(x => new GameProviderIdInfo(x.Code, x.Id))
         .ToAsyncEnumerable();
 
     public ValueTask<GameProviderStatus?> GetStatusAsync(
         string gameProviderCode,
         CancellationToken cancellationToken = default)
-        => _context.GameProviders.AsQueryable()
+        => context.GameProviders.AsQueryable()
         .Where(x => x.Code.ToLower() == gameProviderCode.ToLower())
         .Select(x => (GameProviderStatus?)x.Status)
         .ToAsyncEnumerable()
@@ -101,7 +95,7 @@ internal class GameProviderRepository : IGameProviderRepository
     public ValueTask<GameProviderStatus> GetStatusAsync(
         Guid id,
         CancellationToken cancellationToken = default)
-        => _context.GameProviders.AsQueryable()
+        => context.GameProviders.AsQueryable()
         .Where(x => x.Id == id)
         .Select(x => (GameProviderStatus)x.Status)
         .ToAsyncEnumerable()
@@ -109,7 +103,7 @@ internal class GameProviderRepository : IGameProviderRepository
 
     public IAsyncEnumerable<GameProviderInfo> QueryAsync(
         CancellationToken cancellationToken = default)
-        => _context.GameProviders.AsQueryable()
+        => context.GameProviders.AsQueryable()
         .Select(x => new GameProviderInfo(
             x.Id,
             x.Code,

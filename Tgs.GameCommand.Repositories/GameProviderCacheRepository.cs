@@ -5,34 +5,24 @@ using Tgs.GameCommand.Core.Models;
 
 namespace Tgs.GameCommand.Repositories;
 
-internal class GameProviderCacheRepository : IGameProviderRepository
+internal class GameProviderCacheRepository(
+    IGameProviderRepository repository,
+    IMemoryCache memoryCache) : IGameProviderRepository
 {
-    private readonly IMemoryCache _memoryCache;
-    private readonly IGameProviderRepository _repository;
-
-    public GameProviderCacheRepository(
-        IGameProviderRepository repository,
-        IMemoryCache memoryCache)
-    {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
-    }
-
     public async ValueTask<GameProviderInfo?> GetAsync(
         Guid id,
         CancellationToken cancellationToken = default)
     {
         var key = string.Format("gamecommand:gameprovider:get:{0}", id);
-        if (!_memoryCache.TryGetValue(key, out GameProviderInfo? model))
+        if (!memoryCache.TryGetValue(key, out GameProviderInfo? model))
         {
-            model = await _repository
-                .GetAsync(
-                    id: id,
-                    cancellationToken: cancellationToken)
+            model = await repository.GetAsync(
+                id: id,
+                cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
             if (model is not null)
             {
-                _ = _memoryCache.Set(
+                return memoryCache.Set(
                     key: key,
                     value: model,
                     absoluteExpirationRelativeToNow: TimeSpan.FromMinutes(5));
@@ -48,17 +38,17 @@ internal class GameProviderCacheRepository : IGameProviderRepository
         cancellationToken = default)
     {
         var key = string.Format("gamecommand:gameprovider:get:culture:code:{0}:{1}", gameProviderId, cultureCode);
-        if (!_memoryCache.TryGetValue(key, out string? gameCultureCode))
+        if (!memoryCache.TryGetValue(key, out string? gameCultureCode))
         {
-            gameCultureCode = await _repository
-                        .GetCultureCodeAsync(
-                           gameProviderId: gameProviderId,
-                           cultureCode: cultureCode,
-                           cancellationToken: cancellationToken)
-                        .ConfigureAwait(false);
+            gameCultureCode = await repository.GetCultureCodeAsync(
+                gameProviderId: gameProviderId,
+                cultureCode: cultureCode,
+                cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+
             if (!string.IsNullOrEmpty(gameCultureCode))
             {
-                _ = _memoryCache.Set(
+                return memoryCache.Set(
                     key: key,
                     value: gameCultureCode,
                     absoluteExpirationRelativeToNow: TimeSpan.FromMinutes(5));
@@ -73,17 +63,17 @@ internal class GameProviderCacheRepository : IGameProviderRepository
         CancellationToken cancellationToken = default)
     {
         var key = string.Format("gamecommand:gameprovider:get:currency:{0}:{1}", gameProviderId, currencyCode);
-        if (!_memoryCache.TryGetValue(key, out GameProviderCurrencyModel? model))
+        if (!memoryCache.TryGetValue(key, out GameProviderCurrencyModel? model))
         {
-            model = await _repository
-                        .GetCurrencyAsync(
-                           gameProviderId: gameProviderId,
-                           currencyCode: currencyCode,
-                           cancellationToken: cancellationToken)
-                        .ConfigureAwait(false);
+            model = await repository.GetCurrencyAsync(
+                gameProviderId: gameProviderId,
+                currencyCode: currencyCode,
+                cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+
             if (model is not null)
             {
-                _ = _memoryCache.Set(
+                return memoryCache.Set(
                     key: key,
                     value: model,
                     absoluteExpirationRelativeToNow: TimeSpan.FromMinutes(5));
@@ -98,9 +88,9 @@ internal class GameProviderCacheRepository : IGameProviderRepository
         CancellationToken cancellationToken = default)
     {
         var key = string.Format("gamecommand:gameprovider:get:currency:code:{0}:{1}", gameProviderId, currencyCode);
-        if (!_memoryCache.TryGetValue(key, out string? gameCurrencyCode))
+        if (!memoryCache.TryGetValue(key, out string? gameCurrencyCode))
         {
-            gameCurrencyCode = await _repository
+            gameCurrencyCode = await repository
                         .GetCurrencyCodeAsync(
                            gameProviderId: gameProviderId,
                            currencyCode: currencyCode,
@@ -108,7 +98,7 @@ internal class GameProviderCacheRepository : IGameProviderRepository
                         .ConfigureAwait(false);
             if (!string.IsNullOrEmpty(gameCurrencyCode))
             {
-                _ = _memoryCache.Set(
+                _ = memoryCache.Set(
                     key: key,
                     value: gameCurrencyCode,
                     absoluteExpirationRelativeToNow: TimeSpan.FromMinutes(5));
@@ -122,16 +112,16 @@ internal class GameProviderCacheRepository : IGameProviderRepository
         CancellationToken cancellationToken = default)
     {
         var key = string.Format("gamecommand:gameprovider:get:id:{0}", code);
-        if (!_memoryCache.TryGetValue(key, out Guid? id))
+        if (!memoryCache.TryGetValue(key, out Guid? id))
         {
-            id = await _repository
+            id = await repository
                         .GetGameProviderIdAsync(
                            code: code,
                            cancellationToken: cancellationToken)
                         .ConfigureAwait(false);
             if (id.HasValue)
             {
-                _ = _memoryCache.Set(
+                _ = memoryCache.Set(
                     key: key,
                     value: id);
             }
@@ -140,17 +130,17 @@ internal class GameProviderCacheRepository : IGameProviderRepository
     }
 
     public IAsyncEnumerable<GameProviderIdInfo> GetGameProviderIdsAsync(CancellationToken cancellationToken = default)
-        => _repository.GetGameProviderIdsAsync(
+        => repository.GetGameProviderIdsAsync(
             cancellationToken: cancellationToken);
 
     public ValueTask<GameProviderStatus> GetStatusAsync(Guid id, CancellationToken cancellationToken = default)
-        => _repository
+        => repository
         .GetStatusAsync(
             id: id,
             cancellationToken: cancellationToken);
 
     public IAsyncEnumerable<GameProviderInfo> QueryAsync(CancellationToken cancellationToken = default)
-        => _repository
+        => repository
         .QueryAsync(
             cancellationToken: cancellationToken);
 }

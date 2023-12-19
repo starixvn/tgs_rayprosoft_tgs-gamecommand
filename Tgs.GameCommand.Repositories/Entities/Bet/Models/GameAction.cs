@@ -55,7 +55,7 @@ public partial class GameAction
 
     public virtual GameActionBatch? GameActionBatch { get; set; }
 
-    public virtual ICollection<GameAction> InverseReferencedGameAction { get; } = new List<GameAction>();
+    public virtual ICollection<GameAction> InverseReferencedGameAction { get; set; } = new List<GameAction>();
 
     public virtual GameAction? ReferencedGameAction { get; set; }
 

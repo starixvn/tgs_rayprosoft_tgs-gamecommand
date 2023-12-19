@@ -21,11 +21,11 @@ public class GameProviderController : ControllerBase
     public async IAsyncEnumerable<GameProviderIdInfo> GameProviderGetGameProviderIdsAsync(
         [FromServices] IGameProviderRepository repository)
     {
-        var gameProviderIdInfos = await repository
-            .GetGameProviderIdsAsync(
-                HttpContext.RequestAborted)
+        var gameProviderIdInfos = await repository.GetGameProviderIdsAsync(
+            cancellationToken: HttpContext.RequestAborted)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameProviderIdInfo>();
 
         if (!gameProviderIdInfos.Any())
         {

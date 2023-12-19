@@ -1,5 +1,5 @@
 ﻿{
-  "CodeGenerationMode": 3,
+  "CodeGenerationMode": 4,
   "ContextClassName": "BetContext",
   "ContextNamespace": "Entities",
   "DefaultDacpacSchema": null,
@@ -17,6 +17,7 @@
   ],
   "SelectedHandlebarsLanguage": 0,
   "SelectedToBeGenerated": 0,
+  "T4TemplatePath": null,
   "Tables": [
     {
       "Name": "bet.failed_game_record_operations",
@@ -45,6 +46,7 @@
   "UseDatabaseNames": false,
   "UseDateOnlyTimeOnly": false,
   "UseDbContextSplitting": true,
+  "UseDecimalDataAnnotationForSprocResult": true,
   "UseFluentApiOnly": true,
   "UseHandleBars": false,
   "UseHierarchyId": false,
@@ -52,10 +54,12 @@
   "UseLegacyPluralizer": false,
   "UseManyToManyEntity": true,
   "UseNoDefaultConstructor": true,
+  "UseNoNavigations": false,
   "UseNoObjectFilter": false,
   "UseNodaTime": false,
   "UseNullableReferences": true,
   "UseSchemaFolders": false,
+  "UseSchemaNamespaces": false,
   "UseSpatial": false,
   "UseT4": false
 }

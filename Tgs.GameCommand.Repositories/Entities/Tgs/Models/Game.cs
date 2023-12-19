@@ -51,7 +51,7 @@ public partial class Game
 
     public string? SubGameProviderCode { get; set; }
 
-    public virtual ICollection<BrandGame> BrandGames { get; } = new List<BrandGame>();
+    public virtual ICollection<BrandGame> BrandGames { get; set; } = new List<BrandGame>();
 
     public virtual GameProvider GameProvider { get; set; } = null!;
 

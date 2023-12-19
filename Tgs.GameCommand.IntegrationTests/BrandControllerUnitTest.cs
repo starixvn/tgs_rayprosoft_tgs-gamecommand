@@ -108,49 +108,6 @@ public partial class GameCommandUnitTest
     }
 
     [Fact]
-    public async Task Brand_Query_GameProvider()
-    {
-        var brandId = Guid.NewGuid();
-        var gameProviderId = Guid.NewGuid();
-        var gameProviderConfigurationId = Guid.NewGuid();
-
-        await using var web = CreateTestSettingSite(services =>
-        {
-            var fakeRepository = Substitute.For<IBrandRepository>();
-
-            _ = fakeRepository.QueryGameProviderAsync(
-                brandId: Arg.Is(brandId),
-                cancellationToken: Arg.Any<CancellationToken>())
-                .Returns(new BrandGameProviderInfo[] {
-                    new BrandGameProviderInfo(
-                        BrandId: brandId,
-                        BrandCode: "GPI",
-                        GameProviderId: gameProviderId,
-                        GameProviderCode: "KY",
-                        GameProviderConfigurationId: gameProviderConfigurationId,
-                        DefaultLanguageCode: "cn",
-                        DesktopQueryString: string.Empty,
-                        MobileQueryString: string.Empty)
-                }.ToAsyncEnumerable());
-
-            _ = services.AddSingleton(fakeRepository);
-        });
-
-        var httpClient = web.CreateClient();
-
-        var sut = new GameCommandClient(httpClient);
-
-        var actual = await sut
-            .BrandQueryGameProviderAsync(brandId)
-            .ToArrayAsync()
-            .ConfigureAwait(false)
-            ?? Enumerable.Empty<BrandGameProviderInfo>();
-
-        Assert.NotNull(actual);
-        Assert.True(actual.Any());
-    }
-
-    [Fact]
     public async Task Brand_Get_GameProviderConfigurationId()
     {
         var brandId = Guid.NewGuid();
@@ -275,7 +232,7 @@ public partial class GameCommandUnitTest
                 cancellationToken: Arg.Any<CancellationToken>())
             .Returns(new BrandInfo[]
             {
-                new BrandInfo(
+                new(
                     Guid.NewGuid(),
                     "TGS",
                     Guid.NewGuid(),
@@ -298,6 +255,49 @@ public partial class GameCommandUnitTest
             .ConfigureAwait(false)
             ?? Enumerable.Empty<BrandInfo>();
 
+        Assert.True(actual.Any());
+    }
+
+    [Fact]
+    public async Task Brand_Query_GameProvider()
+    {
+        var brandId = Guid.NewGuid();
+        var gameProviderId = Guid.NewGuid();
+        var gameProviderConfigurationId = Guid.NewGuid();
+
+        await using var web = CreateTestSettingSite(services =>
+        {
+            var fakeRepository = Substitute.For<IBrandRepository>();
+
+            _ = fakeRepository.QueryGameProviderAsync(
+                brandId: Arg.Is(brandId),
+                cancellationToken: Arg.Any<CancellationToken>())
+                .Returns(new BrandGameProviderInfo[] {
+                    new(
+                        BrandId: brandId,
+                        BrandCode: "GPI",
+                        GameProviderId: gameProviderId,
+                        GameProviderCode: "KY",
+                        GameProviderConfigurationId: gameProviderConfigurationId,
+                        DefaultLanguageCode: "cn",
+                        DesktopQueryString: string.Empty,
+                        MobileQueryString: string.Empty)
+                }.ToAsyncEnumerable());
+
+            _ = services.AddSingleton(fakeRepository);
+        });
+
+        var httpClient = web.CreateClient();
+
+        var sut = new GameCommandClient(httpClient);
+
+        var actual = await sut
+            .BrandQueryGameProviderAsync(brandId)
+            .ToArrayAsync()
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<BrandGameProviderInfo>();
+
+        Assert.NotNull(actual);
         Assert.True(actual.Any());
     }
 }

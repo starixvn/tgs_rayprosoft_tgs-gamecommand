@@ -5,26 +5,19 @@ using Tgs.GameCommand.Repositories.Entities;
 
 namespace Tgs.GameCommand.Repositories;
 
-internal class PlayerRepository : IPlayerRepository
+internal class PlayerRepository(TgsContext context) : IPlayerRepository
 {
-    private readonly TgsContext _context;
-
-    public PlayerRepository(TgsContext context)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
-
     public async ValueTask<PlayerInfo?> GetAsync(
         string playerCode,
         CancellationToken cancellationToken = default)
-        => await (from player in _context.Players.AsQueryable()
-                  join brand in _context.Brands.AsQueryable()
+        => await (from player in context.Players.AsQueryable()
+                  join brand in context.Brands.AsQueryable()
                   on player.BrandId equals brand.Id
-                  join licensee in _context.Licensees.AsQueryable()
+                  join licensee in context.Licensees.AsQueryable()
                   on brand.LicenseeId equals licensee.Id
-                  join reseller in _context.Resellers.AsQueryable()
+                  join reseller in context.Resellers.AsQueryable()
                   on licensee.ResellerId equals reseller.Id
-                  where player.PlayerCode.ToLower().Contains(playerCode.ToLower())
+                  where player.PlayerCode.ToLower() == playerCode.ToLower()
                   select new PlayerInfo(
                       reseller.Id,
                       reseller.Code,
@@ -44,8 +37,8 @@ internal class PlayerRepository : IPlayerRepository
     public async ValueTask<PlayerStatus?> GetStatusAsync(
         string playerCode,
         CancellationToken cancellationToken = default)
-        => await (from player in _context.Players.AsQueryable()
-                  where player.PlayerCode.ToLower().Contains(playerCode.ToLower())
+        => await (from player in context.Players.AsQueryable()
+                  where player.PlayerCode.ToLower() == playerCode.ToLower()
                   select (PlayerStatus?)player.Status)
         .FirstOrDefaultAsync(
             cancellationToken: cancellationToken)
@@ -56,12 +49,12 @@ internal class PlayerRepository : IPlayerRepository
         int pageIndex = 1,
         int pageSize = 1000,
         CancellationToken cancellationToken = default)
-        => (from player in _context.Players.AsQueryable()
-            join brand in _context.Brands.AsQueryable()
+        => (from player in context.Players.AsQueryable()
+            join brand in context.Brands.AsQueryable()
             on player.BrandId equals brand.Id
-            join licensee in _context.Licensees.AsQueryable()
+            join licensee in context.Licensees.AsQueryable()
             on brand.LicenseeId equals licensee.Id
-            join reseller in _context.Resellers.AsQueryable()
+            join reseller in context.Resellers.AsQueryable()
             on licensee.ResellerId equals reseller.Id
             where player.BrandId == brandId && player.Status != 3
             select new PlayerInfo(

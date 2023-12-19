@@ -37,7 +37,7 @@ public partial class GameProviderConfig
 
     public string UpdatedByUsername { get; set; } = null!;
 
-    public virtual ICollection<BrandGameProvider> BrandGameProviders { get; } = new List<BrandGameProvider>();
+    public virtual ICollection<BrandGameProvider> BrandGameProviders { get; set; } = new List<BrandGameProvider>();
 
     public virtual GameProvider GameProvider { get; set; } = null!;
 }

@@ -38,15 +38,6 @@ public class BrandController : ControllerBase
             gameProviderId: gameProviderId,
             cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{brandId:guid}/gp/query", Name = "Brand_Query_GameProvider")]
-    public IAsyncEnumerable<BrandGameProviderInfo> QueryGameProviderAsync(
-        [FromServices] IBrandRepository repository,
-        Guid brandId)
-        => repository
-        .QueryGameProviderAsync(
-            brandId: brandId,
-            cancellationToken: HttpContext.RequestAborted);
-
     [HttpGet("{brandId:guid}/gp/configuration/id", Name = "Brand_GetGameProviderConfigurationId")]
     public ValueTask<Guid?> GetGameProviderConfigurationIdAsync(
         [FromServices] IBrandRepository repository,
@@ -92,5 +83,14 @@ public class BrandController : ControllerBase
     public IAsyncEnumerable<BrandInfo> QueryAsync(
         [FromServices] IBrandRepository repository)
         => repository.QueryAsync(
+            cancellationToken: HttpContext.RequestAborted);
+
+    [HttpGet("{brandId:guid}/gp/query", Name = "Brand_Query_GameProvider")]
+    public IAsyncEnumerable<BrandGameProviderInfo> QueryGameProviderAsync(
+        [FromServices] IBrandRepository repository,
+        Guid brandId)
+        => repository
+        .QueryGameProviderAsync(
+            brandId: brandId,
             cancellationToken: HttpContext.RequestAborted);
 }

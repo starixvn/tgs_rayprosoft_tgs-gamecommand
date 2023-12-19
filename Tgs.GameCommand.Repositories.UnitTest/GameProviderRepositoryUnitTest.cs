@@ -25,7 +25,7 @@ public class GameProviderRepositoryUnitTest
 
         var fakeRepository = new GameProviderRepository(context);
         var gameProviders = new GameProvider[]{
-            new GameProvider()
+            new()
             {
                 Id = Guid.NewGuid(),
                 Status = 0,
@@ -45,7 +45,7 @@ public class GameProviderRepositoryUnitTest
                 UpdatedByUsername = string.Empty,
                 Localization = null
             },
-            new GameProvider()
+            new()
             {
                 Id = Guid.NewGuid(),
                 Status = 0,
@@ -69,10 +69,11 @@ public class GameProviderRepositoryUnitTest
 
         await context.GameProviders.AddRangeAsync(gameProviders).ConfigureAwait(false);
         _ = await context.SaveChangesAsync().ConfigureAwait(false);
-        var actual = await fakeRepository
-                .GetGameProviderIdsAsync()
-                .ToArrayAsync()
-                .ConfigureAwait(false);
+        var actual = await fakeRepository.GetGameProviderIdsAsync()
+            .ToArrayAsync()
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameProviderIdInfo>();
+
         Assert.IsNotNull(actual);
         Assert.IsTrue(actual.Any());
     }

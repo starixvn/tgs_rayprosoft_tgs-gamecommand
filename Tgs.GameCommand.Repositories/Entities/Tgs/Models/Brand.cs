@@ -95,17 +95,17 @@ public partial class Brand
 
     public int? TimeSpanMinutes { get; set; }
 
-    public virtual ICollection<BrandCurrency> BrandCurrencies { get; } = new List<BrandCurrency>();
+    public virtual ICollection<BrandCurrency> BrandCurrencies { get; set; } = new List<BrandCurrency>();
 
-    public virtual ICollection<BrandGameProvider> BrandGameProviders { get; } = new List<BrandGameProvider>();
+    public virtual ICollection<BrandGameProvider> BrandGameProviders { get; set; } = new List<BrandGameProvider>();
 
-    public virtual ICollection<BrandGame> BrandGames { get; } = new List<BrandGame>();
+    public virtual ICollection<BrandGame> BrandGames { get; set; } = new List<BrandGame>();
 
-    public virtual ICollection<BrandLanguage> BrandLanguages { get; } = new List<BrandLanguage>();
+    public virtual ICollection<BrandLanguage> BrandLanguages { get; set; } = new List<BrandLanguage>();
 
     public virtual Licensee Licensee { get; set; } = null!;
 
-    public virtual ICollection<PlayerLoginRecord> PlayerLoginRecords { get; } = new List<PlayerLoginRecord>();
+    public virtual ICollection<PlayerLoginRecord> PlayerLoginRecords { get; set; } = new List<PlayerLoginRecord>();
 
-    public virtual ICollection<Player> Players { get; } = new List<Player>();
+    public virtual ICollection<Player> Players { get; set; } = new List<Player>();
 }

@@ -47,7 +47,8 @@ public class PlayerCacheRepositoryUnitTest
 
         var repository = new PlayerCacheRepository(
             fakeRepository,
-            fakeMemoryCache);
+            fakeMemoryCache,
+            TimeSpan.FromDays(1));
 
         var actual = await repository
             .GetAsync(playerCode)
@@ -73,7 +74,8 @@ public class PlayerCacheRepositoryUnitTest
 
         var repository = new PlayerCacheRepository(
             fakeRepository,
-            fakeMemoryCache);
+            fakeMemoryCache,
+            TimeSpan.FromDays(1));
 
         _ = repository
               .GetStatusAsync(

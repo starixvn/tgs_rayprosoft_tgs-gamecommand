@@ -148,19 +148,19 @@ public class BrandRepositoryUnitTest
         var brandId = Guid.NewGuid();
         string currencyCode = "CNY";
         var brandCurrencies = new BrandCurrency[]{
-            new BrandCurrency()
+            new()
             {
                 BrandId = brandId,
                 CurrencyCode = "CNY",
                 BrandCurrencyCode = "CNY"
             },
-            new BrandCurrency()
+            new()
             {
                 BrandId = brandId,
                 CurrencyCode = "HKD",
                 BrandCurrencyCode = "HKD"
             },
-            new BrandCurrency()
+            new()
             {
                 BrandId = brandId,
                 CurrencyCode = "USD",

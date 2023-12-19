@@ -26,11 +26,11 @@ public class GameByGameProviderIdGameTypeQueryServiceUnitTest
         var service = new GameByGameProviderIdGameTypeQueryService(
             fakeGameRepository);
 
-        var actual = await service
-            .QueryAsync(
-                query)
+        var actual = await service.QueryAsync(
+            query: query)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
         Assert.False(actual.Any());
@@ -46,7 +46,7 @@ public class GameByGameProviderIdGameTypeQueryServiceUnitTest
             GameType: GameType.CardGame);
 
         var games = new GameInfo[] {
-            new GameInfo(
+            new(
                 GameId: 1,
                 "baccent",
                 query.GameProviderId,
@@ -76,11 +76,11 @@ public class GameByGameProviderIdGameTypeQueryServiceUnitTest
         var service = new GameByGameProviderIdGameTypeQueryService(
             fakeGameRepository);
 
-        var actual = await service
-            .QueryAsync(
-                query)
+        var actual = await service.QueryAsync(
+            query)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());

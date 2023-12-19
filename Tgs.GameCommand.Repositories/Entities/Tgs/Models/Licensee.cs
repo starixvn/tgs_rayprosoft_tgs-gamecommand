@@ -29,7 +29,7 @@ public partial class Licensee
 
     public string UpdatedByUsername { get; set; } = null!;
 
-    public virtual ICollection<Brand> Brands { get; } = new List<Brand>();
+    public virtual ICollection<Brand> Brands { get; set; } = new List<Brand>();
 
     public virtual Reseller Reseller { get; set; } = null!;
 }

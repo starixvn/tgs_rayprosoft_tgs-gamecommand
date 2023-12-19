@@ -29,5 +29,5 @@ public partial class Reseller
 
     public string UpdatedByUsername { get; set; } = null!;
 
-    public virtual ICollection<Licensee> Licensees { get; } = new List<Licensee>();
+    public virtual ICollection<Licensee> Licensees { get; set; } = new List<Licensee>();
 }

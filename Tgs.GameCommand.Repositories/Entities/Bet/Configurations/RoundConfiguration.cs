@@ -15,7 +15,12 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
         {
             entity.HasKey(e => e.Id).HasName("pk_rounds");
 
-            entity.ToTable("rounds", "bet");
+            entity
+            .ToTable("rounds", "bet")
+            .HasAnnotation("Npgsql:StorageParameter:autovacuum_analyze_scale_factor", "0.001")
+            .HasAnnotation("Npgsql:StorageParameter:autovacuum_analyze_threshold", "0")
+            .HasAnnotation("Npgsql:StorageParameter:autovacuum_vacuum_scale_factor", "0.001")
+            .HasAnnotation("Npgsql:StorageParameter:autovacuum_vacuum_threshold", "0");
 
             entity.HasIndex(e => e.BrandId, "ix_rounds_brand_id");
 

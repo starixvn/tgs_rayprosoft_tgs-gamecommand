@@ -221,7 +221,7 @@ public partial class GameCommandUnitTest
                 query: new GameByGameProviderCodeQuery(gameProviderCode),
                 cancellationToken: Arg.Any<CancellationToken>())
                 .Returns((new GameInfo[] {
-                new GameInfo(
+                new(
                     GameId: 1,
                     GameCode: "baccarat",
                     GameProviderId: Guid.NewGuid(),
@@ -251,7 +251,8 @@ public partial class GameCommandUnitTest
         var actual = await sut
             .GameQueryAsync(gameProviderCode)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -270,7 +271,7 @@ public partial class GameCommandUnitTest
                 new GameByGameProviderCodeGameTypeQuery(gameProviderCode, gameType),
                 cancellationToken: Arg.Any<CancellationToken>())
                 .Returns((new GameInfo[] {
-                new GameInfo(
+                new(
                     GameId: 1,
                     GameCode: "baccarat",
                     GameProviderId: Guid.NewGuid(),
@@ -302,7 +303,8 @@ public partial class GameCommandUnitTest
                 gameProviderCode,
                 GameType.CardGame)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -320,7 +322,7 @@ public partial class GameCommandUnitTest
                 query: new GameByGameProviderIdQuery(gameProviderId),
                 cancellationToken: Arg.Any<CancellationToken>())
                 .Returns((new GameInfo[] {
-                new GameInfo(
+                new(
                     GameId: 1,
                     GameCode: "baccarat",
                     GameProviderId: gameProviderId,
@@ -350,7 +352,8 @@ public partial class GameCommandUnitTest
         var actual = await sut
             .GameQueryAsync(gameProviderId)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -379,7 +382,8 @@ public partial class GameCommandUnitTest
         var actual = await sut
             .GameQueryAsync(gameProviderId)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
         Assert.False(actual.Any());
@@ -398,7 +402,7 @@ public partial class GameCommandUnitTest
                 new GameByGameProviderIdGameTypeQuery(gameProviderId, gameType),
                 cancellationToken: Arg.Any<CancellationToken>())
                 .Returns((new GameInfo[] {
-                new GameInfo(
+                new(
                     GameId: 1,
                     GameCode: "baccarat",
                     GameProviderId: gameProviderId,
@@ -430,7 +434,8 @@ public partial class GameCommandUnitTest
                 gameProviderId,
                 GameType.CardGame)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -462,7 +467,8 @@ public partial class GameCommandUnitTest
                 gameProviderId,
                 GameType.CardGame)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
         Assert.False(actual.Any());

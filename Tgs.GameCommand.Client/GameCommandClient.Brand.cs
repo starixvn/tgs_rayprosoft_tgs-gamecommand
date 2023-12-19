@@ -87,38 +87,6 @@ internal partial class GameCommandClient
                 options: _SerializerOptions);
     }
 
-    public async IAsyncEnumerable<BrandGameProviderInfo> BrandQueryGameProviderAsync(
-        Guid brandId,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default)
-
-    {
-        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/brand/{brandId}/gp/query"));
-        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-        uriBuilder.Query = query.ToString();
-
-        var response = await _httpClient
-            .GetAsync(
-            requestUri: uriBuilder.Uri,
-            cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-
-        _ = response.EnsureSuccessStatusCode();
-
-        var contentJson = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
-
-        var infos = JsonSerializer.Deserialize<IEnumerable<BrandGameProviderInfo>>(contentJson, _SerializerOptions) ?? Enumerable.Empty<BrandGameProviderInfo>();
-
-        if (!infos.Any())
-        {
-            yield break;
-        }
-
-        foreach (var info in infos)
-        {
-            yield return info;
-        }
-    }
-
     public async ValueTask<Guid?> BrandGetGameProviderConfigurationIdAsync(
         Guid brandId,
         Guid gameProviderId,
@@ -245,6 +213,38 @@ internal partial class GameCommandClient
         var contentJson = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var infos = JsonSerializer.Deserialize<IEnumerable<BrandInfo>>(contentJson, _SerializerOptions) ?? Enumerable.Empty<BrandInfo>();
+
+        if (!infos.Any())
+        {
+            yield break;
+        }
+
+        foreach (var info in infos)
+        {
+            yield return info;
+        }
+    }
+
+    public async IAsyncEnumerable<BrandGameProviderInfo> BrandQueryGameProviderAsync(
+                            Guid brandId,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+
+    {
+        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/brand/{brandId}/gp/query"));
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        uriBuilder.Query = query.ToString();
+
+        var response = await _httpClient
+            .GetAsync(
+            requestUri: uriBuilder.Uri,
+            cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        _ = response.EnsureSuccessStatusCode();
+
+        var contentJson = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        var infos = JsonSerializer.Deserialize<IEnumerable<BrandGameProviderInfo>>(contentJson, _SerializerOptions) ?? Enumerable.Empty<BrandGameProviderInfo>();
 
         if (!infos.Any())
         {

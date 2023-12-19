@@ -5,24 +5,16 @@ using Tgs.GameCommand.Repositories.Entities;
 
 namespace Tgs.GameCommand.Repositories;
 
-internal class GameRepository : IGameRepository
+internal class GameRepository(
+    TgsContext context) : IGameRepository
 {
-    private readonly TgsContext _context;
-
-    public GameRepository(
-       TgsContext context
-       )
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
-
     public ValueTask<GameInfo?> GetAsync(
         int id,
         CancellationToken cancellationToken = default)
-        => _context.Games
+        => context.Games
         .AsQueryable()
         .Where(x => x.Id == id)
-        .Join(_context.GameProviders.AsQueryable(),
+        .Join(context.GameProviders.AsQueryable(),
             game => game.GameProviderId,
             gameProvider => gameProvider.Id,
             (game, gameProvider) => new GameInfo(
@@ -53,7 +45,7 @@ internal class GameRepository : IGameRepository
         Guid gameProviderId,
         string gameExternalId,
         CancellationToken cancellationToken = default)
-        => _context.Games
+        => context.Games
         .AsQueryable()
         .Where(x => x.GameProviderId == gameProviderId
                 && x.ExternalId == gameExternalId)
@@ -65,7 +57,7 @@ internal class GameRepository : IGameRepository
     public ValueTask<GameStatus> GetStatusAsync(
         int id,
         CancellationToken cancellationToken = default)
-        => _context.Games
+        => context.Games
         .AsQueryable()
         .Where(x => x.Id == id)
         .Select(game => (GameStatus)game.Status)
@@ -76,9 +68,9 @@ internal class GameRepository : IGameRepository
     public IAsyncEnumerable<GameInfo> QueryAsync(
         Guid gameProviderId,
         CancellationToken cancellationToken = default)
-        => _context.GameProviders.AsQueryable()
+        => context.GameProviders.AsQueryable()
         .Where(x => x.Id == gameProviderId)
-        .Join(_context.Games.AsQueryable(),
+        .Join(context.Games.AsQueryable(),
             gameProvider => gameProvider.Id,
             game => game.GameProviderId,
             (gameProvider, game) => new GameInfo(
@@ -107,9 +99,9 @@ internal class GameRepository : IGameRepository
         Guid gameProviderId,
         GameType type,
         CancellationToken cancellationToken = default)
-        => _context.Games.AsQueryable()
+        => context.Games.AsQueryable()
         .Where(x => x.GameProviderId == gameProviderId && x.Type == (int)type)
-        .Join(_context.GameProviders.AsQueryable(),
+        .Join(context.GameProviders.AsQueryable(),
             game => game.GameProviderId,
             gameProvider => gameProvider.Id,
             (game, gameProvider) => new GameInfo(

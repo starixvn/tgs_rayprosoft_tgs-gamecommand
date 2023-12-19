@@ -97,7 +97,7 @@ public partial class GameCommandUnitTest
 
             var playerInfos = new PlayerInfo[]
             {
-                new PlayerInfo(
+                new(
                     ResellerId: Guid.NewGuid(),
                      ResellerCode: "TGS",
                      LicenseeId: Guid.NewGuid(),

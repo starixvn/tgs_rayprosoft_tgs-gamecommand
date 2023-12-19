@@ -109,7 +109,7 @@ public class GameProviderConfigurationRepositoryUnitTest
             Localization = null,
         };
         var gameProviderConfigs = new GameProviderConfig[]{
-            new GameProviderConfig()
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Configuration KY",
@@ -127,7 +127,7 @@ public class GameProviderConfigurationRepositoryUnitTest
                 CreatedByUsername = "admin.enabled",
                 UpdatedByUsername = "admin.enabled"
             },
-            new GameProviderConfig()
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Configuration KY",
@@ -145,7 +145,7 @@ public class GameProviderConfigurationRepositoryUnitTest
                 CreatedByUsername = "admin.enabled",
                 UpdatedByUsername = "admin.enabled"
             },
-            new GameProviderConfig()
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Configuration VR",

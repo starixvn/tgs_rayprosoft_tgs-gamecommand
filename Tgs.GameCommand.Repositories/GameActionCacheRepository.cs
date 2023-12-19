@@ -4,36 +4,26 @@ using Tgs.GameCommand.Core;
 
 namespace Tgs.GameCommand.Repositories;
 
-internal class GameActionCacheRepository : IGameActionRepository
+internal class GameActionCacheRepository(
+    IGameActionRepository repository,
+    IMemoryCache memoryCache) : IGameActionRepository
 {
-    private readonly IMemoryCache _memoryCache;
-    private readonly IGameActionRepository _repository;
-
-    public GameActionCacheRepository(
-        IGameActionRepository repository,
-        IMemoryCache memoryCache)
-    {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
-    }
-
     public IAsyncEnumerable<GameActionInfo> QueryAsync(
         Guid id,
         CancellationToken cancellationToken = default)
     {
         var key = string.Format("gamecommand:gameaction:query:{0}", id);
 
-        if (!_memoryCache.TryGetValue(key, out IEnumerable<GameActionInfo>? value))
+        if (!memoryCache.TryGetValue(key, out IEnumerable<GameActionInfo>? value))
         {
-            value = _repository
-                .QueryAsync(
-                    id: id,
-                    cancellationToken: cancellationToken)
+            value = repository.QueryAsync(
+                id: id,
+                cancellationToken: cancellationToken)
                 .ToEnumerable() ?? Enumerable.Empty<GameActionInfo>();
 
             if (value.Any())
             {
-                _ = _memoryCache.Set(
+                _ = memoryCache.Set(
                     key: key,
                     value: value,
                    absoluteExpirationRelativeToNow: TimeSpan.FromSeconds(10));

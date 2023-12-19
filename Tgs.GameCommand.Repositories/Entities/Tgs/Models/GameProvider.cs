@@ -41,15 +41,15 @@ public partial class GameProvider
 
     public string? Localization { get; set; }
 
-    public virtual ICollection<BrandGameProvider> BrandGameProviders { get; } = new List<BrandGameProvider>();
+    public virtual ICollection<BrandGameProvider> BrandGameProviders { get; set; } = new List<BrandGameProvider>();
 
-    public virtual ICollection<GameProviderConfig> GameProviderConfigs { get; } = new List<GameProviderConfig>();
+    public virtual ICollection<GameProviderConfig> GameProviderConfigs { get; set; } = new List<GameProviderConfig>();
 
-    public virtual ICollection<GameProviderCurrency> GameProviderCurrencies { get; } = new List<GameProviderCurrency>();
+    public virtual ICollection<GameProviderCurrency> GameProviderCurrencies { get; set; } = new List<GameProviderCurrency>();
 
-    public virtual ICollection<GameProviderLanguage> GameProviderLanguages { get; } = new List<GameProviderLanguage>();
+    public virtual ICollection<GameProviderLanguage> GameProviderLanguages { get; set; } = new List<GameProviderLanguage>();
 
-    public virtual ICollection<Game> Games { get; } = new List<Game>();
+    public virtual ICollection<Game> Games { get; set; } = new List<Game>();
 
-    public virtual ICollection<SubGameProvider> SubGameProviders { get; } = new List<SubGameProvider>();
+    public virtual ICollection<SubGameProvider> SubGameProviders { get; set; } = new List<SubGameProvider>();
 }

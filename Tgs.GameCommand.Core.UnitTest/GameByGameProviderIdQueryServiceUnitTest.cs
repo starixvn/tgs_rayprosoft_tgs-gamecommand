@@ -16,7 +16,7 @@ public class GameByGameProviderIdQueryServiceUnitTest
             GameProviderId: Guid.NewGuid());
 
         var games = new GameInfo[] {
-            new GameInfo(
+            new(
                 1,
                 "baccent",
                 query.GameProviderId,
@@ -45,11 +45,11 @@ public class GameByGameProviderIdQueryServiceUnitTest
         var service = new GameByGameProviderIdQueryService(
             fakeGameRepository);
 
-        var actual = await service
-            .QueryAsync(
-                query)
+        var actual = await service.QueryAsync(
+            query)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameInfo>();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());

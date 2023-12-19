@@ -23,5 +23,5 @@ public partial class GameActionBatch
 
     public Guid GameProviderId { get; set; }
 
-    public virtual ICollection<GameAction> GameActions { get; } = new List<GameAction>();
+    public virtual ICollection<GameAction> GameActions { get; set; } = new List<GameAction>();
 }

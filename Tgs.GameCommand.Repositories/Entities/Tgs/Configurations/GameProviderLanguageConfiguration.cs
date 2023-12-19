@@ -24,7 +24,7 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
             .HasMaxLength(6)
             .HasColumnName("culture_code");
             entity.Property(e => e.GameProviderCultureCode)
-            .HasMaxLength(6)
+            .HasMaxLength(8)
             .HasColumnName("game_provider_culture_code");
 
             entity.HasOne(d => d.GameProvider).WithMany(p => p.GameProviderLanguages)

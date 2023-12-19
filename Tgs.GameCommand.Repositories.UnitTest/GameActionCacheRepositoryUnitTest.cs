@@ -31,7 +31,7 @@ public class GameActionCacheRepositoryUnitTest
              .Returns(false);
 
         var gameActions = new GameActionInfo[] {
-            new GameActionInfo(
+            new(
                 Id: Guid.NewGuid(),
                 RoundId: id,
                 PlayerCode: string.Empty,
@@ -65,11 +65,11 @@ public class GameActionCacheRepositoryUnitTest
             fakeRepository,
             fakeMemoryCache);
 
-        var actual = await repository
-            .QueryAsync(
-                id)
+        var actual = await repository.QueryAsync(
+            id)
             .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<GameActionInfo>();
 
         Assert.IsNotNull(actual);
         Assert.IsTrue(actual.Any());

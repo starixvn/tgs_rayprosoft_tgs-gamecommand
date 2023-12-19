@@ -92,7 +92,7 @@ public partial class GameCommandUnitTest
         var gameProviderId = Guid.NewGuid();
         var gameProviderCode = "KY";
         var gameProviderConfigurationInfos = new GameProviderConfigInfo[]{
-            new GameProviderConfigInfo(
+            new(
                 GameProviderId: gameProviderId,
                 GameProviderCode: gameProviderCode,
                 GameProviderConfigId:  Guid.NewGuid(),
@@ -105,7 +105,7 @@ public partial class GameCommandUnitTest
                 MobileEndpoint: string.Empty,
                 ConfigurationData: string.Empty,
                 IsDefault: true),
-            new GameProviderConfigInfo(
+            new(
                 GameProviderId: gameProviderId,
                 GameProviderCode: gameProviderCode,
                 GameProviderConfigId: Guid.NewGuid(),
