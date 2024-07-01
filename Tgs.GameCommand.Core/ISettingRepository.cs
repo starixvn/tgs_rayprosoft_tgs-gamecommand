@@ -2,5 +2,5 @@
 
 public interface ISettingRepository
 {
-    ValueTask<string?> GetConfigurationAsync(string key);
+	ValueTask<string?> GetConfigurationAsync(string key);
 }

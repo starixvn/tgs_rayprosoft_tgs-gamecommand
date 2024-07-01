@@ -6,6 +6,6 @@ namespace Tgs.GameCommand.IntegrationTests;
 
 internal class TestServiceApplication(Action<IWebHostBuilder>? webHostConfigure = null) : WebApplicationFactory<Program>
 {
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-        => webHostConfigure?.Invoke(builder);
+	protected override void ConfigureWebHost(IWebHostBuilder builder)
+		=> webHostConfigure?.Invoke(builder);
 }

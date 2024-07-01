@@ -10,86 +10,86 @@ namespace Tgs.GameCommand.Controllers;
 [Route("[controller]")]
 public class GameController : ControllerBase
 {
-    [HttpGet("{id}", Name = "Game_Get")]
-    public ValueTask<GameInfo?> GetAsync(
-        [FromServices] IGameRepository repository,
-        int id)
-        => repository.GetAsync(
-            id: id,
-            cancellationToken: HttpContext.RequestAborted);
+	[HttpGet("{id}", Name = "Game_Get")]
+	public ValueTask<GameInfo?> GetAsync(
+		[FromServices] IGameRepository repository,
+		int id)
+		=> repository.GetAsync(
+			id: id,
+			cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{gameProviderCode}/{gameExternalId}", Name = "Game_GameProviderCode_ExternalGameId_Get")]
-    public ValueTask<GameInfo?> GetAsync(
-        [FromServices] IGetService<GameExternalQuery, GameInfo?> service,
-        string gameProviderCode,
-        string gameExternalId)
-        => service.GetAsync(
-            query: new GameExternalQuery(gameProviderCode, gameExternalId),
-            cancellationToken: HttpContext.RequestAborted);
+	[HttpGet("{gameProviderCode}/{gameExternalId}", Name = "Game_GameProviderCode_ExternalGameId_Get")]
+	public ValueTask<GameInfo?> GetAsync(
+		[FromServices] IGetService<GameExternalQuery, GameInfo?> service,
+		string gameProviderCode,
+		string gameExternalId)
+		=> service.GetAsync(
+			query: new GameExternalQuery(gameProviderCode, gameExternalId),
+			cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{gameProviderid:guid}/{gameExternalId}", Name = "Game_GameProviderId_ExternalGameId_Get")]
-    public ValueTask<GameInfo?> GetAsync(
-        [FromServices] IGetService<GameGameProviderIdExternalQuery, GameInfo?> service,
-        Guid gameProviderid,
-        string gameExternalId)
-        => service.GetAsync(
-           query: new GameGameProviderIdExternalQuery(gameProviderid, gameExternalId),
-           cancellationToken: HttpContext.RequestAborted);
+	[HttpGet("{gameProviderid:guid}/{gameExternalId}", Name = "Game_GameProviderId_ExternalGameId_Get")]
+	public ValueTask<GameInfo?> GetAsync(
+		[FromServices] IGetService<GameGameProviderIdExternalQuery, GameInfo?> service,
+		Guid gameProviderid,
+		string gameExternalId)
+		=> service.GetAsync(
+		   query: new GameGameProviderIdExternalQuery(gameProviderid, gameExternalId),
+		   cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{gameProviderid:guid}/{gameExternalId}/id", Name = "Game_GameProviderId_ExternalGameId_Get_Id")]
-    public ValueTask<int?> GetIdAsync(
-        [FromServices] IGameRepository repository,
-        Guid gameProviderid,
-        string gameExternalId)
-        => repository.GetIdAsync(
-           gameProviderId: gameProviderid,
-           gameExternalId: gameExternalId,
-           cancellationToken: HttpContext.RequestAborted);
+	[HttpGet("{gameProviderid:guid}/{gameExternalId}/id", Name = "Game_GameProviderId_ExternalGameId_Get_Id")]
+	public ValueTask<int?> GetIdAsync(
+		[FromServices] IGameRepository repository,
+		Guid gameProviderid,
+		string gameExternalId)
+		=> repository.GetIdAsync(
+		   gameProviderId: gameProviderid,
+		   gameExternalId: gameExternalId,
+		   cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("{id}/status", Name = "Game_GetStatus")]
-    public ValueTask<GameStatus> GetStatusAsync(
-        [FromServices] IGameRepository repository,
-        int id)
-        => repository
-        .GetStatusAsync(
-            id,
-            HttpContext.RequestAborted);
+	[HttpGet("{id}/status", Name = "Game_GetStatus")]
+	public ValueTask<GameStatus> GetStatusAsync(
+		[FromServices] IGameRepository repository,
+		int id)
+		=> repository
+		.GetStatusAsync(
+			id,
+			HttpContext.RequestAborted);
 
-    [HttpGet("query/{gameProviderCode}", Name = "Game_Query_GameProviderCode")]
-    public IAsyncEnumerable<GameInfo> QueryAsync(
-        [FromServices] IQueryService<GameByGameProviderCodeQuery, GameInfo> service,
-        string gameProviderCode)
-        => service
-        .QueryAsync(
-            query: new GameByGameProviderCodeQuery(gameProviderCode),
-            cancellationToken: HttpContext.RequestAborted);
+	[HttpGet("query/{gameProviderCode}", Name = "Game_Query_GameProviderCode")]
+	public IAsyncEnumerable<GameInfo> QueryAsync(
+		[FromServices] IQueryService<GameByGameProviderCodeQuery, GameInfo> service,
+		string gameProviderCode)
+		=> service
+		.QueryAsync(
+			query: new GameByGameProviderCodeQuery(gameProviderCode),
+			cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("query/{gameProviderid:guid}", Name = "Game_Query_GameProviderid")]
-    public IAsyncEnumerable<GameInfo> QueryAsync(
-        [FromServices] IQueryService<GameByGameProviderIdQuery, GameInfo> service,
-        Guid gameProviderid)
-        => service
-        .QueryAsync(
-            query: new GameByGameProviderIdQuery(gameProviderid),
-            cancellationToken: HttpContext.RequestAborted);
+	[HttpGet("query/{gameProviderid:guid}", Name = "Game_Query_GameProviderid")]
+	public IAsyncEnumerable<GameInfo> QueryAsync(
+		[FromServices] IQueryService<GameByGameProviderIdQuery, GameInfo> service,
+		Guid gameProviderid)
+		=> service
+		.QueryAsync(
+			query: new GameByGameProviderIdQuery(gameProviderid),
+			cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("query/{gameProviderCode}/{type}", Name = "Game_Query_GameProviderCode_GameType")]
-    public IAsyncEnumerable<GameInfo> QueryByGameTypeAsync(
-        [FromServices] IQueryService<GameByGameProviderCodeGameTypeQuery, GameInfo> service,
-        string gameProviderCode,
-        GameType type)
-        => service
-        .QueryAsync(
-            query: new GameByGameProviderCodeGameTypeQuery(gameProviderCode, type),
-            cancellationToken: HttpContext.RequestAborted);
+	[HttpGet("query/{gameProviderCode}/{type}", Name = "Game_Query_GameProviderCode_GameType")]
+	public IAsyncEnumerable<GameInfo> QueryByGameTypeAsync(
+		[FromServices] IQueryService<GameByGameProviderCodeGameTypeQuery, GameInfo> service,
+		string gameProviderCode,
+		GameType type)
+		=> service
+		.QueryAsync(
+			query: new GameByGameProviderCodeGameTypeQuery(gameProviderCode, type),
+			cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("query/{gameProviderId:guid}/{type}", Name = "Game_Query_GameProviderId_GameType")]
-    public IAsyncEnumerable<GameInfo> QueryByGameTypeAsync(
-        [FromServices] IQueryService<GameByGameProviderIdGameTypeQuery, GameInfo> service,
-        Guid gameProviderId,
-        GameType type)
-        => service
-        .QueryAsync(
-            query: new GameByGameProviderIdGameTypeQuery(gameProviderId, type),
-            cancellationToken: HttpContext.RequestAborted);
+	[HttpGet("query/{gameProviderId:guid}/{type}", Name = "Game_Query_GameProviderId_GameType")]
+	public IAsyncEnumerable<GameInfo> QueryByGameTypeAsync(
+		[FromServices] IQueryService<GameByGameProviderIdGameTypeQuery, GameInfo> service,
+		Guid gameProviderId,
+		GameType type)
+		=> service
+		.QueryAsync(
+			query: new GameByGameProviderIdGameTypeQuery(gameProviderId, type),
+			cancellationToken: HttpContext.RequestAborted);
 }

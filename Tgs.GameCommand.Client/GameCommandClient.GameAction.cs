@@ -6,27 +6,27 @@ namespace Tgs.GameCommand.Client;
 
 internal partial class GameCommandClient
 {
-    public async ValueTask<IEnumerable<GameActionInfo>?> GameActionQueryAsync(
-        Guid roundId,
-        CancellationToken cancellationToken = default)
+	public async ValueTask<IEnumerable<GameActionInfo>?> GameActionQueryAsync(
+		Guid roundId,
+		CancellationToken cancellationToken = default)
 
-    {
-        var response = await _httpClient
-            .GetAsync(
-                requestUri: $"/gameaction/{roundId}",
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+	{
+		var response = await _httpClient
+			.GetAsync(
+				requestUri: $"/gameaction/{roundId}",
+				cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
 
-        _ = response.EnsureSuccessStatusCode();
+		_ = response.EnsureSuccessStatusCode();
 
-        return response.StatusCode == HttpStatusCode.NoContent
-            ? Enumerable.Empty<GameActionInfo>()
-            : JsonSerializer.Deserialize<IEnumerable<GameActionInfo>>(
-                json: await response
-                    .Content
-                    .ReadAsStringAsync(
-                        cancellationToken: cancellationToken)
-                    .ConfigureAwait(false),
-                options: _SerializerOptions);
-    }
+		return response.StatusCode == HttpStatusCode.NoContent
+			? Enumerable.Empty<GameActionInfo>()
+			: JsonSerializer.Deserialize<IEnumerable<GameActionInfo>>(
+				json: await response
+					.Content
+					.ReadAsStringAsync(
+						cancellationToken: cancellationToken)
+					.ConfigureAwait(false),
+				options: _SerializerOptions);
+	}
 }

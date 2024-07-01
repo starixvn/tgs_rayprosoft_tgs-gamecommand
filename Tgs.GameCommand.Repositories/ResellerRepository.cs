@@ -6,22 +6,22 @@ namespace Tgs.GameCommand.Repositories;
 
 internal class ResellerRepository(TgsContext context) : IResellerRepository
 {
-    public ValueTask<ResellerStatus> GetStatusAsync(
-        Guid resellerId,
-        CancellationToken cancellationToken = default)
-        => context.Resellers.AsQueryable()
-        .Where(x => x.Id == resellerId)
-        .Select(x => (ResellerStatus)x.Status)
-        .ToAsyncEnumerable()
-        .FirstOrDefaultAsync(
-            cancellationToken: cancellationToken);
+	public ValueTask<ResellerStatus> GetStatusAsync(
+		Guid resellerId,
+		CancellationToken cancellationToken = default)
+		=> context.Resellers.AsQueryable()
+		.Where(x => x.Id == resellerId)
+		.Select(x => (ResellerStatus)x.Status)
+		.ToAsyncEnumerable()
+		.FirstOrDefaultAsync(
+			cancellationToken: cancellationToken);
 
-    public IAsyncEnumerable<ResellerInfo> QueryAsync(
-        CancellationToken cancellationToken = default)
-        => (from reseller in context.Resellers.AsQueryable()
-            where reseller.Status != (int)LicenseeStatus.Archived
-            select new ResellerInfo(
-                reseller.Id,
-                reseller.Code))
-        .ToAsyncEnumerable();
+	public IAsyncEnumerable<ResellerInfo> QueryAsync(
+		CancellationToken cancellationToken = default)
+		=> (from reseller in context.Resellers.AsQueryable()
+			where reseller.Status != (int)LicenseeStatus.Archived
+			select new ResellerInfo(
+				reseller.Id,
+				reseller.Code))
+		.ToAsyncEnumerable();
 }

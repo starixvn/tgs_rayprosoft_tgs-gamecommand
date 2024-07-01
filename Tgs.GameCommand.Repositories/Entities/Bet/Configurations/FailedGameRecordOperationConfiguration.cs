@@ -22,23 +22,23 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
             entity.HasIndex(e => new { e.ExternalRoundId, e.PlayerCode, e.GameProviderId, e.GameId }, "ux_failed_game_record_operations_external_round_id_player_code_").IsUnique();
 
             entity.Property(e => e.Id)
-            .ValueGeneratedNever()
-            .HasColumnName("id");
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.AutoStatus).HasColumnName("auto_status");
             entity.Property(e => e.CreatedOn).HasColumnName("created_on");
             entity.Property(e => e.Detail).HasColumnName("detail");
             entity.Property(e => e.ExternalId)
-            .HasMaxLength(32)
-            .HasColumnName("external_id");
+                .HasMaxLength(32)
+                .HasColumnName("external_id");
             entity.Property(e => e.ExternalRoundId)
-            .HasMaxLength(255)
-            .HasColumnName("external_round_id");
+                .HasMaxLength(255)
+                .HasColumnName("external_round_id");
             entity.Property(e => e.GameId).HasColumnName("game_id");
             entity.Property(e => e.GameProviderCode).HasColumnName("game_provider_code");
             entity.Property(e => e.GameProviderId).HasColumnName("game_provider_id");
             entity.Property(e => e.PlayerCode)
-            .HasMaxLength(16)
-            .HasColumnName("player_code");
+                .HasMaxLength(16)
+                .HasColumnName("player_code");
             entity.Property(e => e.ProcesStatus).HasColumnName("proces_status");
             entity.Property(e => e.UpdatedOn).HasColumnName("updated_on");
 

@@ -5,83 +5,83 @@ using Tgs.GameCommand.Repositories.Entities;
 namespace Tgs.GameCommand.Repositories;
 
 internal class GameProviderConfigurationRepository(
-    TgsContext context) : IGameProviderConfigurationRepository
+	TgsContext context) : IGameProviderConfigurationRepository
 {
-    public ValueTask<GameProviderConfigInfo?> GetAsync(
-        Guid gameProviderConfigId,
-        CancellationToken cancellationToken = default)
-        => context.GameProviderConfigs.AsQueryable()
-            .Join(context.GameProviders.AsQueryable(),
-                config => config.GameProviderId,
-                gameProvider => gameProvider.Id,
-                (config, gameProvider) => new
-                {
-                    GameProviderId = gameProvider.Id,
-                    GameProviderCode = gameProvider.Code,
-                    GameProviderConfigId = config.Id,
-                    Status = (GameProviderConfigStatus)config.Status,
-                    config.Name,
-                    config.Description,
-                    config.ClientId,
-                    config.SecretKey,
-                    config.DesktopEndpoint,
-                    config.MobileEndpoint,
-                    config.ConfigurationData,
-                    config.IsDefault
-                })
-            .Where(x => x.GameProviderConfigId == gameProviderConfigId)
-            .Select(data => new GameProviderConfigInfo(
-                    data.GameProviderId,
-                    data.GameProviderCode,
-                    data.GameProviderConfigId,
-                    data.Status,
-                    data.Name,
-                    data.Description,
-                    data.ClientId,
-                    data.SecretKey,
-                    data.DesktopEndpoint,
-                    data.MobileEndpoint,
-                    data.ConfigurationData,
-                    data.IsDefault))
-            .ToAsyncEnumerable()
-            .FirstOrDefaultAsync(
-                cancellationToken: cancellationToken);
+	public ValueTask<GameProviderConfigInfo?> GetAsync(
+		Guid gameProviderConfigId,
+		CancellationToken cancellationToken = default)
+		=> context.GameProviderConfigs.AsQueryable()
+			.Join(context.GameProviders.AsQueryable(),
+				config => config.GameProviderId,
+				gameProvider => gameProvider.Id,
+				(config, gameProvider) => new
+				{
+					GameProviderId = gameProvider.Id,
+					GameProviderCode = gameProvider.Code,
+					GameProviderConfigId = config.Id,
+					Status = (GameProviderConfigStatus)config.Status,
+					config.Name,
+					config.Description,
+					config.ClientId,
+					config.SecretKey,
+					config.DesktopEndpoint,
+					config.MobileEndpoint,
+					config.ConfigurationData,
+					config.IsDefault
+				})
+			.Where(x => x.GameProviderConfigId == gameProviderConfigId)
+			.Select(data => new GameProviderConfigInfo(
+					data.GameProviderId,
+					data.GameProviderCode,
+					data.GameProviderConfigId,
+					data.Status,
+					data.Name,
+					data.Description,
+					data.ClientId,
+					data.SecretKey,
+					data.DesktopEndpoint,
+					data.MobileEndpoint,
+					data.ConfigurationData,
+					data.IsDefault))
+			.ToAsyncEnumerable()
+			.FirstOrDefaultAsync(
+				cancellationToken: cancellationToken);
 
-    public IAsyncEnumerable<GameProviderConfigInfo> QueryAsync(
-        string gameProviderCode,
-        CancellationToken cancellationToken = default)
-        => context.GameProviderConfigs.AsQueryable()
-            .Join(context.GameProviders.AsQueryable(),
-                config => config.GameProviderId,
-                gameProvider => gameProvider.Id,
-                (config, gameProvider) => new
-                {
-                    GameProviderId = gameProvider.Id,
-                    GameProviderCode = gameProvider.Code,
-                    GameProviderConfigId = config.Id,
-                    Status = (GameProviderConfigStatus)config.Status,
-                    config.Name,
-                    config.Description,
-                    config.ClientId,
-                    config.SecretKey,
-                    config.DesktopEndpoint,
-                    config.MobileEndpoint,
-                    config.ConfigurationData,
-                    config.IsDefault
-                })
-            .Where(x => x.GameProviderCode.ToLower() == gameProviderCode.ToLower())
-            .Select(data => new GameProviderConfigInfo(
-                    data.GameProviderId,
-                    data.GameProviderCode,
-                    data.GameProviderConfigId,
-                    data.Status,
-                    data.Name,
-                    data.Description,
-                    data.ClientId,
-                    data.SecretKey,
-                    data.DesktopEndpoint,
-                    data.MobileEndpoint,
-                    data.ConfigurationData,
-                    data.IsDefault))
-            .ToAsyncEnumerable();
+	public IAsyncEnumerable<GameProviderConfigInfo> QueryAsync(
+		string gameProviderCode,
+		CancellationToken cancellationToken = default)
+		=> context.GameProviderConfigs.AsQueryable()
+			.Join(context.GameProviders.AsQueryable(),
+				config => config.GameProviderId,
+				gameProvider => gameProvider.Id,
+				(config, gameProvider) => new
+				{
+					GameProviderId = gameProvider.Id,
+					GameProviderCode = gameProvider.Code,
+					GameProviderConfigId = config.Id,
+					Status = (GameProviderConfigStatus)config.Status,
+					config.Name,
+					config.Description,
+					config.ClientId,
+					config.SecretKey,
+					config.DesktopEndpoint,
+					config.MobileEndpoint,
+					config.ConfigurationData,
+					config.IsDefault
+				})
+			.Where(x => x.GameProviderCode.ToLower() == gameProviderCode.ToLower())
+			.Select(data => new GameProviderConfigInfo(
+					data.GameProviderId,
+					data.GameProviderCode,
+					data.GameProviderConfigId,
+					data.Status,
+					data.Name,
+					data.Description,
+					data.ClientId,
+					data.SecretKey,
+					data.DesktopEndpoint,
+					data.MobileEndpoint,
+					data.ConfigurationData,
+					data.IsDefault))
+			.ToAsyncEnumerable();
 }

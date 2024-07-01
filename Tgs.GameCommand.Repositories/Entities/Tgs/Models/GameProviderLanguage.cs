@@ -7,9 +7,9 @@ namespace Tgs.GameCommand.Repositories.Entities;
 
 public partial class GameProviderLanguage
 {
-    public Guid GameProviderId { get; set; }
-
     public string CultureCode { get; set; } = null!;
+
+    public Guid GameProviderId { get; set; }
 
     public string GameProviderCultureCode { get; set; } = null!;
 

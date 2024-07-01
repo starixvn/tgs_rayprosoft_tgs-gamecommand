@@ -8,84 +8,84 @@ namespace Tgs.GameCommand.Client;
 
 internal partial class GameCommandClient
 {
-    public async ValueTask<PlayerInfo?> PlayerGetAsync(
-        string playerCode,
-        CancellationToken cancellationToken = default)
-    {
-        var response = await _httpClient
-            .GetAsync(
-                requestUri: $"/player/{playerCode}",
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+	public async ValueTask<PlayerInfo?> PlayerGetAsync(
+		string playerCode,
+		CancellationToken cancellationToken = default)
+	{
+		var response = await _httpClient
+			.GetAsync(
+				requestUri: $"/player/{playerCode}",
+				cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
 
-        _ = response.EnsureSuccessStatusCode();
+		_ = response.EnsureSuccessStatusCode();
 
-        return response.StatusCode == HttpStatusCode.NoContent
-            ? null
-            : JsonSerializer.Deserialize<PlayerInfo>(
-                json: await response
-                    .Content
-                    .ReadAsStringAsync(
-                        cancellationToken: cancellationToken)
-                    .ConfigureAwait(false),
-                options: _SerializerOptions);
-    }
+		return response.StatusCode == HttpStatusCode.NoContent
+			? null
+			: JsonSerializer.Deserialize<PlayerInfo>(
+				json: await response
+					.Content
+					.ReadAsStringAsync(
+						cancellationToken: cancellationToken)
+					.ConfigureAwait(false),
+				options: _SerializerOptions);
+	}
 
-    public async ValueTask<PlayerStatus?> PlayerGetStatusAsync(
-        string playerCode,
-        CancellationToken cancellationToken = default)
-    {
-        var response = await _httpClient
-            .GetAsync(
-                 requestUri: $"/player/{playerCode}/status",
-                 cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+	public async ValueTask<PlayerStatus?> PlayerGetStatusAsync(
+		string playerCode,
+		CancellationToken cancellationToken = default)
+	{
+		var response = await _httpClient
+			.GetAsync(
+				 requestUri: $"/player/{playerCode}/status",
+				 cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
 
-        _ = response.EnsureSuccessStatusCode();
+		_ = response.EnsureSuccessStatusCode();
 
-        return response.StatusCode == HttpStatusCode.NoContent
-            ? null
-            : JsonSerializer.Deserialize<PlayerStatus>(
-                json: await response
-                    .Content
-                    .ReadAsStringAsync(
-                        cancellationToken: cancellationToken)
-                    .ConfigureAwait(false),
-                options: _SerializerOptions);
-    }
+		return response.StatusCode == HttpStatusCode.NoContent
+			? null
+			: JsonSerializer.Deserialize<PlayerStatus>(
+				json: await response
+					.Content
+					.ReadAsStringAsync(
+						cancellationToken: cancellationToken)
+					.ConfigureAwait(false),
+				options: _SerializerOptions);
+	}
 
-    public async IAsyncEnumerable<PlayerInfo> PlayerQueryAsync(
-        Guid brandId,
-        int pageIndex = 1,
-        int pageSize = 1000,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<PlayerInfo> PlayerQueryAsync(
+		Guid brandId,
+		int pageIndex = 1,
+		int pageSize = 1000,
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
 
-    {
-        var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/player/{brandId}"));
-        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-        query["pageIndex"] = pageIndex.ToString();
-        query["pageSize"] = pageSize.ToString();
-        uriBuilder.Query = query.ToString();
-        var response = await _httpClient
-        .GetAsync(
-                requestUri: uriBuilder.Uri,
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+	{
+		var uriBuilder = new UriBuilder(new Uri(_httpClient.BaseAddress!, $"/player/{brandId}"));
+		var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+		query["pageIndex"] = pageIndex.ToString();
+		query["pageSize"] = pageSize.ToString();
+		uriBuilder.Query = query.ToString();
+		var response = await _httpClient
+		.GetAsync(
+				requestUri: uriBuilder.Uri,
+				cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
 
-        _ = response.EnsureSuccessStatusCode();
+		_ = response.EnsureSuccessStatusCode();
 
-        var contentJson = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+		var contentJson = await response.Content.ReadAsStringAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
-        var gameModels = JsonSerializer.Deserialize<IEnumerable<PlayerInfo>>(contentJson, _SerializerOptions) ?? Enumerable.Empty<PlayerInfo>();
+		var gameModels = JsonSerializer.Deserialize<IEnumerable<PlayerInfo>>(contentJson, _SerializerOptions) ?? Enumerable.Empty<PlayerInfo>();
 
-        if (!gameModels.Any())
-        {
-            yield break;
-        }
+		if (!gameModels.Any())
+		{
+			yield break;
+		}
 
-        foreach (var gameModel in gameModels)
-        {
-            yield return gameModel;
-        }
-    }
+		foreach (var gameModel in gameModels)
+		{
+			yield return gameModel;
+		}
+	}
 }

@@ -9,19 +9,19 @@ public partial class GameActionBatch
 {
     public Guid Id { get; set; }
 
-    public string ExternalId { get; set; } = null!;
+    public DateTime CreatedOn { get; set; }
 
     public short Error { get; set; }
 
     public string? ErrorMessage { get; set; }
 
-    public int TransactionsCount { get; set; }
-
     public string? ErrorsJson { get; set; }
 
-    public DateTime CreatedOn { get; set; }
+    public string ExternalId { get; set; } = null!;
 
     public Guid GameProviderId { get; set; }
+
+    public int TransactionsCount { get; set; }
 
     public virtual ICollection<GameAction> GameActions { get; set; } = new List<GameAction>();
 }

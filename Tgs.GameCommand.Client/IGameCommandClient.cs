@@ -4,166 +4,166 @@ namespace Tgs.GameCommand.Client;
 
 public interface IGameCommandClient
 {
-    ValueTask<Guid?> BrandGetBrandIdAsync(
-        string brandcode,
-        CancellationToken cancellationToken = default);
+	ValueTask<Guid?> BrandGetBrandIdAsync(
+		string brandcode,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<string?> BrandGetCurrencyAsync(
-        Guid brandId,
-        string currencyCode,
-        CancellationToken cancellationToken = default);
+	ValueTask<string?> BrandGetCurrencyAsync(
+		Guid brandId,
+		string currencyCode,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<BrandGameProviderInfo?> BrandGetGameProviderConfigurationAsync(
-        Guid brandId,
-        Guid gameProviderId,
-        CancellationToken cancellationToken = default);
+	ValueTask<BrandGameProviderInfo?> BrandGetGameProviderConfigurationAsync(
+		Guid brandId,
+		Guid gameProviderId,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<Guid?> BrandGetGameProviderConfigurationIdAsync(
-        Guid brandId,
-        Guid gameProviderId,
-        CancellationToken cancellationToken = default);
+	ValueTask<Guid?> BrandGetGameProviderConfigurationIdAsync(
+		Guid brandId,
+		Guid gameProviderId,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<GameProviderStatus?> BrandGetGameProviderStatusAsync(
-        Guid brandId,
-        Guid gameProviderId,
-        CancellationToken cancellationToken = default);
+	ValueTask<GameProviderStatus?> BrandGetGameProviderStatusAsync(
+		Guid brandId,
+		Guid gameProviderId,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<GameStatus?> BrandGetGameStatusAsync(
-        Guid brandId,
-        int gameId,
-        CancellationToken cancellationToken = default);
+	ValueTask<GameStatus?> BrandGetGameStatusAsync(
+		Guid brandId,
+		int gameId,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<BrandStatus?> BrandGetStatusAsync(
-        Guid brandId,
-        CancellationToken cancellationToken = default);
+	ValueTask<BrandStatus?> BrandGetStatusAsync(
+		Guid brandId,
+		CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<BrandInfo> BrandQueryAsync(
-        CancellationToken cancellationToken = default);
+	IAsyncEnumerable<BrandInfo> BrandQueryAsync(
+		CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<BrandGameProviderInfo> BrandQueryGameProviderAsync(
-                            Guid brandId,
-        CancellationToken cancellationToken = default);
+	IAsyncEnumerable<BrandGameProviderInfo> BrandQueryGameProviderAsync(
+							Guid brandId,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<IEnumerable<GameActionInfo>?> GameActionQueryAsync(
-        Guid roundId,
-        CancellationToken cancellationToken = default);
+	ValueTask<IEnumerable<GameActionInfo>?> GameActionQueryAsync(
+		Guid roundId,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<GameInfo?> GameGetAsync(
-        int gameId,
-        CancellationToken cancellationToken = default);
+	ValueTask<GameInfo?> GameGetAsync(
+		int gameId,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<GameInfo?> GameGetAsync(
-       string gameProviderCode,
-       string gameExternalId,
-       CancellationToken cancellationToken = default);
+	ValueTask<GameInfo?> GameGetAsync(
+	   string gameProviderCode,
+	   string gameExternalId,
+	   CancellationToken cancellationToken = default);
 
-    ValueTask<GameInfo?> GameGetAsync(
-       Guid gameProviderId,
-       string gameExternalId,
-       CancellationToken cancellationToken = default);
+	ValueTask<GameInfo?> GameGetAsync(
+	   Guid gameProviderId,
+	   string gameExternalId,
+	   CancellationToken cancellationToken = default);
 
-    ValueTask<int?> GameGetIdAsync(
-       Guid gameProviderId,
-       string gameExternalId,
-       CancellationToken cancellationToken = default);
+	ValueTask<int?> GameGetIdAsync(
+	   Guid gameProviderId,
+	   string gameExternalId,
+	   CancellationToken cancellationToken = default);
 
-    ValueTask<GameStatus?> GameGetStatusAsync(
-       int gameid,
-       CancellationToken cancellationToken = default);
+	ValueTask<GameStatus?> GameGetStatusAsync(
+	   int gameid,
+	   CancellationToken cancellationToken = default);
 
-    ValueTask<GameProviderConfigInfo?> GameProviderConfigurationGetAsync(
-        Guid gameProviderConfigId,
-        CancellationToken cancellationToken = default);
+	ValueTask<GameProviderConfigInfo?> GameProviderConfigurationGetAsync(
+		Guid gameProviderConfigId,
+		CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<GameProviderConfigInfo> GameProviderConfigurationQueryAsync(
-        string gameProviderCode,
-        CancellationToken cancellationToken = default);
+	IAsyncEnumerable<GameProviderConfigInfo> GameProviderConfigurationQueryAsync(
+		string gameProviderCode,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<GameProviderInfo?> GameProviderGetAsync(
-        Guid gameProviderId,
-        CancellationToken cancellationToken = default);
+	ValueTask<GameProviderInfo?> GameProviderGetAsync(
+		Guid gameProviderId,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<string?> GameProviderGetCultureCodeAsync(
-        Guid gameProviderId,
-        string cultureCode,
-        CancellationToken cancellationToken = default);
+	ValueTask<string?> GameProviderGetCultureCodeAsync(
+		Guid gameProviderId,
+		string cultureCode,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<GameProviderCurrencyInfo?> GameProviderGetCurrencyAsync(
-        Guid gameProviderId,
-        string currencyCode,
-        CancellationToken cancellationToken = default);
+	ValueTask<GameProviderCurrencyInfo?> GameProviderGetCurrencyAsync(
+		Guid gameProviderId,
+		string currencyCode,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<string?> GameProviderGetCurrencyCodeAsync(
-        Guid gameProviderId,
-        string currencyCode,
-        CancellationToken cancellationToken = default);
+	ValueTask<string?> GameProviderGetCurrencyCodeAsync(
+		Guid gameProviderId,
+		string currencyCode,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<Guid?> GameProviderGetGameProviderIdAsync(
-        string gameProviderCode,
-        CancellationToken cancellationToken = default);
+	ValueTask<Guid?> GameProviderGetGameProviderIdAsync(
+		string gameProviderCode,
+		CancellationToken cancellationToken = default);
 
-    [Obsolete("已過時，請改使用GameProviderQueryAsync")]
-    IAsyncEnumerable<GameProviderIdInfo> GameProviderGetGameProviderIdsAsync(
-        CancellationToken cancellationToken = default);
+	[Obsolete("已過時，請改使用GameProviderQueryAsync")]
+	IAsyncEnumerable<GameProviderIdInfo> GameProviderGetGameProviderIdsAsync(
+		CancellationToken cancellationToken = default);
 
-    ValueTask<GameProviderStatus?> GameProviderGetStatusAsync(
-        Guid gameProviderId,
-        CancellationToken cancellationToken = default);
+	ValueTask<GameProviderStatus?> GameProviderGetStatusAsync(
+		Guid gameProviderId,
+		CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<GameProviderInfo> GameProviderQueryAsync(
-            CancellationToken cancellationToken = default);
+	IAsyncEnumerable<GameProviderInfo> GameProviderQueryAsync(
+			CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<GameInfo> GameQueryAsync(
-        string gameProviderCode,
-        CancellationToken cancellationToken = default);
+	IAsyncEnumerable<GameInfo> GameQueryAsync(
+		string gameProviderCode,
+		CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<GameInfo> GameQueryAsync(
-        Guid gameProviderId,
-        CancellationToken cancellationToken = default);
+	IAsyncEnumerable<GameInfo> GameQueryAsync(
+		Guid gameProviderId,
+		CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<GameInfo> GameQueryAsync(
-        string gameProviderCode,
-        GameType gameType,
-        CancellationToken cancellationToken = default);
+	IAsyncEnumerable<GameInfo> GameQueryAsync(
+		string gameProviderCode,
+		GameType gameType,
+		CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<GameInfo> GameQueryAsync(
-        Guid gameProviderId,
-        GameType gameType,
-        CancellationToken cancellationToken = default);
+	IAsyncEnumerable<GameInfo> GameQueryAsync(
+		Guid gameProviderId,
+		GameType gameType,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<LicenseeStatus?> LicenseeGetStatusAsync(
-        Guid licenseeId,
-        CancellationToken cancellationToken = default);
+	ValueTask<LicenseeStatus?> LicenseeGetStatusAsync(
+		Guid licenseeId,
+		CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<LicenseeInfo> LicenseeQueryAsync(
-        CancellationToken cancellationToken = default);
+	IAsyncEnumerable<LicenseeInfo> LicenseeQueryAsync(
+		CancellationToken cancellationToken = default);
 
-    ValueTask<PlayerInfo?> PlayerGetAsync(
-        string playerCode,
-        CancellationToken cancellationToken = default);
+	ValueTask<PlayerInfo?> PlayerGetAsync(
+		string playerCode,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<PlayerStatus?> PlayerGetStatusAsync(
-        string playerCode,
-        CancellationToken cancellationToken = default);
+	ValueTask<PlayerStatus?> PlayerGetStatusAsync(
+		string playerCode,
+		CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<PlayerInfo> PlayerQueryAsync(
-            Guid brandId,
-        int pageIndex = 1,
-        int pageSize = 1000,
-        CancellationToken cancellationToken = default);
+	IAsyncEnumerable<PlayerInfo> PlayerQueryAsync(
+			Guid brandId,
+		int pageIndex = 1,
+		int pageSize = 1000,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<ResellerStatus?> ResellerGetStatusAsync(
-        Guid resellerId,
-        CancellationToken cancellationToken = default);
+	ValueTask<ResellerStatus?> ResellerGetStatusAsync(
+		Guid resellerId,
+		CancellationToken cancellationToken = default);
 
-    IAsyncEnumerable<ResellerInfo> ResellerQueryAsync(
-        CancellationToken cancellationToken = default);
+	IAsyncEnumerable<ResellerInfo> ResellerQueryAsync(
+		CancellationToken cancellationToken = default);
 
-    ValueTask<TConfiguration?> SettingGetConfigurationAsync<TConfiguration>(
-        string key,
-        CancellationToken cancellationToken = default);
+	ValueTask<TConfiguration?> SettingGetConfigurationAsync<TConfiguration>(
+		string key,
+		CancellationToken cancellationToken = default);
 
-    ValueTask<string?> SettingGetConfigurationStringAsync(
-       string key,
-       CancellationToken cancellationToken = default);
+	ValueTask<string?> SettingGetConfigurationStringAsync(
+	   string key,
+	   CancellationToken cancellationToken = default);
 }
