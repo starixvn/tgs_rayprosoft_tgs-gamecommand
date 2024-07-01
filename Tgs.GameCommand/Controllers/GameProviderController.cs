@@ -8,102 +8,102 @@ namespace Tgs.GameCommand.Controllers;
 [ApiController]
 public class GameProviderController : ControllerBase
 {
-    [HttpGet("{id}", Name = "GameProvider_Get")]
-    public ValueTask<GameProviderInfo?> GameProviderGetAsync(
-        [FromServices] IGameProviderRepository repository,
-        Guid id)
-        => repository
-        .GetAsync(
-            id: id,
-            cancellationToken: HttpContext.RequestAborted);
+	[HttpGet("{id}", Name = "GameProvider_Get")]
+	public ValueTask<GameProviderInfo?> GameProviderGetAsync(
+		[FromServices] IGameProviderRepository repository,
+		Guid id)
+		=> repository
+		.GetAsync(
+			id: id,
+			cancellationToken: HttpContext.RequestAborted);
 
-    [HttpGet("query/id", Name = "GameProvider_Get_GameProviderIds")]
-    public async IAsyncEnumerable<GameProviderIdInfo> GameProviderGetGameProviderIdsAsync(
-        [FromServices] IGameProviderRepository repository)
-    {
-        var gameProviderIdInfos = await repository.GetGameProviderIdsAsync(
-            cancellationToken: HttpContext.RequestAborted)
-            .ToArrayAsync()
-            .ConfigureAwait(false)
-            ?? Enumerable.Empty<GameProviderIdInfo>();
+	[HttpGet("query/id", Name = "GameProvider_Get_GameProviderIds")]
+	public async IAsyncEnumerable<GameProviderIdInfo> GameProviderGetGameProviderIdsAsync(
+		[FromServices] IGameProviderRepository repository)
+	{
+		var gameProviderIdInfos = await repository.GetGameProviderIdsAsync(
+			cancellationToken: HttpContext.RequestAborted)
+			.ToArrayAsync()
+			.ConfigureAwait(false)
+			?? Enumerable.Empty<GameProviderIdInfo>();
 
-        if (!gameProviderIdInfos.Any())
-        {
-            yield break;
-        }
+		if (!gameProviderIdInfos.Any())
+		{
+			yield break;
+		}
 
-        foreach (var gameProviderIdInfo in gameProviderIdInfos)
-        {
-            yield return new Common.GameProviderIdInfo(
-                gameProviderIdInfo.GameProviderCode,
-                gameProviderIdInfo.GameProviderId);
-        }
-    }
+		foreach (var gameProviderIdInfo in gameProviderIdInfos)
+		{
+			yield return new Common.GameProviderIdInfo(
+				gameProviderIdInfo.GameProviderCode,
+				gameProviderIdInfo.GameProviderId);
+		}
+	}
 
-    [HttpGet("{id}/culturecode", Name = "GameProvider_GetCultureCode")]
-    public ValueTask<string?> GetCultureCodeAsync(
-        [FromServices] IGameProviderRepository repository,
-        Guid id,
-        [FromQuery] string cultureCode)
-        => repository
-        .GetCultureCodeAsync(
-            id,
-            cultureCode,
-            HttpContext.RequestAborted);
+	[HttpGet("{id}/culturecode", Name = "GameProvider_GetCultureCode")]
+	public ValueTask<string?> GetCultureCodeAsync(
+		[FromServices] IGameProviderRepository repository,
+		Guid id,
+		[FromQuery] string cultureCode)
+		=> repository
+		.GetCultureCodeAsync(
+			id,
+			cultureCode,
+			HttpContext.RequestAborted);
 
-    [HttpGet("{id}/currency", Name = "GameProvider_GetCurrency")]
-    public async ValueTask<GameProviderCurrencyInfo?> GetCurrencyAsync(
-        [FromServices] IGameProviderRepository repository,
-        Guid id,
-        [FromQuery] string currencyCode)
-    {
-        var data = await repository
-            .GetCurrencyAsync(
-                id,
-                currencyCode,
-                HttpContext.RequestAborted).ConfigureAwait(false);
+	[HttpGet("{id}/currency", Name = "GameProvider_GetCurrency")]
+	public async ValueTask<GameProviderCurrencyInfo?> GetCurrencyAsync(
+		[FromServices] IGameProviderRepository repository,
+		Guid id,
+		[FromQuery] string currencyCode)
+	{
+		var data = await repository
+			.GetCurrencyAsync(
+				id,
+				currencyCode,
+				HttpContext.RequestAborted).ConfigureAwait(false);
 
-        return data != null
-            ? new Common.GameProviderCurrencyInfo(
-                data.GameProviderId,
-                data.CurrencyCode,
-                data.GameProviderCurrencyCode)
-            : null;
-    }
+		return data != null
+			? new Common.GameProviderCurrencyInfo(
+				data.GameProviderId,
+				data.CurrencyCode,
+				data.GameProviderCurrencyCode)
+			: null;
+	}
 
-    [HttpGet("{id}/currencycode", Name = "GameProvider_GetCurrencyCode")]
-    public ValueTask<string?> GetCurrencyCodeAsync(
-        [FromServices] IGameProviderRepository repository,
-        Guid id,
-        [FromQuery] string currencyCode)
-        => repository
-        .GetCurrencyCodeAsync(
-            id,
-            currencyCode,
-            HttpContext.RequestAborted);
+	[HttpGet("{id}/currencycode", Name = "GameProvider_GetCurrencyCode")]
+	public ValueTask<string?> GetCurrencyCodeAsync(
+		[FromServices] IGameProviderRepository repository,
+		Guid id,
+		[FromQuery] string currencyCode)
+		=> repository
+		.GetCurrencyCodeAsync(
+			id,
+			currencyCode,
+			HttpContext.RequestAborted);
 
-    [HttpGet("{code}/id", Name = "GameProvider_GetGameProviderId")]
-    public ValueTask<Guid?> GetGameProviderIdAsync(
-        [FromServices] IGameProviderRepository repository,
-        string code)
-        => repository
-        .GetGameProviderIdAsync(
-            code,
-            HttpContext.RequestAborted);
+	[HttpGet("{code}/id", Name = "GameProvider_GetGameProviderId")]
+	public ValueTask<Guid?> GetGameProviderIdAsync(
+		[FromServices] IGameProviderRepository repository,
+		string code)
+		=> repository
+		.GetGameProviderIdAsync(
+			code,
+			HttpContext.RequestAborted);
 
-    [HttpGet("{id}/status", Name = "GameProvider_GetStatus")]
-    public ValueTask<GameProviderStatus> GetStatusAsync(
-        [FromServices] IGameProviderRepository repository,
-        Guid id)
-        => repository
-        .GetStatusAsync(
-            id,
-            HttpContext.RequestAborted);
+	[HttpGet("{id}/status", Name = "GameProvider_GetStatus")]
+	public ValueTask<GameProviderStatus> GetStatusAsync(
+		[FromServices] IGameProviderRepository repository,
+		Guid id)
+		=> repository
+		.GetStatusAsync(
+			id,
+			HttpContext.RequestAborted);
 
-    [HttpGet(Name = "GameProvider_Query")]
-    public IAsyncEnumerable<GameProviderInfo> QueryAsync(
-        [FromServices] IGameProviderRepository repository)
-        => repository
-        .QueryAsync(
-            HttpContext.RequestAborted);
+	[HttpGet(Name = "GameProvider_Query")]
+	public IAsyncEnumerable<GameProviderInfo> QueryAsync(
+		[FromServices] IGameProviderRepository repository)
+		=> repository
+		.QueryAsync(
+			HttpContext.RequestAborted);
 }

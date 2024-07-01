@@ -9,25 +9,25 @@ public partial class FailedGameRecordOperation
 {
     public Guid Id { get; set; }
 
-    public Guid GameProviderId { get; set; }
+    public short AutoStatus { get; set; }
 
-    public string? GameProviderCode { get; set; }
-
-    public string ExternalRoundId { get; set; } = null!;
-
-    public string PlayerCode { get; set; } = null!;
-
-    public int GameId { get; set; }
-
-    public string ExternalId { get; set; } = null!;
+    public DateTime CreatedOn { get; set; }
 
     public string Detail { get; set; } = null!;
 
-    public short AutoStatus { get; set; }
+    public string ExternalId { get; set; } = null!;
+
+    public string ExternalRoundId { get; set; } = null!;
+
+    public int GameId { get; set; }
+
+    public string? GameProviderCode { get; set; }
+
+    public Guid GameProviderId { get; set; }
+
+    public string PlayerCode { get; set; } = null!;
 
     public short ProcesStatus { get; set; }
-
-    public DateTime CreatedOn { get; set; }
 
     public DateTime UpdatedOn { get; set; }
 }

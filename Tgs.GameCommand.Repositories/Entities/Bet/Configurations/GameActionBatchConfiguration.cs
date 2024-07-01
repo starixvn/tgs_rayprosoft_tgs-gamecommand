@@ -20,19 +20,19 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
             entity.HasIndex(e => e.GameProviderId, "ix_game_action_batches_game_provider_id");
 
             entity.Property(e => e.Id)
-            .ValueGeneratedNever()
-            .HasColumnName("id");
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.CreatedOn).HasColumnName("created_on");
             entity.Property(e => e.Error).HasColumnName("error");
             entity.Property(e => e.ErrorMessage)
-            .HasMaxLength(1024)
-            .HasColumnName("error_message");
+                .HasMaxLength(1024)
+                .HasColumnName("error_message");
             entity.Property(e => e.ErrorsJson)
-            .HasColumnType("jsonb")
-            .HasColumnName("errors_json");
+                .HasColumnType("jsonb")
+                .HasColumnName("errors_json");
             entity.Property(e => e.ExternalId)
-            .HasMaxLength(64)
-            .HasColumnName("external_id");
+                .HasMaxLength(64)
+                .HasColumnName("external_id");
             entity.Property(e => e.GameProviderId).HasColumnName("game_provider_id");
             entity.Property(e => e.TransactionsCount).HasColumnName("transactions_count");
 

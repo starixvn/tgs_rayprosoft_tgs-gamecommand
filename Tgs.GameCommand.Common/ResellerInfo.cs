@@ -1,5 +1,5 @@
 ﻿namespace Tgs.GameCommand.Common;
 
 public record ResellerInfo(
-    Guid ResellerId,
-    string ResellerCode);
+	Guid ResellerId,
+	string ResellerCode);

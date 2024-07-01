@@ -3,5 +3,5 @@
 namespace Tgs.GameCommand.Core.ApplicationServices;
 
 public record GameByGameProviderCodeGameTypeQuery(
-    string GameProviderCode,
-    GameType GameType);
+	string GameProviderCode,
+	GameType GameType);

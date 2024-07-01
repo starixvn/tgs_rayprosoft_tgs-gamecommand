@@ -12,60 +12,60 @@ namespace Tgs.GameCommand.IntegrationTests;
 
 public partial class GameCommandUnitTest
 {
-    [Fact]
-    public async Task Reseller_Get_Status()
-    {
-        var expected = ResellerStatus.Active;
-        var resellerId = Guid.NewGuid();
-        await using var web = CreateTestSettingSite(services =>
-        {
-            var fakeRepository = Substitute.For<IResellerRepository>();
+	[Fact]
+	public async Task Reseller_Get_Status()
+	{
+		var expected = ResellerStatus.Active;
+		var resellerId = Guid.NewGuid();
+		await using var web = CreateTestSettingSite(services =>
+		{
+			var fakeRepository = Substitute.For<IResellerRepository>();
 
-            _ = fakeRepository.GetStatusAsync(resellerId)
-                .Returns(ResellerStatus.Active);
+			_ = fakeRepository.GetStatusAsync(resellerId)
+				.Returns(ResellerStatus.Active);
 
-            _ = services.AddSingleton(fakeRepository);
-        });
+			_ = services.AddSingleton(fakeRepository);
+		});
 
-        var httpClient = web.CreateClient();
+		var httpClient = web.CreateClient();
 
-        var sut = new GameCommandClient(httpClient);
+		var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut.ResellerGetStatusAsync(resellerId);
+		var actual = await sut.ResellerGetStatusAsync(resellerId);
 
-        Assert.Equal(expected, actual);
-    }
+		Assert.Equal(expected, actual);
+	}
 
-    [Fact]
-    public async Task Reseller_Query()
-    {
-        await using var web = CreateTestSettingSite(services =>
-        {
-            var fakeRepository = Substitute.For<IResellerRepository>();
+	[Fact]
+	public async Task Reseller_Query()
+	{
+		await using var web = CreateTestSettingSite(services =>
+		{
+			var fakeRepository = Substitute.For<IResellerRepository>();
 
-            _ = fakeRepository
-            .QueryAsync(
-                cancellationToken: Arg.Any<CancellationToken>())
-            .Returns(new ResellerInfo[]
-            {
-                new(
-                    Guid.NewGuid(),
-                    "TGS"
-                    )
-            }.ToAsyncEnumerable());
+			_ = fakeRepository
+			.QueryAsync(
+				cancellationToken: Arg.Any<CancellationToken>())
+			.Returns(new ResellerInfo[]
+			{
+				new(
+					Guid.NewGuid(),
+					"TGS"
+					)
+			}.ToAsyncEnumerable());
 
-            _ = services.AddSingleton(fakeRepository);
-        });
+			_ = services.AddSingleton(fakeRepository);
+		});
 
-        var httpClient = web.CreateClient();
+		var httpClient = web.CreateClient();
 
-        var sut = new GameCommandClient(httpClient);
+		var sut = new GameCommandClient(httpClient);
 
-        var actual = await sut
-            .ResellerQueryAsync()
-            .ToArrayAsync()
-            ?? Enumerable.Empty<ResellerInfo>();
+		var actual = await sut
+			.ResellerQueryAsync()
+			.ToArrayAsync()
+			?? Enumerable.Empty<ResellerInfo>();
 
-        Assert.True(actual.Any());
-    }
+		Assert.True(actual.Any());
+	}
 }

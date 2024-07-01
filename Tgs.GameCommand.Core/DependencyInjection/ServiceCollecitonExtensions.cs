@@ -4,10 +4,10 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollecitonExtensions
 {
-    public static IServiceCollection AddGameCommandCore(
-        this IServiceCollection services)
-        => services
-            .RegisterAllServiceUtilityTypes(
-                Assembly.GetExecutingAssembly(),
-                ServiceLifetime.Transient);
+	public static IServiceCollection AddGameCommandCore(
+		this IServiceCollection services)
+		=> services
+			.RegisterAllServiceUtilityTypes(
+				Assembly.GetExecutingAssembly(),
+				ServiceLifetime.Transient);
 }
