@@ -100,6 +100,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHealthChecks("/health");
+app.MapHealthChecks("/");
 
 _ = app.UseGameCommandRegister();
 
