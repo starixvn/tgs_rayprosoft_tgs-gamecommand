@@ -5,11 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tgs.GameCommand.Middlewares;
 
 var filterInstrumentations = new[] { "html", "ico", "png", "jpg" };
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.WebHost.UseSentry();
 builder.Logging
 	.AddOpenTelemetry(options =>
 	{
@@ -17,9 +18,9 @@ builder.Logging
 		options.ParseStateValues = true;
 		_ = options.AddFluentdForwardExporter(fluentOptions =>
 		{
-			var nodeIp = builder.Configuration.GetValue<string>("Otel:NodeIp")!;
+			var nodeIp = builder.Configuration.GetValue<string>("NODE_IP")!;
 			fluentOptions.Host = nodeIp;
-			fluentOptions.Tag = builder.Configuration.GetValue<string>("Otel:ServiceName")!;
+			fluentOptions.Tag = builder.Configuration.GetValue<string>("OTEL_SERVICE_NAME")!;
 			fluentOptions.UseMessagePack();
 		});
 	});
@@ -58,8 +59,7 @@ builder.Services
 
 builder.Services
 	.AddOpenTelemetry()
-	.ConfigureResource(_ => _.AddService(builder.Configuration.GetValue<string>("Otel:ServiceName")))
-	.WithTracing(tracerProviderBuilder => tracerProviderBuilder
+	.WithTracing(builder => builder
 		.SetResourceBuilder(ResourceBuilder.CreateDefault()
 			.AddEnvironmentVariableDetector())
 		.AddSource("Tgs.*")
@@ -67,7 +67,7 @@ builder.Services
 		.AddAspNetCoreInstrumentation(options => options.Filter =
 			httpContext => !httpContext.Request.Path.HasValue
 			|| !httpContext.Request.Path.StartsWithSegments("/swagger")
-			&& !httpContext.Request.Path.StartsWithSegments("/health")
+			&& !httpContext.Request.Path.StartsWithSegments("/healthz")
 			&& !httpContext.Request.Path.StartsWithSegments("/profiler/")
 			&& !httpContext.Request.Path.StartsWithSegments("/hangfire")
 			&& !httpContext.Request.Path.StartsWithSegments("/metrics")
@@ -76,7 +76,7 @@ builder.Services
 		.AddGrpcClientInstrumentation()
 		.AddGrpcCoreInstrumentation()
 		.AddEntityFrameworkCoreInstrumentation(options => options.SetDbStatementForText = true)
-		.AddOtlpExporter(options => options.Endpoint = builder.Configuration.GetValue<Uri>("Otel:Collector")))
+		.AddOtlpExporter())
 	.WithMetrics(meterBuiler => meterBuiler
 	.SetResourceBuilder(ResourceBuilder.CreateDefault()
 		.AddEnvironmentVariableDetector())
@@ -88,19 +88,18 @@ builder.Services
 	.AddServiceUtiltiyInterceptors();
 
 builder.Services.AddHealthChecks();
-
+builder.Services.AddScoped<ExceptionMiddleware>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
-
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHealthChecks("/health");
-app.MapHealthChecks("/");
+app.MapHealthChecks("/healthz");
 
 _ = app.UseGameCommandRegister();
 
