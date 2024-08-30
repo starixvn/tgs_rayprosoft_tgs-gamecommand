@@ -11,19 +11,19 @@ var filterInstrumentations = new[] { "html", "ico", "png", "jpg" };
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseSentry();
-//builder.Logging
-//	.AddOpenTelemetry(options =>
-//	{
-//		options.IncludeFormattedMessage = true;
-//		options.ParseStateValues = true;
-//		_ = options.AddFluentdForwardExporter(fluentOptions =>
-//		{
-//			var nodeIp = builder.Configuration.GetValue<string>("NODE_IP")!;
-//			fluentOptions.Host = nodeIp;
-//			fluentOptions.Tag = builder.Configuration.GetValue<string>("OTEL_SERVICE_NAME")!;
-//			fluentOptions.UseMessagePack();
-//		});
-//	});
+builder.Logging
+	.AddOpenTelemetry(options =>
+	{
+		options.IncludeFormattedMessage = true;
+		options.ParseStateValues = true;
+		_ = options.AddFluentdForwardExporter(fluentOptions =>
+		{
+			var nodeIp = builder.Configuration.GetValue<string>("NODE_IP")!;
+			fluentOptions.Host = nodeIp;
+			fluentOptions.Tag = builder.Configuration.GetValue<string>("OTEL_SERVICE_NAME")!;
+			fluentOptions.UseMessagePack();
+		});
+	});
 // Add services to the container.
 
 builder.Services
@@ -57,35 +57,35 @@ builder.Services
 		_ = dbBuilder.UseNpgsql(config.GetConnectionString("Tgs"), builder => _ = builder.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(15), errorCodesToAdd: null));
 	});
 
-//builder.Services
-//	.AddOpenTelemetry()
-//	.WithTracing(builder => builder
-//		.SetResourceBuilder(ResourceBuilder.CreateDefault()
-//			.AddEnvironmentVariableDetector())
-//		.AddSource("Tgs.*")
-//		.AddSource("TGS.*")
-//		.AddAspNetCoreInstrumentation(options => options.Filter =
-//			httpContext => !httpContext.Request.Path.HasValue
-//			|| !httpContext.Request.Path.StartsWithSegments("/swagger")
-//			&& !httpContext.Request.Path.StartsWithSegments("/healthz")
-//			&& !httpContext.Request.Path.StartsWithSegments("/profiler/")
-//			&& !httpContext.Request.Path.StartsWithSegments("/hangfire")
-//			&& !httpContext.Request.Path.StartsWithSegments("/metrics")
-//			&& !filterInstrumentations.Any(ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
-//		.AddHttpClientInstrumentation()
-//		.AddGrpcClientInstrumentation()
-//		.AddGrpcCoreInstrumentation()
-//		.AddEntityFrameworkCoreInstrumentation(options => options.SetDbStatementForText = true)
-//		.AddOtlpExporter())
-//	.WithMetrics(meterBuiler => meterBuiler
-//	.SetResourceBuilder(ResourceBuilder.CreateDefault()
-//		.AddEnvironmentVariableDetector())
-//		.AddRuntimeInstrumentation()
-//		.AddAspNetCoreInstrumentation()
-//		.AddOtlpExporter())
-//	.Services
-//	.AddInterceptionService()
-//	.AddServiceUtiltiyInterceptors();
+builder.Services
+	.AddOpenTelemetry()
+	.WithTracing(builder => builder
+		.SetResourceBuilder(ResourceBuilder.CreateDefault()
+			.AddEnvironmentVariableDetector())
+		.AddSource("Tgs.*")
+		.AddSource("TGS.*")
+		.AddAspNetCoreInstrumentation(options => options.Filter =
+			httpContext => !httpContext.Request.Path.HasValue
+			|| !httpContext.Request.Path.StartsWithSegments("/swagger")
+			&& !httpContext.Request.Path.StartsWithSegments("/healthz")
+			&& !httpContext.Request.Path.StartsWithSegments("/profiler/")
+			&& !httpContext.Request.Path.StartsWithSegments("/hangfire")
+			&& !httpContext.Request.Path.StartsWithSegments("/metrics")
+			&& !filterInstrumentations.Any(ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
+		.AddHttpClientInstrumentation()
+		.AddGrpcClientInstrumentation()
+		.AddGrpcCoreInstrumentation()
+		.AddEntityFrameworkCoreInstrumentation(options => options.SetDbStatementForText = true)
+		.AddOtlpExporter())
+	.WithMetrics(meterBuiler => meterBuiler
+	.SetResourceBuilder(ResourceBuilder.CreateDefault()
+		.AddEnvironmentVariableDetector())
+		.AddRuntimeInstrumentation()
+		.AddAspNetCoreInstrumentation()
+		.AddOtlpExporter())
+	.Services
+	.AddInterceptionService()
+	.AddServiceUtiltiyInterceptors();
 
 builder.Services.AddHealthChecks();
 builder.Services.AddScoped<ExceptionMiddleware>();
