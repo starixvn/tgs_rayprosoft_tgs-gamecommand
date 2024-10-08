@@ -19,7 +19,13 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
 
             entity.HasIndex(e => new { e.BrandId, e.GameId }, "ak_brand_games_brand_id_game_id").IsUnique();
 
+            entity.HasIndex(e => new { e.BrandId, e.GameId }, "ak_brand_games_brand_id_game_id_ccnew").IsUnique();
+
             entity.HasIndex(e => e.GameId, "ix_brand_games_game_id");
+
+            entity.HasIndex(e => e.GameId, "ix_brand_games_game_id_ccnew");
+
+            entity.HasIndex(e => e.Id, "pk_brand_games_ccnew").IsUnique();
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()

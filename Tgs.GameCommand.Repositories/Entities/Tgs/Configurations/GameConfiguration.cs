@@ -19,7 +19,13 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
 
             entity.HasIndex(e => e.GameProviderId, "ix_games_game_provider_id");
 
+            entity.HasIndex(e => e.Name, "ix_games_name");
+
             entity.HasIndex(e => e.SubGameProviderCode, "ix_games_sub_game_provider_code");
+
+            entity.HasIndex(e => e.Name, "ix_trgm_games_name")
+                .HasMethod("gin")
+                .HasOperators(new[] { "gin_trgm_ops" });
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -75,6 +81,7 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
 
             entity.HasOne(d => d.SubGameProviderCodeNavigation).WithMany(p => p.Games)
                 .HasForeignKey(d => d.SubGameProviderCode)
+                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("fk_games_sub_game_providers_sub_game_provider_code");
 
             OnConfigurePartial(entity);

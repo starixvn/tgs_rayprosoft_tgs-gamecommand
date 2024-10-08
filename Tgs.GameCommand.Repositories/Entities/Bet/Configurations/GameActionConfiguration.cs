@@ -13,9 +13,13 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
     {
         public void Configure(EntityTypeBuilder<GameAction> entity)
         {
-            entity.HasKey(e => e.Id).HasName("pk_game_actions");
+            entity.HasKey(e => new { e.Id, e.RecordedOn }).HasName("pk_game_actions");
 
             entity.ToTable("game_actions", "bet");
+
+            entity.HasIndex(e => e.ExternalGameActionGroupId, "ix_game_actions_external_game_action_group_id");
+
+            entity.HasIndex(e => e.ExternalTransactionId, "ix_game_actions_external_transaction_id");
 
             entity.HasIndex(e => e.GameActionBatchId, "ix_game_actions_game_action_batch_id");
 
@@ -25,9 +29,10 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
 
             entity.HasIndex(e => e.RoundId, "ix_game_actions_round_id");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
+            entity.HasIndex(e => e.RecordedOn, "ix_partition_game_actions_recorded_on").IsDescending();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.RecordedOn).HasColumnName("recorded_on");
             entity.Property(e => e.Amount)
                 .HasPrecision(18, 6)
                 .HasColumnName("amount");
@@ -57,7 +62,6 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
             entity.Property(e => e.PlayerIp)
                 .HasMaxLength(128)
                 .HasColumnName("player_ip");
-            entity.Property(e => e.RecordedOn).HasColumnName("recorded_on");
             entity.Property(e => e.ReferencedGameActionId).HasColumnName("referenced_game_action_id");
             entity.Property(e => e.RoundId).HasColumnName("round_id");
             entity.Property(e => e.SentOn).HasColumnName("sent_on");
@@ -74,18 +78,6 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
             entity.Property(e => e.WinLoss)
                 .HasPrecision(18, 6)
                 .HasColumnName("win_loss");
-
-            entity.HasOne(d => d.GameActionBatch).WithMany(p => p.GameActions)
-                .HasForeignKey(d => d.GameActionBatchId)
-                .HasConstraintName("fk_game_actions_game_action_batches_game_action_batch_id");
-
-            entity.HasOne(d => d.ReferencedGameAction).WithMany(p => p.InverseReferencedGameAction)
-                .HasForeignKey(d => d.ReferencedGameActionId)
-                .HasConstraintName("fk_game_actions_referenced_game_action_id");
-
-            entity.HasOne(d => d.Round).WithMany(p => p.GameActions)
-                .HasForeignKey(d => d.RoundId)
-                .HasConstraintName("fk_game_actions_rounds_round_id");
 
             OnConfigurePartial(entity);
         }
