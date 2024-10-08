@@ -7,9 +7,9 @@ namespace Tgs.GameCommand.Repositories.Entities;
 
 public partial class GameProviderCurrency
 {
-    public string CurrencyCode { get; set; } = null!;
-
     public Guid GameProviderId { get; set; }
+
+    public string CurrencyCode { get; set; } = null!;
 
     public string GameProviderCurrencyCode { get; set; } = null!;
 

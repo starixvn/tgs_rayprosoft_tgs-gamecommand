@@ -13,13 +13,23 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
     {
         public void Configure(EntityTypeBuilder<Round> entity)
         {
-            entity.HasKey(e => e.Id).HasName("pk_rounds");
+            entity.HasKey(e => new { e.Id, e.CreatedOn }).HasName("rounds_pkey");
 
             entity.ToTable("rounds", "bet");
 
             entity.HasIndex(e => e.BrandId, "ix_rounds_brand_id");
 
             entity.HasIndex(e => e.ClosedOn, "ix_rounds_closed_on").HasMethod("brin");
+
+            entity.HasIndex(e => new { e.ClosedOn, e.BrandId }, "ix_rounds_closed_on_brand_id");
+
+            entity.HasIndex(e => e.CreatedOn, "ix_rounds_created_on").HasMethod("brin");
+
+            entity.HasIndex(e => e.ExternalClosedOn, "ix_rounds_external_closed_on").HasMethod("brin");
+
+            entity.HasIndex(e => new { e.ExternalClosedOn, e.GameProviderId }, "ix_rounds_external_closed_on_game_provider_id");
+
+            entity.HasIndex(e => new { e.ExternalRoundId, e.PlayerCode, e.GameProviderId, e.GameId }, "ix_rounds_external_round_id_player_code_game_provider");
 
             entity.HasIndex(e => e.GameId, "ix_rounds_game_id");
 
@@ -31,9 +41,8 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
 
             entity.HasIndex(e => new { e.ExternalRoundId, e.GameProviderId, e.GameId, e.WalletId }, "ix_rounds_wallet_id_composite");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreatedOn).HasColumnName("created_on");
             entity.Property(e => e.BetAmount)
                 .HasPrecision(18, 6)
                 .HasColumnName("bet_amount");
@@ -43,7 +52,6 @@ namespace Tgs.GameCommand.Repositories.Entities.Configurations
             entity.Property(e => e.Commission)
                 .HasPrecision(18, 6)
                 .HasColumnName("commission");
-            entity.Property(e => e.CreatedOn).HasColumnName("created_on");
             entity.Property(e => e.CurrencyCode)
                 .HasMaxLength(10)
                 .HasColumnName("currency_code");
